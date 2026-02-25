@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import svgPaths from "../imports/svg-pgtixnbxan";
 import { MenuxLogo, CortexLogo, AtomLogo, AuraLogo } from "./components/BrandLogos";
 
-const mono = "'Basis Grotesque Pro Mono', 'Courier New', monospace";
-const heading = "'Inter Tight', sans-serif";
-const body = "'InterDisplay', 'Inter', sans-serif";
-const display = "'InterDisplay', 'Inter', sans-serif";
+const mono = "'Basis Grotesque Pro Mono', 'InterDisplay', sans-serif";
+const heading = "'Inter Tight', 'InterDisplay', sans-serif";
+const body = "'InterDisplay', 'Inter Tight', sans-serif";
+const display = "'InterDisplay', 'Inter Tight', sans-serif";
 const audienceTextHalo =
   "0 0 0 #F2F3EF, 1px 0 0 #F2F3EF, -1px 0 0 #F2F3EF, 0 1px 0 #F2F3EF, 0 -1px 0 #F2F3EF, 2px 0 0 #F2F3EF, -2px 0 0 #F2F3EF, 0 2px 0 #F2F3EF, 0 -2px 0 #F2F3EF, 0 0 12px #F2F3EF, 0 0 22px #F2F3EF, 0 0 34px #F2F3EF";
 
@@ -418,7 +418,7 @@ const problemCards = [
     text: "Produto evolui sem alinhamento com comercial.",
     textMaxClass: "max-w-[207px]",
     illustrationSrc: "/illustrations/problem-01-produto-comercial.svg",
-    illustrationClassName: "w-[100px] sm:w-[122px]",
+    illustrationClassName: "w-[150px] sm:w-[122px]",
     illustrationDesktopClassName: "left-[55px] top-[38px] w-[140px]",
   },
   {
@@ -426,7 +426,7 @@ const problemCards = [
     text: "Marketing gera demanda que a operação não absorve.",
     textMaxClass: "max-w-[207px]",
     illustrationSrc: "/illustrations/problem-02-marketing-operacao.svg",
-    illustrationClassName: "w-[90px] sm:w-[104px]",
+    illustrationClassName: "w-[136px] sm:w-[104px]",
     illustrationDesktopClassName: "left-[65px] top-[38px] w-[118px]",
   },
   {
@@ -434,7 +434,7 @@ const problemCards = [
     text: "Tecnologia acumula decisões sem arquitetura clara.",
     textMaxClass: "max-w-[225px]",
     illustrationSrc: "/illustrations/problem-03-tecnologia-arquitetura.svg",
-    illustrationClassName: "w-[102px] sm:w-[124px]",
+    illustrationClassName: "w-[148px] sm:w-[124px]",
     illustrationDesktopClassName: "left-[53px] top-[38px] w-[143px]",
   },
   {
@@ -442,7 +442,7 @@ const problemCards = [
     text: "Gestão decide por percepção, não por sistema.",
     textMaxClass: "max-w-[207px]",
     illustrationSrc: "/illustrations/problem-04-gestao-percepcao.svg",
-    illustrationClassName: "w-[92px] sm:w-[110px]",
+    illustrationClassName: "w-[140px] sm:w-[110px]",
     illustrationDesktopClassName: "left-[61px] top-[34px] w-[127px]",
   },
 ];
@@ -455,7 +455,7 @@ const services = [
     desc: "Estruturamos proposta de valor, arquitetura e roadmap com base em pesquisa e validação.",
     titleMaxClass: "max-w-[146px]",
     illustrationSrc: "/illustrations/services-01-produto-estrategia.svg",
-    illustrationClassName: "w-[95px] sm:w-[112px]",
+    illustrationClassName: "w-[140px] sm:w-[112px]",
     illustrationDesktopClassName: "left-[59px] top-[37px] w-[130px]",
   },
   {
@@ -463,7 +463,7 @@ const services = [
     desc: "Projetamos arquiteturas escaláveis com stack moderna e bem definida.",
     titleMaxClass: "max-w-[175px]",
     illustrationSrc: "/illustrations/services-02-tecnologia-arquitetura.svg",
-    illustrationClassName: "w-[120px] sm:w-[150px]",
+    illustrationClassName: "w-[162px] sm:w-[150px]",
     illustrationDesktopClassName: "left-[32px] top-[51px] w-[184px]",
   },
   {
@@ -471,7 +471,7 @@ const services = [
     desc: "Estruturamos posicionamento, pricing e funis com lógica de margem e LTV.",
     titleMaxClass: "max-w-[143px]",
     illustrationSrc: "/illustrations/services-03-growth-comercial.svg",
-    illustrationClassName: "w-[108px] sm:w-[122px]",
+    illustrationClassName: "w-[148px] sm:w-[122px]",
     illustrationDesktopClassName: "left-[55px] top-[51px] w-[139px]",
   },
   {
@@ -479,7 +479,7 @@ const services = [
     desc: "Modelamos indicadores, automatizamos processos e reduzimos fricção operacional.",
     titleMaxClass: "max-w-[169px]",
     illustrationSrc: "/illustrations/services-04-inteligencia-operacao.svg",
-    illustrationClassName: "w-[126px] sm:w-[146px]",
+    illustrationClassName: "w-[168px] sm:w-[146px]",
     illustrationDesktopClassName: "left-[39px] top-[51px] w-[171px]",
   },
 ];
@@ -647,18 +647,18 @@ export default function App() {
             {problemCards.map((card, index) => (
               <div
                 key={card.id}
-                className={`relative flex items-end p-6 min-h-[180px] sm:h-[231px] md:pr-[249px] ${
+                className={`relative grid min-h-[248px] grid-rows-[1fr_auto] p-6 md:flex md:h-[231px] md:flex-col md:pr-[249px] ${
                   index > 0 ? "border-t border-[#d6dace]" : ""
                 } ${index % 2 === 1 ? "sm:border-l sm:border-[#d6dace]" : ""} ${
                   index >= 2 ? "sm:border-t sm:border-[#d6dace]" : ""
                 } ${index === 1 ? "sm:border-t-0" : ""}`}
               >
-                <div className="pointer-events-none absolute inset-x-6 top-6 flex justify-center md:hidden">
+                <div className="pointer-events-none flex items-end justify-end md:hidden">
                   <img
                     alt=""
                     aria-hidden
                     src={card.illustrationSrc}
-                    className={`h-auto object-contain ${card.illustrationClassName}`}
+                    className={`h-auto w-auto object-contain ${card.illustrationClassName}`}
                   />
                 </div>
                 <div className="pointer-events-none absolute right-0 top-0 hidden h-[232px] w-[249px] md:block">
@@ -669,7 +669,7 @@ export default function App() {
                     className={`absolute h-auto object-contain ${card.illustrationDesktopClassName}`}
                   />
                 </div>
-                <p data-reveal="text" className={`relative z-[1] text-[#101700] text-[14px] md:text-[16px] ${card.textMaxClass}`} style={{ fontFamily: display, fontWeight: 500, lineHeight: "normal" }}>
+                <p data-reveal="text" className={`relative z-[1] pt-4 text-[#101700] text-[14px] md:text-[16px] md:pt-0 md:mt-auto ${card.textMaxClass}`} style={{ fontFamily: display, fontWeight: 500, lineHeight: "normal" }}>
                   {card.text}
                 </p>
               </div>
@@ -788,18 +788,18 @@ export default function App() {
           {services.map((svc, index) => (
             <div
               key={svc.title}
-              className={`relative flex flex-col justify-end p-6 min-h-[200px] md:h-[231px] md:pr-[249px] ${
+              className={`relative grid min-h-[286px] grid-rows-[1fr_auto] p-6 md:flex md:h-[231px] md:flex-col md:pr-[249px] ${
                 index > 0 ? "border-t border-[#d6dace]" : ""
               } ${index % 2 === 1 ? "md:border-l md:border-[#d6dace]" : ""} ${
                 index >= 2 ? "md:border-t md:border-[#d6dace]" : ""
               } ${index === 1 ? "md:border-t-0" : ""}`}
             >
-              <div className="pointer-events-none absolute inset-x-6 top-6 flex justify-center md:hidden">
+              <div className="pointer-events-none flex items-end justify-end md:hidden">
                 <img
                   alt=""
                   aria-hidden
                   src={svc.illustrationSrc}
-                  className={`h-auto object-contain ${svc.illustrationClassName}`}
+                  className={`h-auto w-auto object-contain ${svc.illustrationClassName}`}
                 />
               </div>
               <div className="pointer-events-none absolute right-0 top-0 hidden h-[232px] w-[249px] md:block">
@@ -810,7 +810,7 @@ export default function App() {
                   className={`absolute h-auto object-contain ${svc.illustrationDesktopClassName}`}
                 />
               </div>
-              <div className="relative z-[1] flex flex-col gap-4">
+              <div className="relative z-[1] flex flex-col gap-4 pt-4 md:pt-0 md:mt-auto">
                 <p data-reveal="text" className={`text-[#101700] text-[14px] md:text-[16px] ${svc.titleMaxClass}`} style={{ fontFamily: display, fontWeight: 500, lineHeight: "normal" }}>
                   {svc.title}
                 </p>

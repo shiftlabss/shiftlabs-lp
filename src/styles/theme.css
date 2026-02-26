@@ -129,6 +129,7 @@
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: auto;
   }
 
   /**
@@ -140,9 +141,18 @@
     font-size: var(--font-size);
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
     overflow-x: hidden;
-    overflow-y: auto;
+  }
+
+  html,
+  body,
+  #root {
+    scroll-snap-type: none !important;
+  }
+
+  [data-reveal='section'] {
+    scroll-snap-align: none !important;
   }
 
   #root {
@@ -211,15 +221,18 @@
   opacity: 0;
   transform: translate3d(0, 22px, 0);
   transition-property: opacity, transform;
-  transition-duration: 760ms;
+  transition-duration: 560ms;
   transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-reveal]:not(.is-visible) {
   will-change: opacity, transform;
 }
 
 [data-reveal='section'] {
   opacity: 0.001;
   transform: translate3d(0, 30px, 0);
-  transition-duration: 860ms;
+  transition-duration: 620ms;
 }
 
 [data-reveal='title'] {
@@ -235,11 +248,27 @@
 [data-reveal].is-visible {
   opacity: 1;
   transform: translate3d(0, 0, 0);
+  will-change: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .marquee-track {
     animation: none;
+  }
+
+  [data-reveal],
+  [data-reveal='section'],
+  [data-reveal='title'],
+  [data-reveal='text'] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .marquee-track {
+    animation-duration: 36s;
   }
 
   [data-reveal],

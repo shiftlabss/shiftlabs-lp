@@ -418,7 +418,7 @@ const problemCards = [
     text: "Produto evolui sem alinhamento com comercial.",
     textMaxClass: "max-w-[207px]",
     illustrationSrc: "/illustrations/problem-01-produto-comercial.svg",
-    illustrationClassName: "w-[150px] sm:w-[122px]",
+    illustrationClassName: "w-[128px] sm:w-[122px]",
     illustrationDesktopClassName: "left-[55px] top-[38px] w-[140px]",
   },
   {
@@ -426,7 +426,7 @@ const problemCards = [
     text: "Marketing gera demanda que a operação não absorve.",
     textMaxClass: "max-w-[207px]",
     illustrationSrc: "/illustrations/problem-02-marketing-operacao.svg",
-    illustrationClassName: "w-[136px] sm:w-[104px]",
+    illustrationClassName: "w-[118px] sm:w-[104px]",
     illustrationDesktopClassName: "left-[65px] top-[38px] w-[118px]",
   },
   {
@@ -434,7 +434,7 @@ const problemCards = [
     text: "Tecnologia acumula decisões sem arquitetura clara.",
     textMaxClass: "max-w-[225px]",
     illustrationSrc: "/illustrations/problem-03-tecnologia-arquitetura.svg",
-    illustrationClassName: "w-[148px] sm:w-[124px]",
+    illustrationClassName: "w-[132px] sm:w-[124px]",
     illustrationDesktopClassName: "left-[53px] top-[38px] w-[143px]",
   },
   {
@@ -442,7 +442,7 @@ const problemCards = [
     text: "Gestão decide por percepção, não por sistema.",
     textMaxClass: "max-w-[207px]",
     illustrationSrc: "/illustrations/problem-04-gestao-percepcao.svg",
-    illustrationClassName: "w-[140px] sm:w-[110px]",
+    illustrationClassName: "w-[122px] sm:w-[110px]",
     illustrationDesktopClassName: "left-[61px] top-[34px] w-[127px]",
   },
 ];
@@ -455,7 +455,7 @@ const services = [
     desc: "Estruturamos proposta de valor, arquitetura e roadmap com base em pesquisa e validação.",
     titleMaxClass: "max-w-[146px]",
     illustrationSrc: "/illustrations/services-01-produto-estrategia.svg",
-    illustrationClassName: "w-[140px] sm:w-[112px]",
+    illustrationClassName: "w-[126px] sm:w-[112px]",
     illustrationDesktopClassName: "left-[59px] top-[37px] w-[130px]",
   },
   {
@@ -463,7 +463,7 @@ const services = [
     desc: "Projetamos arquiteturas escaláveis com stack moderna e bem definida.",
     titleMaxClass: "max-w-[175px]",
     illustrationSrc: "/illustrations/services-02-tecnologia-arquitetura.svg",
-    illustrationClassName: "w-[162px] sm:w-[150px]",
+    illustrationClassName: "w-[150px] sm:w-[150px]",
     illustrationDesktopClassName: "left-[32px] top-[51px] w-[184px]",
   },
   {
@@ -471,7 +471,7 @@ const services = [
     desc: "Estruturamos posicionamento, pricing e funis com lógica de margem e LTV.",
     titleMaxClass: "max-w-[143px]",
     illustrationSrc: "/illustrations/services-03-growth-comercial.svg",
-    illustrationClassName: "w-[148px] sm:w-[122px]",
+    illustrationClassName: "w-[136px] sm:w-[122px]",
     illustrationDesktopClassName: "left-[55px] top-[51px] w-[139px]",
   },
   {
@@ -479,7 +479,7 @@ const services = [
     desc: "Modelamos indicadores, automatizamos processos e reduzimos fricção operacional.",
     titleMaxClass: "max-w-[169px]",
     illustrationSrc: "/illustrations/services-04-inteligencia-operacao.svg",
-    illustrationClassName: "w-[168px] sm:w-[146px]",
+    illustrationClassName: "w-[154px] sm:w-[146px]",
     illustrationDesktopClassName: "left-[39px] top-[51px] w-[171px]",
   },
 ];
@@ -508,11 +508,22 @@ const socialLinks = [
   { name: "GitHub", Icon: GitHubIcon },
 ];
 
+const headerSectionLinks = [
+  { id: "inicio", label: "Início" },
+  { id: "problema", label: "Problema" },
+  { id: "abordagem", label: "Abordagem" },
+  { id: "servicos", label: "Serviços" },
+  { id: "cases", label: "Cases" },
+  { id: "contato", label: "Contato" },
+] as const;
+
 type CaseLogoKey = "menux" | "cortex";
 
 /* ════════════════════════════════════════════ */
 export default function App() {
   const [activeCaseLogo, setActiveCaseLogo] = useState<CaseLogoKey>("menux");
+  const [isHeaderCondensed, setIsHeaderCondensed] = useState(false);
+  const [activeHeaderLink, setActiveHeaderLink] = useState<(typeof headerSectionLinks)[number]["id"]>("inicio");
 
   useEffect(() => {
     const revealNodes = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
@@ -542,16 +553,109 @@ export default function App() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const updateHeaderMode = () => {
+      const shouldCondense = window.scrollY > 28 && window.innerWidth >= 1024;
+      setIsHeaderCondensed((current) => (current === shouldCondense ? current : shouldCondense));
+    };
+
+    updateHeaderMode();
+    window.addEventListener("scroll", updateHeaderMode, { passive: true });
+    window.addEventListener("resize", updateHeaderMode);
+    return () => {
+      window.removeEventListener("scroll", updateHeaderMode);
+      window.removeEventListener("resize", updateHeaderMode);
+    };
+  }, []);
+
+  useEffect(() => {
+    const sectionNodes = headerSectionLinks
+      .map((item) => document.getElementById(item.id))
+      .filter((node): node is HTMLElement => node instanceof HTMLElement);
+    if (!sectionNodes.length || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntries = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (!visibleEntries.length) return;
+        setActiveHeaderLink(visibleEntries[0].target.id as (typeof headerSectionLinks)[number]["id"]);
+      },
+      {
+        threshold: [0.12, 0.25, 0.45, 0.7],
+        rootMargin: "-24% 0px -64% 0px",
+      },
+    );
+
+    sectionNodes.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="bg-[#f2f3ef] min-h-screen w-full overflow-x-hidden">
-      {/* ===== TOP BAR ===== */}
-      <div className="max-w-[1512px] mx-auto px-6 xl:px-[192px] py-4 flex items-center gap-2">
-        <ShiftLabsIcon />
-        <ShiftLabsWordmark />
+    <div className="bg-[#f2f3ef] min-h-screen w-full overflow-x-hidden pt-[72px]">
+      {/* ===== FIXED TOP BAR ===== */}
+      <div
+        className={`fixed inset-x-0 top-0 z-50 transition-[padding] duration-300 ease-out ${
+          isHeaderCondensed ? "pt-3" : "pt-0"
+        }`}
+      >
+        <div className={isHeaderCondensed ? "mx-auto w-full max-w-[1040px] px-4" : "w-full"}>
+          <header
+            className={`transition-all duration-300 ease-out ${
+              isHeaderCondensed
+                ? "rounded-[16px] border border-[#d6dace] bg-[#f2f3ef]/96 shadow-[0_12px_30px_rgba(16,23,0,0.10)] backdrop-blur-md"
+                : "border-b border-[#d6dace] bg-[#f2f3ef]/95 backdrop-blur-sm"
+            }`}
+          >
+            <div
+              className={`mx-auto h-[72px] flex items-center justify-between gap-6 transition-[padding,max-width] duration-300 ease-out ${
+                isHeaderCondensed ? "max-w-none px-6" : "max-w-[1512px] px-6 xl:px-[192px]"
+              }`}
+            >
+              <a href="#" className="inline-flex items-center gap-2">
+                <ShiftLabsIcon />
+                <ShiftLabsWordmark />
+              </a>
+              <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
+                {headerSectionLinks.map((item) => (
+                  <a
+                    key={item.id}
+                    href={`#${item.id}`}
+                    onClick={() => setActiveHeaderLink(item.id)}
+                    className={`text-[14px] xl:text-[16px] transition-colors ${
+                      activeHeaderLink === item.id ? "text-[#101700]" : "text-[#70745a] hover:text-[#101700]"
+                    }`}
+                    style={{ fontFamily: body, fontWeight: 400, lineHeight: "normal" }}
+                  >
+                    {item.label}
+                  </a>
+                ))}
+              </nav>
+              <div className="flex items-center gap-4 md:gap-6">
+                <a
+                  href="#"
+                  className="text-[#70745a] hover:text-[#101700] transition-colors text-[14px]"
+                  style={{ fontFamily: mono, fontWeight: 400, lineHeight: "normal" }}
+                >
+                  /VAGAS
+                </a>
+                <span aria-hidden className="h-4 w-px bg-[#d6dace]" />
+                <div className="flex items-center gap-3 md:gap-4">
+                  {socialLinks.map(({ name, Icon }) => (
+                    <a key={`header-${name}`} aria-label={name} href="#" className="inline-flex items-center hover:opacity-70 transition-opacity">
+                      <Icon />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </header>
+        </div>
       </div>
 
       {/* ===== HERO ===== */}
-      <div data-reveal="section" className="border-y border-[#d6dace]">
+      <div id="inicio" data-reveal="section" className="border-y border-[#d6dace] scroll-mt-[96px]">
         <div className="max-w-[1512px] mx-auto flex relative">
           <XlHelper className="border-r border-[#d6dace]" />
           <div className="flex flex-col lg:flex-row flex-1 min-w-0">
@@ -573,18 +677,19 @@ export default function App() {
                 </p>
               </div>
               <div className="mt-8 lg:mt-0">
-                <button
-                  className="bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase cursor-pointer"
+                <a
+                  href="#contato"
+                  className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase cursor-pointer"
                   style={{ fontFamily: mono }}
                 >
                   conhecer mais
-                </button>
+                </a>
               </div>
             </div>
             <div className="flex items-center justify-center p-6 w-full lg:w-1/2 min-h-[300px] lg:h-[462px] lg:border-l border-[#d6dace]">
               <div className="bg-white w-full max-w-[532px] aspect-[532/430] overflow-hidden">
                 <video
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover pointer-events-none"
                   src="/videos/hero-header.mp4"
                   autoPlay
                   loop
@@ -619,7 +724,7 @@ export default function App() {
       </div>
 
       {/* ===== PROBLEM HEADER ===== */}
-      <div data-reveal="section" className="border-b border-[#d6dace]">
+      <div id="problema" data-reveal="section" className="border-b border-[#d6dace] scroll-mt-[96px]">
         <div className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-12">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
             <div className="flex flex-col gap-6 max-w-[499px]">
@@ -647,13 +752,13 @@ export default function App() {
             {problemCards.map((card, index) => (
               <div
                 key={card.id}
-                className={`relative grid min-h-[248px] grid-rows-[1fr_auto] p-6 md:flex md:h-[231px] md:flex-col md:pr-[249px] ${
+                className={`relative flex flex-col p-6 min-h-[248px] md:h-[231px] md:pr-[249px] ${
                   index > 0 ? "border-t border-[#d6dace]" : ""
                 } ${index % 2 === 1 ? "sm:border-l sm:border-[#d6dace]" : ""} ${
                   index >= 2 ? "sm:border-t sm:border-[#d6dace]" : ""
                 } ${index === 1 ? "sm:border-t-0" : ""}`}
               >
-                <div className="pointer-events-none flex items-end justify-end md:hidden">
+                <div className="pointer-events-none mb-4 flex w-full justify-end md:hidden">
                   <img
                     alt=""
                     aria-hidden
@@ -669,7 +774,7 @@ export default function App() {
                     className={`absolute h-auto object-contain ${card.illustrationDesktopClassName}`}
                   />
                 </div>
-                <p data-reveal="text" className={`relative z-[1] pt-4 text-[#101700] text-[14px] md:text-[16px] md:pt-0 md:mt-auto ${card.textMaxClass}`} style={{ fontFamily: display, fontWeight: 500, lineHeight: "normal" }}>
+                <p data-reveal="text" className={`relative z-[1] max-w-[250px] text-[#101700] text-[14px] md:text-[16px] md:mt-auto ${card.textMaxClass}`} style={{ fontFamily: display, fontWeight: 500, lineHeight: "normal" }}>
                   {card.text}
                 </p>
               </div>
@@ -696,7 +801,7 @@ export default function App() {
       </div>
 
       {/* ===== THE SHIFT APPROACH ===== */}
-      <div data-reveal="section" className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] pt-16 pb-9">
+      <div id="abordagem" data-reveal="section" className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] pt-16 pb-9 scroll-mt-[96px]">
         <div className="flex flex-col lg:flex-row lg:items-end gap-8 lg:gap-12">
           <div className="flex flex-col gap-8 max-w-[649px]">
             <SectionLabel>/The Shift Approach</SectionLabel>
@@ -771,7 +876,7 @@ export default function App() {
       </div>
 
       {/* ===== O QUE FAZEMOS ===== */}
-      <div data-reveal="section" className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] pt-16 pb-9">
+      <div id="servicos" data-reveal="section" className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] pt-16 pb-9 scroll-mt-[96px]">
         <div className="flex flex-col gap-6 max-w-[499px]">
           <SectionLabel>/O QUE FAZEMOS</SectionLabel>
           <SectionTitle className="text-[28px] md:text-[36px] lg:text-[40px]">
@@ -788,13 +893,13 @@ export default function App() {
           {services.map((svc, index) => (
             <div
               key={svc.title}
-              className={`relative grid min-h-[286px] grid-rows-[1fr_auto] p-6 md:flex md:h-[231px] md:flex-col md:pr-[249px] ${
+              className={`relative flex flex-col p-6 min-h-[286px] md:h-[231px] md:pr-[249px] ${
                 index > 0 ? "border-t border-[#d6dace]" : ""
               } ${index % 2 === 1 ? "md:border-l md:border-[#d6dace]" : ""} ${
                 index >= 2 ? "md:border-t md:border-[#d6dace]" : ""
               } ${index === 1 ? "md:border-t-0" : ""}`}
             >
-              <div className="pointer-events-none flex items-end justify-end md:hidden">
+              <div className="pointer-events-none mb-4 flex w-full justify-end md:hidden">
                 <img
                   alt=""
                   aria-hidden
@@ -810,7 +915,7 @@ export default function App() {
                   className={`absolute h-auto object-contain ${svc.illustrationDesktopClassName}`}
                 />
               </div>
-              <div className="relative z-[1] flex flex-col gap-4 pt-4 md:pt-0 md:mt-auto">
+              <div className="relative z-[1] flex max-w-[250px] flex-col gap-4 md:max-w-none md:mt-auto">
                 <p data-reveal="text" className={`text-[#101700] text-[14px] md:text-[16px] ${svc.titleMaxClass}`} style={{ fontFamily: display, fontWeight: 500, lineHeight: "normal" }}>
                   {svc.title}
                 </p>
@@ -881,7 +986,7 @@ export default function App() {
       </div>
 
       {/* ===== CASES ===== */}
-      <div data-reveal="section" className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] pt-16 pb-9">
+      <div id="cases" data-reveal="section" className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] pt-16 pb-9 scroll-mt-[96px]">
         <div className="flex flex-col gap-6 max-w-[499px]">
           <SectionLabel>/cases</SectionLabel>
           <SectionTitle className="text-[28px] md:text-[36px] lg:text-[40px]">
@@ -1090,12 +1195,13 @@ export default function App() {
               </p>
             </div>
             <div className="flex items-end justify-end p-6 w-full lg:w-1/2 min-h-[120px] lg:h-[462px]">
-              <button
-                className="bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase cursor-pointer"
+              <a
+                href="#contato"
+                className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase cursor-pointer"
                 style={{ fontFamily: mono }}
               >
                 conhecer mais
-              </button>
+              </a>
             </div>
           </div>
           <XlHelper className="border-l border-[#d6dace]" />
@@ -1104,7 +1210,7 @@ export default function App() {
       </div>
 
       {/* ===== FOOTER ===== */}
-      <div data-reveal="section" className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-9">
+      <div id="contato" data-reveal="section" className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-9 scroll-mt-[96px]">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 pb-9">
           <div className="flex flex-col gap-8 max-w-[356px]">
             <ShiftLabsIcon />

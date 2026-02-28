@@ -1341,18 +1341,51 @@ function stripInlineMarkdown(value: string): string {
     .trim();
 }
 
-function isStyledRoleSectionHeading(rawHeading: string): boolean {
+type StyledRoleSectionHeading = {
+  canonical: string;
+  patterns: RegExp[];
+};
+
+const styledRoleSectionHeadings: StyledRoleSectionHeading[] = [
+  {
+    canonical: "Missão do cargo",
+    patterns: [/\bmissao do cargo\b/],
+  },
+  {
+    canonical: "Responsabilidades no dia a dia",
+    patterns: [/\bresponsabilidades (no|do|de) dia a dia\b/],
+  },
+  {
+    canonical: "Perfil esperado",
+    patterns: [/\bperfil esperado\b/],
+  },
+  {
+    canonical: "O que esperamos nos primeiros 60–90 dias",
+    patterns: [/\bo que esperamos nos primeiros 60(?: a)? 90 dias\b/],
+  },
+];
+
+function resolveStyledRoleSectionHeading(rawHeading: string): string | null {
   const normalized = normalizeSearchText(stripInlineMarkdown(rawHeading));
-  return (
-    normalized === "missao do cargo" ||
-    normalized === "responsabilidades no dia a dia" ||
-    normalized === "perfil esperado" ||
-    normalized === "o que esperamos nos primeiros 60 90 dias"
-  );
+  for (const entry of styledRoleSectionHeadings) {
+    if (entry.patterns.some((pattern) => pattern.test(normalized))) {
+      return entry.canonical;
+    }
+  }
+  return null;
+}
+
+function isStyledRoleSectionHeading(rawHeading: string): boolean {
+  return resolveStyledRoleSectionHeading(rawHeading) !== null;
 }
 
 function formatRoleSectionHeading(rawHeading: string): string {
-  return `/${stripInlineMarkdown(rawHeading).toLocaleUpperCase("pt-BR")}`;
+  const canonicalHeading = resolveStyledRoleSectionHeading(rawHeading);
+  const heading = (canonicalHeading ?? stripInlineMarkdown(rawHeading))
+    .replace(/^\/+/, "")
+    .replace(/[:–—-]+$/g, "")
+    .trim();
+  return `/${heading.toLocaleUpperCase("pt-BR")}`;
 }
 
 function inlineMarkdownToHtml(value: string): string {
@@ -1400,9 +1433,9 @@ function markdownToHtml(markdown: string): string {
     if (headingMatch) {
       const level = Math.min(6, headingMatch[1].length);
       const headingText = headingMatch[2].trim();
-      if (level >= 2 && isStyledRoleSectionHeading(headingText)) {
+      if (isStyledRoleSectionHeading(headingText)) {
         html.push(
-          `<h${level} class="role-section-label" style="font-family: 'Basis Grotesque Pro Mono', 'InterDisplay', sans-serif;">${escapeHtml(formatRoleSectionHeading(headingText))}</h${level}>`,
+          `<h2 class="role-section-label" style="font-family: 'Basis Grotesque Pro Mono', 'InterDisplay', sans-serif;">${escapeHtml(formatRoleSectionHeading(headingText))}</h2>`,
         );
       } else {
         html.push(`<h${level}>${inlineMarkdownToHtml(headingText)}</h${level}>`);
@@ -1442,7 +1475,13 @@ function markdownToHtml(markdown: string): string {
       paragraph.push(lines[index].trim());
       index += 1;
     }
-    html.push(`<p>${inlineMarkdownToHtml(paragraph.join(" "))}</p>`);
+    if (paragraph.length === 1 && isStyledRoleSectionHeading(paragraph[0])) {
+      html.push(
+        `<h2 class="role-section-label" style="font-family: 'Basis Grotesque Pro Mono', 'InterDisplay', sans-serif;">${escapeHtml(formatRoleSectionHeading(paragraph[0]))}</h2>`,
+      );
+    } else {
+      html.push(`<p>${inlineMarkdownToHtml(paragraph.join(" "))}</p>`);
+    }
   }
 
   return html.join("");
@@ -2480,7 +2519,7 @@ function RoleContentSection({
   return (
     <section className="pt-6 md:pt-7">
       <h2
-        className={usesLabelStyle ? "text-[16px] text-[#70745a] uppercase" : "text-[24px] text-[#101700]"}
+        className={usesLabelStyle ? "text-[16px] text-[#70745a] uppercase tracking-[0.02em]" : "text-[24px] text-[#101700]"}
         style={{
           fontFamily: usesLabelStyle ? mono : heading,
           fontWeight: usesLabelStyle ? 400 : 500,
@@ -2500,7 +2539,7 @@ function MarkdownBody({ markdown }: { markdown: string }) {
 
   return (
     <div
-      className="pt-2 text-[16px] text-[#101700] leading-[1.42] [&_h1]:mt-7 [&_h1]:text-[28px] [&_h1]:font-medium [&_h2]:mt-7 [&_h2]:text-[24px] [&_h2]:font-medium [&_h3]:mt-6 [&_h3]:text-[20px] [&_h3]:font-medium [&_h2.role-section-label]:mt-12 [&_h2.role-section-label]:text-[16px] [&_h2.role-section-label]:font-normal [&_h2.role-section-label]:uppercase [&_h2.role-section-label]:text-[#70745a] [&_h2.role-section-label]:leading-[1.1] [&_h3.role-section-label]:mt-12 [&_h3.role-section-label]:text-[16px] [&_h3.role-section-label]:font-normal [&_h3.role-section-label]:uppercase [&_h3.role-section-label]:text-[#70745a] [&_h3.role-section-label]:leading-[1.1] [&_p]:m-0 [&_p+p]:mt-3 [&_p+ul]:mt-3 [&_p+ol]:mt-3 [&_p+h2.role-section-label]:mt-12 [&_p+h3.role-section-label]:mt-12 [&_ul]:m-0 [&_ul]:list-disc [&_ul]:pl-6 [&_ul+*]:mt-3 [&_ul+h2.role-section-label]:mt-12 [&_ul+h3.role-section-label]:mt-12 [&_ol]:m-0 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol+*]:mt-3 [&_ol+h2.role-section-label]:mt-12 [&_ol+h3.role-section-label]:mt-12 [&_li]:mb-2 [&_li:last-child]:mb-0 [&_a]:underline [&_a]:underline-offset-2 [&_a:hover]:opacity-80 [&_code]:rounded-none [&_code]:border [&_code]:border-[#d6dace] [&_code]:bg-[#ecefe7] [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[14px]"
+      className="pt-2 text-[16px] text-[#101700] leading-[1.42] [&_h1]:mt-7 [&_h1]:text-[28px] [&_h1]:font-medium [&_h2]:mt-7 [&_h2]:text-[24px] [&_h2]:font-medium [&_h3]:mt-6 [&_h3]:text-[20px] [&_h3]:font-medium [&_h2.role-section-label]:mt-12 [&_h2.role-section-label]:text-[16px] [&_h2.role-section-label]:font-normal [&_h2.role-section-label]:uppercase [&_h2.role-section-label]:tracking-[0.02em] [&_h2.role-section-label]:text-[#70745a] [&_h2.role-section-label]:leading-[1.1] [&_h3.role-section-label]:mt-12 [&_h3.role-section-label]:text-[16px] [&_h3.role-section-label]:font-normal [&_h3.role-section-label]:uppercase [&_h3.role-section-label]:tracking-[0.02em] [&_h3.role-section-label]:text-[#70745a] [&_h3.role-section-label]:leading-[1.1] [&_p]:m-0 [&_p+p]:mt-3 [&_p+ul]:mt-3 [&_p+ol]:mt-3 [&_p+h2.role-section-label]:mt-12 [&_p+h3.role-section-label]:mt-12 [&_ul]:m-0 [&_ul]:list-disc [&_ul]:pl-6 [&_ul+*]:mt-3 [&_ul+h2.role-section-label]:mt-12 [&_ul+h3.role-section-label]:mt-12 [&_ol]:m-0 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol+*]:mt-3 [&_ol+h2.role-section-label]:mt-12 [&_ol+h3.role-section-label]:mt-12 [&_li]:mb-2 [&_li:last-child]:mb-0 [&_a]:underline [&_a]:underline-offset-2 [&_a:hover]:opacity-80 [&_code]:rounded-none [&_code]:border [&_code]:border-[#d6dace] [&_code]:bg-[#ecefe7] [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[14px]"
       style={{ fontFamily: body }}
       dangerouslySetInnerHTML={{ __html: html }}
     />

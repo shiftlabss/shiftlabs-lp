@@ -587,14 +587,23 @@ const socialLinks = [
   { name: "GitHub", Icon: GitHubIcon },
 ];
 
+const careersSocialLinks = [
+  { name: "LinkedIn", href: "https://www.linkedin.com/company/shiftlabs-br/", Icon: LinkedInIcon },
+  { name: "Instagram", href: "https://instagram.com/shiftlabs.br", Icon: InstagramIcon },
+  { name: "GitHub", href: "https://github.com/shiftlabs-br", Icon: GitHubIcon },
+];
+
 type CareersRole = {
   slug: string;
   title: string;
+  displayTitle?: string;
   location: string;
   commitment: string;
   model: string;
   area: string;
+  displayArea?: string;
   intro: string;
+  cardSummary?: string;
   roleOneLiner?: string;
   about: string[];
   responsibilities: string[];
@@ -616,11 +625,14 @@ type CareersRoleRow = {
   id: string;
   slug: string;
   title: string;
+  display_title?: string | null;
   location: string;
   commitment: string;
   model: string;
   area: string;
+  display_area?: string | null;
   intro: string;
+  card_summary?: string | null;
   role_one_liner: string | null;
   body_markdown: string | null;
   about: string[] | null;
@@ -647,21 +659,248 @@ function toTextArray(value: unknown): string[] {
   return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
 }
 
+function normalizeSearchText(value: string): string {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function isGenericArea(value: string | undefined): boolean {
+  const normalized = normalizeSearchText(value ?? "");
+  return !normalized || normalized === "geral" || normalized === "general";
+}
+
+function inferRoleArea({
+  area,
+  title,
+  intro,
+  roleOneLiner,
+  aboutFirst,
+  bodyMarkdown,
+}: {
+  area?: string;
+  title?: string;
+  intro?: string;
+  roleOneLiner?: string;
+  aboutFirst?: string;
+  bodyMarkdown?: string;
+}): string {
+  const trimmedArea = (area ?? "").trim();
+  if (trimmedArea && !isGenericArea(trimmedArea)) {
+    return trimmedArea;
+  }
+
+  const detectArea = (haystack: string): string | null => {
+    if (/(finance|contab|fiscal|tesouraria|controlador|analista financeiro)/.test(haystack)) return "Financeiro";
+    if (/(rh|people|recrut|talent|human)/.test(haystack)) return "Pessoas";
+    if (/(customer success|suporte|atendimento|cx|operac)/.test(haystack)) return "Operações";
+    if (/(video|criador|editor|conteudo|content)/.test(haystack)) return "Conteúdo";
+    if (/(design|ui|ux)/.test(haystack)) return "Design";
+    if (/(backend|frontend|fullstack|dev|engenhari|software|tech|tecnolog)/.test(haystack)) return "Tecnologia";
+    if (/(produto|product|pm|manager)/.test(haystack)) return "Produto";
+    if (/(growth|marketing|comercial|sdr|closer|venda|sales)/.test(haystack)) return "Growth & Comercial";
+    return null;
+  };
+
+  const titleMatch = detectArea(normalizeSearchText(`${title ?? ""} ${area ?? ""}`));
+  if (titleMatch) return titleMatch;
+
+  const fullMatch = detectArea(
+    normalizeSearchText(`${title ?? ""} ${intro ?? ""} ${roleOneLiner ?? ""} ${aboutFirst ?? ""} ${bodyMarkdown ?? ""}`),
+  );
+  if (fullMatch) return fullMatch;
+
+  return "Geral";
+}
+
+function stripRoleSenioritySuffix(title: string): string {
+  const trimmed = title.trim();
+  if (!trimmed) return trimmed;
+
+  const hasSeniorityTokens = (value: string) => {
+    const normalized = normalizeSearchText(value);
+    if (!normalized) return false;
+
+    const tokens = normalized.split(" ").filter(Boolean);
+    if (!tokens.length || tokens.length > 8) return false;
+
+    const allowed = new Set([
+      "junior",
+      "jr",
+      "pleno",
+      "senior",
+      "especialista",
+      "lead",
+      "lider",
+      "mid",
+      "middle",
+      "nivel",
+      "i",
+      "ii",
+      "iii",
+      "iv",
+      "v",
+      "ou",
+      "e",
+      "de",
+    ]);
+    const levelTokens = new Set(["junior", "jr", "pleno", "senior", "especialista", "lead", "lider", "mid", "middle"]);
+
+    let hasLevel = false;
+    for (const token of tokens) {
+      if (!allowed.has(token)) return false;
+      if (levelTokens.has(token)) hasLevel = true;
+    }
+    return hasLevel;
+  };
+
+  const separatorMatch = trimmed.match(/^(.*?)(?:\s[-–—]\s|\s\|\s)([^|]+)$/);
+  if (separatorMatch) {
+    const base = separatorMatch[1].trim();
+    const tail = separatorMatch[2].trim();
+    if (base && hasSeniorityTokens(tail)) return base;
+  }
+
+  const parentheticalMatch = trimmed.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
+  if (parentheticalMatch) {
+    const base = parentheticalMatch[1].trim();
+    const tail = parentheticalMatch[2].trim();
+    if (base && hasSeniorityTokens(tail)) return base;
+  }
+
+  return trimmed;
+}
+
+function applyRoleTitleAlias(title: string): string {
+  const trimmed = title.trim();
+  if (!trimmed) return trimmed;
+
+  const normalized = normalizeSearchText(trimmed);
+
+  if (/^executivo comercial\b/.test(normalized) && /(sdr|closer)/.test(normalized)) {
+    return "Sales Executive";
+  }
+
+  if (/^(rh|recursos humanos)\b/.test(normalized)) {
+    return "Gestor de RH";
+  }
+
+  return trimmed;
+}
+
+function getDisplayRoleTitle(title: string, precomputedDisplayTitle?: string): string {
+  if (precomputedDisplayTitle?.trim()) {
+    return precomputedDisplayTitle.trim();
+  }
+  return stripRoleSenioritySuffix(applyRoleTitleAlias(title));
+}
+
+function toRoleIntroPreview(value: string): string {
+  return value
+    .replace(/\[(.*?)\]\((.*?)\)/g, "$1")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/^\s*[-–—]{2,}\s*/gm, "")
+    .replace(/^\s*[-*+]\s+/gm, "")
+    .replace(/^\s*\d+\.\s+/gm, "")
+    .replace(/[*_`~]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function isGenericRoleSummary(value: string): boolean {
+  const normalized = normalizeSearchText(value);
+  if (!normalized || normalized.length < 20) return true;
+  return (
+    normalized === "missao do cargo" ||
+    normalized === "descricao da vaga" ||
+    normalized === "detalhes da vaga" ||
+    normalized === "the role" ||
+    normalized === "role summary" ||
+    normalized === "summary" ||
+    normalized === "about the role" ||
+    normalized === "sobre a vaga"
+  );
+}
+
+function firstMeaningfulMarkdownLine(markdown?: string): string {
+  if (!markdown?.trim()) return "";
+  const lines = markdown
+    .split("\n")
+    .map((line) => toRoleIntroPreview(line))
+    .filter(Boolean);
+  return lines.find((line) => !isGenericRoleSummary(line)) ?? "";
+}
+
+function getRoleCardSummary(
+  role: Pick<CareersRole, "intro" | "roleOneLiner" | "bodyMarkdown" | "about" | "cardSummary">,
+): string {
+  const persistedSummary = role.cardSummary?.trim();
+  if (persistedSummary) return persistedSummary;
+
+  const candidates = [
+    toRoleIntroPreview(role.intro),
+    toRoleIntroPreview(role.roleOneLiner ?? ""),
+    firstMeaningfulMarkdownLine(role.bodyMarkdown),
+    toRoleIntroPreview(role.about[0] ?? ""),
+  ];
+  return (
+    candidates.find((candidate) => candidate && !isGenericRoleSummary(candidate)) ??
+    "Detalhes da vaga disponíveis na página completa."
+  );
+}
+
+function getRoleCardArea(
+  role: Pick<CareersRole, "area" | "displayArea" | "title" | "intro" | "roleOneLiner" | "about" | "bodyMarkdown">,
+): string {
+  const persistedArea = role.displayArea?.trim();
+  if (persistedArea) return persistedArea;
+  return inferRoleArea({
+    area: role.area,
+    title: role.title,
+    intro: role.intro,
+    roleOneLiner: role.roleOneLiner,
+    aboutFirst: role.about?.[0],
+    bodyMarkdown: role.bodyMarkdown,
+  });
+}
+
 function rowToCareersRole(row: CareersRoleRow): CareersRole {
+  const about = toTextArray(row.about);
+  const responsibilities = toTextArray(row.responsibilities);
+  const requirements = toTextArray(row.requirements);
+  const stack = toTextArray(row.stack);
+  const process = toTextArray(row.process);
+  const joinUs = toTextArray(row.join_us);
+  const area = inferRoleArea({
+    area: row.area,
+    title: row.title,
+    intro: row.intro,
+    roleOneLiner: row.role_one_liner ?? undefined,
+    aboutFirst: about[0],
+    bodyMarkdown: row.body_markdown ?? undefined,
+  });
+
   return {
     slug: row.slug,
     title: row.title,
+    displayTitle: row.display_title?.trim() || undefined,
     location: row.location,
     commitment: row.commitment,
     model: row.model,
-    area: row.area,
+    area,
+    displayArea: row.display_area?.trim() || area,
     intro: row.intro,
+    cardSummary: row.card_summary?.trim() || undefined,
     roleOneLiner: row.role_one_liner ?? undefined,
-    about: toTextArray(row.about),
-    responsibilities: toTextArray(row.responsibilities),
-    requirements: toTextArray(row.requirements),
-    stack: toTextArray(row.stack),
-    process: toTextArray(row.process),
+    about,
+    responsibilities,
+    requirements,
+    stack,
+    process,
     whyTitle: row.why_title ?? undefined,
     roleTitle: row.role_title ?? undefined,
     doTitle: row.do_title ?? undefined,
@@ -669,19 +908,28 @@ function rowToCareersRole(row: CareersRoleRow): CareersRole {
     stackTitle: row.stack_title ?? undefined,
     processTitle: row.process_title ?? undefined,
     joinTitle: row.join_title ?? undefined,
-    joinUs: toTextArray(row.join_us),
+    joinUs,
     bodyMarkdown: row.body_markdown ?? undefined,
   };
 }
 
 function roleToCareersRowPayload(role: CareersRole) {
+  const area = inferRoleArea({
+    area: role.area,
+    title: role.title,
+    intro: role.intro,
+    roleOneLiner: role.roleOneLiner,
+    aboutFirst: role.about[0],
+    bodyMarkdown: role.bodyMarkdown,
+  });
+
   return {
     slug: role.slug,
     title: role.title,
     location: role.location,
     commitment: role.commitment,
     model: role.model,
-    area: role.area,
+    area,
     intro: role.intro,
     role_one_liner: role.roleOneLiner ?? null,
     body_markdown: role.bodyMarkdown ?? null,
@@ -896,20 +1144,44 @@ function normalizeCareersRole(raw: unknown): CareersRole | null {
     return null;
   }
   const toList = (value: unknown) => (Array.isArray(value) ? value.filter((item): item is string => typeof item === "string" && item.trim().length > 0) : []);
+  const about = toList(entry.about);
+  const responsibilities = toList(entry.responsibilities);
+  const requirements = toList(entry.requirements);
+  const stack = toList(entry.stack);
+  const process = toList(entry.process);
+  const joinUs = toList(entry.joinUs);
+  const area = inferRoleArea({
+    area: entry.area,
+    title: entry.title,
+    intro: entry.intro,
+    roleOneLiner: entry.roleOneLiner,
+    aboutFirst: about[0],
+    bodyMarkdown: entry.bodyMarkdown,
+  });
+
   return {
     slug: entry.slug.trim(),
     title: entry.title.trim(),
+    displayTitle: getDisplayRoleTitle(entry.title.trim()),
     location: entry.location.trim(),
     commitment: entry.commitment.trim(),
     model: entry.model.trim(),
-    area: entry.area.trim(),
+    area,
+    displayArea: area,
     intro: entry.intro.trim(),
+    cardSummary: getRoleCardSummary({
+      intro: entry.intro.trim(),
+      roleOneLiner: entry.roleOneLiner?.trim() || undefined,
+      bodyMarkdown: entry.bodyMarkdown?.trim() || undefined,
+      about,
+      cardSummary: undefined,
+    }),
     roleOneLiner: entry.roleOneLiner?.trim() || undefined,
-    about: toList(entry.about),
-    responsibilities: toList(entry.responsibilities),
-    requirements: toList(entry.requirements),
-    stack: toList(entry.stack),
-    process: toList(entry.process),
+    about,
+    responsibilities,
+    requirements,
+    stack,
+    process,
     whyTitle: entry.whyTitle?.trim() || undefined,
     roleTitle: entry.roleTitle?.trim() || undefined,
     doTitle: entry.doTitle?.trim() || undefined,
@@ -917,7 +1189,7 @@ function normalizeCareersRole(raw: unknown): CareersRole | null {
     stackTitle: entry.stackTitle?.trim() || undefined,
     processTitle: entry.processTitle?.trim() || undefined,
     joinTitle: entry.joinTitle?.trim() || undefined,
-    joinUs: toList(entry.joinUs),
+    joinUs,
     bodyMarkdown: entry.bodyMarkdown?.trim() || undefined,
   };
 }
@@ -1897,86 +2169,176 @@ function MarkdownBody({ markdown }: { markdown: string }) {
 }
 
 function CareerRolePage({ role }: { role: CareersRole }) {
-  const careersBorder = "border-[#d6dace]";
-  const applyHref = `mailto:careers@shiftlabs.digital?subject=${encodeURIComponent(`Candidatura - ${role.title}`)}`;
+  const [isHeaderCondensed, setIsHeaderCondensed] = useState(false);
+  const displayRoleTitle = getDisplayRoleTitle(role.title, role.displayTitle);
+  const displayArea = getRoleCardArea(role);
+  const roleSummary = getRoleCardSummary(role);
+  const applyHref = `mailto:careers@shiftlabs.digital?subject=${encodeURIComponent(`Candidatura - ${displayRoleTitle}`)}`;
+
+  useEffect(() => {
+    let rafId = 0;
+
+    const updateHeaderMode = () => {
+      const shouldCondense = window.scrollY > 28 && window.innerWidth >= 1024;
+      setIsHeaderCondensed((current) => (current === shouldCondense ? current : shouldCondense));
+    };
+
+    const scheduleHeaderUpdate = () => {
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = 0;
+        updateHeaderMode();
+      });
+    };
+
+    updateHeaderMode();
+    window.addEventListener("scroll", scheduleHeaderUpdate, { passive: true });
+    window.addEventListener("resize", scheduleHeaderUpdate);
+    return () => {
+      window.removeEventListener("scroll", scheduleHeaderUpdate);
+      window.removeEventListener("resize", scheduleHeaderUpdate);
+      if (rafId) {
+        window.cancelAnimationFrame(rafId);
+      }
+    };
+  }, []);
 
   return (
-    <div className="relative min-h-screen w-full overflow-x-hidden bg-[#f2f3ef] text-[#101700]">
-      <CareersHeader />
-
-      <main className={`mt-[66px] min-h-[calc(100vh-66px)] border-y ${careersBorder}`}>
-        <section className={`border-b ${careersBorder}`}>
-          <div className="max-w-[1512px] mx-auto px-6 md:px-8">
-            <div className="flex items-center">
-              <div className={`relative inline-flex h-[60px] items-center justify-center border-x ${careersBorder} px-6 md:h-[76px] md:px-6`}>
-                <h1 className="text-[30px] text-[#101700] md:text-[32px]" style={{ fontFamily: display, fontWeight: 500, lineHeight: "normal" }}>
-                  {role.title}
-                </h1>
-                <div aria-hidden className="pointer-events-none absolute inset-0 hidden md:block">
-                  <div className="absolute left-0 top-0">
-                    <span className="absolute top-0 -translate-x-1/2 h-[2px] w-[14px] bg-[#70745a]" />
-                    <span className="absolute top-0 -translate-x-1/2 h-[12px] w-[2px] bg-[#70745a]" />
-                  </div>
-                  <div className="absolute right-0 top-0">
-                    <span className="absolute top-0 -translate-x-1/2 h-[2px] w-[14px] bg-[#70745a]" />
-                    <span className="absolute top-0 -translate-x-1/2 h-[12px] w-[2px] bg-[#70745a]" />
-                  </div>
-                  <div className="absolute bottom-0 left-0">
-                    <span className="absolute bottom-0 -translate-x-1/2 h-[2px] w-[14px] bg-[#70745a]" />
-                    <span className="absolute bottom-0 -translate-x-1/2 h-[12px] w-[2px] bg-[#70745a]" />
-                  </div>
-                  <div className="absolute bottom-0 right-0">
-                    <span className="absolute bottom-0 -translate-x-1/2 h-[2px] w-[14px] bg-[#70745a]" />
-                    <span className="absolute bottom-0 -translate-x-1/2 h-[12px] w-[2px] bg-[#70745a]" />
-                  </div>
+    <div className="bg-[#f2f3ef] min-h-screen w-full overflow-x-hidden pt-[72px]">
+      <div
+        className={`fixed inset-x-0 top-0 z-50 transition-[padding] duration-300 ease-out ${
+          isHeaderCondensed ? "pt-3" : "pt-0"
+        }`}
+      >
+        <div className={isHeaderCondensed ? "mx-auto w-full max-w-[1040px] px-4" : "w-full"}>
+          <header
+            className={`transition-all duration-300 ease-out ${
+              isHeaderCondensed
+                ? "rounded-[16px] border border-[#d6dace] bg-[#f2f3ef]"
+                : "border-b border-[#d6dace] bg-[#f2f3ef]"
+            }`}
+          >
+            <div
+              className={`mx-auto h-[72px] flex items-center justify-between gap-6 transition-[padding,max-width] duration-300 ease-out ${
+                isHeaderCondensed ? "max-w-none px-6" : "max-w-[1512px] px-6 xl:px-[192px]"
+              }`}
+            >
+              <a href="/" className="inline-flex items-center gap-2">
+                <ShiftLabsIcon />
+                <ShiftLabsWordmark />
+              </a>
+              <div className="flex items-center gap-4 md:gap-6">
+                <a
+                  href="/vagas"
+                  className="text-[#101700] transition-colors text-[14px]"
+                  style={{ fontFamily: mono, fontWeight: 400, lineHeight: "normal" }}
+                >
+                  /VAGAS
+                </a>
+                <span aria-hidden className="h-4 w-px bg-[#d6dace]" />
+                <div className="flex items-center gap-3 md:gap-4">
+                  {careersSocialLinks.map(({ name, href, Icon }) => (
+                    <a
+                      key={`careers-role-header-${name}`}
+                      href={href}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={name}
+                      className="inline-flex items-center opacity-70 hover:opacity-100 transition-opacity"
+                    >
+                      <Icon />
+                    </a>
+                  ))}
                 </div>
               </div>
             </div>
+          </header>
+        </div>
+      </div>
+
+      <main className="text-[#101700]">
+        <div className="border-y border-[#d6dace]">
+          <div className="max-w-[1512px] mx-auto flex relative">
+            <XlHelper className="border-r border-[#d6dace]" />
+            <div className="flex-1 border-x border-[#d6dace]">
+            <article className="flex min-h-[360px] flex-col justify-between gap-8 p-6 md:p-8 xl:p-10">
+              <div className="flex flex-col gap-4 max-w-[880px]">
+                <a
+                  href="/vagas"
+                  className="inline-flex w-fit text-[#70745a] hover:text-[#101700] transition-colors text-[14px] md:text-[16px] uppercase"
+                  style={{ fontFamily: mono }}
+                >
+                  /voltar para vagas
+                </a>
+                <p className="text-[#70745a] text-[13px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
+                  /{displayArea}
+                </p>
+                <h1
+                  className="text-[#101700] text-[32px] md:text-[44px] lg:text-[56px] leading-[1.03]"
+                  style={{ fontFamily: display, fontWeight: 500 }}
+                >
+                  {displayRoleTitle}
+                </h1>
+                <p
+                  className="text-[#70745a] text-[18px] md:text-[24px] max-w-[980px]"
+                  style={{ fontFamily: body, lineHeight: 1.3 }}
+                >
+                  {roleSummary}
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-wrap gap-2">
+                  <span
+                    className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#70745a]"
+                    style={{ fontFamily: body, lineHeight: "normal" }}
+                  >
+                    <CareersLocationIcon />
+                    {role.location}
+                  </span>
+                  <span
+                    className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#70745a]"
+                    style={{ fontFamily: body, lineHeight: "normal" }}
+                  >
+                    <CareersClockIcon />
+                    {role.commitment}
+                  </span>
+                  <span
+                    className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#70745a]"
+                    style={{ fontFamily: body, lineHeight: "normal" }}
+                  >
+                    <CareersWorkModeIcon />
+                    {role.model}
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <a
+                    href="/vagas"
+                    className="inline-flex border border-[#101700] text-[#101700] px-4 py-3 text-[14px] uppercase"
+                    style={{ fontFamily: mono, lineHeight: "normal" }}
+                  >
+                    ver outras vagas
+                  </a>
+                  <a
+                    href={applyHref}
+                    className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-3 text-[14px] uppercase"
+                    style={{ fontFamily: mono, lineHeight: "normal" }}
+                  >
+                    candidatar-se
+                  </a>
+                </div>
+              </div>
+            </article>
+            </div>
+            <XlHelper className="border-l border-[#d6dace]" />
+            <SectionBorderTicks positions={["192px", "calc(100% - 192px)"]} />
           </div>
-        </section>
+        </div>
 
-        <div className="mx-auto w-full max-w-[1512px] px-6 pb-14 pt-8 md:px-8 md:pb-20 md:pt-12">
-          <div className="grid grid-cols-1 gap-10 lg:grid-cols-[304px_minmax(0,1fr)] lg:gap-14">
-            <aside className="order-2 lg:order-1 lg:sticky lg:top-[92px] lg:self-start">
-              <a
-                href="/vagas"
-                className="inline-flex items-center gap-2 text-[16px] text-[#101700] transition-colors hover:text-[#70745a] md:text-[20px]"
-                style={{ fontFamily: display, fontWeight: 500, lineHeight: "normal" }}
-              >
-                <span aria-hidden>↩</span>
-                <span>Vagas</span>
-              </a>
-
-              <div className={`mt-9 border-t ${careersBorder} pt-6`}>
-                <p
-                  className="mb-3 text-[13px] text-[#70745a] md:text-[14px]"
-                  style={{ fontFamily: body, lineHeight: "normal" }}
-                >
-                  Employment Type
-                </p>
-                <RoleMetaPill>{role.commitment}</RoleMetaPill>
-              </div>
-
-              <div className={`mt-6 border-t ${careersBorder} pt-6`}>
-                <p
-                  className="mb-3 text-[13px] text-[#70745a] md:text-[14px]"
-                  style={{ fontFamily: body, lineHeight: "normal" }}
-                >
-                  Location
-                </p>
-                <RoleMetaPill>{role.location}</RoleMetaPill>
-              </div>
-
-              <a
-                href={applyHref}
-                className="mt-8 inline-flex bg-[#101700] px-4 py-4 text-[14px] uppercase text-[#f2f3ef] md:text-[16px]"
-                style={{ fontFamily: mono, lineHeight: "normal" }}
-              >
-                Apply now
-              </a>
-            </aside>
-
-            <article className="order-1 max-w-[920px] lg:order-2">
+        <div className="border-b border-[#d6dace]">
+          <div className="max-w-[1512px] mx-auto flex relative">
+            <XlHelper className="border-r border-[#d6dace]" />
+            <article className="flex-1 border-x border-[#d6dace] px-6 md:px-8 xl:px-10 py-10 md:py-12">
               {role.bodyMarkdown?.trim() ? (
                 <MarkdownBody markdown={role.bodyMarkdown} />
               ) : (
@@ -2080,6 +2442,83 @@ function CareerRolePage({ role }: { role: CareersRole }) {
                 </>
               )}
             </article>
+            <XlHelper className="border-l border-[#d6dace]" />
+            <SectionBorderTicks positions={["192px", "calc(100% - 192px)"]} />
+          </div>
+        </div>
+
+        <div className="border-y border-[#d6dace] mt-16">
+          <div className="max-w-[1512px] mx-auto flex relative">
+            <XlHelper className="border-r border-[#d6dace]" />
+            <div className="flex flex-col lg:flex-row flex-1 min-w-0 bg-[#b4eb38]">
+              <div className="flex flex-col justify-between p-6 w-full lg:w-1/2 min-h-[300px] lg:h-[360px]">
+                <div className="flex flex-col gap-6 max-w-[450px]">
+                  <p className="text-[#517400] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
+                    /call to action
+                  </p>
+                  <div className="text-[#101700] text-[28px] md:text-[36px] lg:text-[40px]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: "normal" }}>
+                    Curtiu essa vaga?
+                  </div>
+                </div>
+                <p
+                  className="text-[#517400] text-[14px] md:text-[16px] max-w-[390px] mt-8"
+                  style={{ fontFamily: body, lineHeight: 1.3 }}
+                >
+                  Candidate-se agora ou explore outras oportunidades abertas no time.
+                </p>
+              </div>
+              <div className="flex items-end justify-end p-6 w-full lg:w-1/2 min-h-[120px] lg:h-[360px] gap-3">
+                <a
+                  href="/vagas"
+                  className="inline-flex border border-[#101700] text-[#101700] px-4 py-4 text-[14px] md:text-[16px] uppercase"
+                  style={{ fontFamily: mono, lineHeight: "normal" }}
+                >
+                  ver outras vagas
+                </a>
+                <a
+                  href={applyHref}
+                  className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase"
+                  style={{ fontFamily: mono, lineHeight: "normal" }}
+                >
+                  candidatar-se
+                </a>
+              </div>
+            </div>
+            <XlHelper className="border-l border-[#d6dace]" />
+            <SectionBorderTicks positions={["192px", "calc(100% - 192px)"]} />
+          </div>
+        </div>
+
+        <div className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-9">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 pb-9">
+            <div className="flex flex-col gap-8 max-w-[356px]">
+              <ShiftLabsIcon />
+              <p className="text-[#70745a] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+                Construímos estruturas para produto, tecnologia, comercial e operação evoluírem no mesmo ritmo.
+              </p>
+              <p className="text-[#70745a] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+                <span className="text-[#101700]" style={{ fontFamily: display, fontWeight: 500 }}>© 2026 ShiftLabs.</span>
+                <span> Todos os direitos reservados.</span>
+              </p>
+            </div>
+            <div className="flex flex-col gap-6">
+              <p className="text-[#70745a] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
+                /social
+              </p>
+              <div className="flex items-center gap-5">
+                {careersSocialLinks.map(({ name, href, Icon }) => (
+                  <a key={`careers-role-footer-${name}`} href={href} target="_blank" rel="noreferrer" className="flex items-center gap-2">
+                    <Icon />
+                    <span className="text-[#70745a] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+                      {name}
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="pt-9">
+            <BigWordmark />
           </div>
         </div>
       </main>
@@ -2566,19 +3005,15 @@ function CareersEditorPage({
 
 function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoading?: boolean }) {
   const [isHeaderCondensed, setIsHeaderCondensed] = useState(false);
-  const careersSocialLinks = [
-    { name: "LinkedIn", href: "https://www.linkedin.com/company/shiftlabs-br/", Icon: LinkedInIcon },
-    { name: "Instagram", href: "https://instagram.com/shiftlabs.br", Icon: InstagramIcon },
-    { name: "GitHub", href: "https://github.com/shiftlabs-br", Icon: GitHubIcon },
-  ];
-  const toIntroPreview = (value: string) =>
-    value
-      .replace(/\[(.*?)\]\((.*?)\)/g, "$1")
-      .replace(/^#{1,6}\s+/gm, "")
-      .replace(/^\s*[-*+]\s+/gm, "")
-      .replace(/[*_`~]/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  const sortedRoles = useMemo(
+    () =>
+      [...roles].sort((first, second) =>
+        getDisplayRoleTitle(first.title, first.displayTitle).localeCompare(getDisplayRoleTitle(second.title, second.displayTitle), "pt-BR", {
+          sensitivity: "base",
+        }),
+      ),
+    [roles],
+  );
 
   useEffect(() => {
     let rafId = 0;
@@ -2794,8 +3229,10 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
           <div className="max-w-[1512px] mx-auto flex relative">
             <XlHelper className="border-t border-[#d6dace]" />
             <ul className="m-0 p-0 list-none flex-1 grid grid-cols-1 md:grid-cols-2 border-x border-t border-[#d6dace]">
-              {roles.map((role, index) => {
-                const introPreview = toIntroPreview(role.intro) || "Detalhes da vaga disponíveis na página completa.";
+              {sortedRoles.map((role, index) => {
+                const introPreview = getRoleCardSummary(role);
+                const displayArea = getRoleCardArea(role);
+                const displayRoleTitle = getDisplayRoleTitle(role.title, role.displayTitle);
                 return (
                   <li
                     key={role.slug}
@@ -2809,17 +3246,25 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                       <article className="flex h-full min-h-[318px] flex-col justify-between gap-8 p-6">
                         <div className="flex flex-col gap-4">
                           <p className="text-[#70745a] text-[13px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
-                            /{role.area}
+                            /{displayArea}
                           </p>
                           <h2
                             className="text-[#101700] text-[28px] md:text-[32px] leading-[1.08] transition-transform duration-200 lg:group-hover:translate-x-2"
                             style={{ fontFamily: display, fontWeight: 500 }}
                           >
-                            {role.title}
+                            {displayRoleTitle}
                           </h2>
                           <p
                             className="text-[#70745a] text-[14px] md:text-[16px] max-w-[480px]"
-                            style={{ fontFamily: body, lineHeight: 1.3 }}
+                            style={{
+                              fontFamily: body,
+                              lineHeight: 1.3,
+                              display: "-webkit-box",
+                              WebkitBoxOrient: "vertical",
+                              WebkitLineClamp: 3,
+                              overflow: "hidden",
+                            }}
+                            title={introPreview}
                           >
                             {introPreview}
                           </p>
@@ -2994,7 +3439,58 @@ export default function App() {
       return;
     }
 
-    setEditorRoles(((data ?? []) as CareersRoleRow[]).map(rowToCareersRole));
+    const rows = (data ?? []) as CareersRoleRow[];
+    const rowsNeedingNormalization = rows
+      .map((row) => ({
+        id: row.id,
+        currentArea: row.area,
+        currentDisplayArea: row.display_area?.trim() ?? "",
+        currentDisplayTitle: row.display_title?.trim() ?? "",
+        currentCardSummary: row.card_summary?.trim() ?? "",
+        inferredArea: inferRoleArea({
+          area: row.area,
+          title: row.title,
+          intro: row.intro,
+          roleOneLiner: row.role_one_liner ?? undefined,
+          aboutFirst: toTextArray(row.about)[0],
+          bodyMarkdown: row.body_markdown ?? undefined,
+        }),
+        inferredDisplayTitle: getDisplayRoleTitle(row.title),
+        inferredCardSummary: getRoleCardSummary({
+          intro: row.intro,
+          roleOneLiner: row.role_one_liner ?? undefined,
+          bodyMarkdown: row.body_markdown ?? undefined,
+          about: toTextArray(row.about),
+          cardSummary: undefined,
+        }),
+      }))
+      .filter((entry) =>
+        entry.inferredArea !== entry.currentArea ||
+        entry.currentDisplayArea !== entry.inferredArea ||
+        entry.currentDisplayTitle !== entry.inferredDisplayTitle ||
+        entry.currentCardSummary !== entry.inferredCardSummary,
+      );
+
+    if (rowsNeedingNormalization.length) {
+      const results = await Promise.all(
+        rowsNeedingNormalization.map(async (entry) => {
+          const { error: updateError } = await supabase
+            .from("careers_roles")
+            .update({ area: entry.inferredArea })
+            .eq("id", entry.id);
+          return { ...entry, updateError };
+        }),
+      );
+
+      const failed = results.filter((result) => result.updateError);
+      if (failed.length) {
+        console.error("Não foi possível atualizar a área de algumas vagas:", failed.map((result) => result.updateError?.message));
+      } else {
+        void fetchPublishedRoles();
+      }
+    }
+
+    setEditorRoles(rows.map(rowToCareersRole));
     setIsLoadingEditorRoles(false);
   };
 

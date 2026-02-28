@@ -36,7 +36,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <p
       data-reveal="text"
-      className="text-[#70745a] text-[14px] md:text-[16px] uppercase"
+      className="text-[#5f644c] text-[14px] md:text-[16px] uppercase"
       style={{ fontFamily: mono }}
     >
       {children}
@@ -83,15 +83,15 @@ function SectionBorderTicks({
       {showTop &&
         positions.map((left) => (
           <div key={`top-${left}`} className="absolute top-0" style={{ left }}>
-            <span className="absolute top-0 -translate-x-1/2 h-[2px] w-[14px] bg-[#70745a]" />
-            <span className="absolute top-0 -translate-x-1/2 h-[12px] w-[2px] bg-[#70745a]" />
+            <span className="absolute top-0 -translate-x-1/2 h-[2px] w-[14px] bg-[#5f644c]" />
+            <span className="absolute top-0 -translate-x-1/2 h-[12px] w-[2px] bg-[#5f644c]" />
           </div>
         ))}
       {showBottom &&
         positions.map((left) => (
           <div key={`bottom-${left}`} className="absolute bottom-0" style={{ left }}>
-            <span className="absolute bottom-0 -translate-x-1/2 h-[2px] w-[14px] bg-[#70745a]" />
-            <span className="absolute bottom-0 -translate-x-1/2 h-[12px] w-[2px] bg-[#70745a]" />
+            <span className="absolute bottom-0 -translate-x-1/2 h-[2px] w-[14px] bg-[#5f644c]" />
+            <span className="absolute bottom-0 -translate-x-1/2 h-[12px] w-[2px] bg-[#5f644c]" />
           </div>
         ))}
     </div>
@@ -409,7 +409,7 @@ function CareersPill({
 }) {
   return (
     <span
-      className="inline-flex items-center justify-center rounded-none border border-[#d6dace] bg-[#f2f3ef] p-2 text-[15px] text-[#70745a]"
+      className="inline-flex items-center justify-center rounded-none border border-[#d6dace] bg-[#f2f3ef] p-2 text-[15px] text-[#5f644c]"
       style={{ fontFamily: mono, fontWeight: 400, lineHeight: "normal" }}
     >
       <span>{children}</span>
@@ -421,12 +421,12 @@ function CareersPill({
 function IdentityLayerIcon() {
   return (
     <svg className="size-9" fill="none" viewBox="0 0 40 40">
-      <circle cx="20" cy="20" r="10.5" stroke="#70745a" strokeWidth="1.5" />
-      <circle cx="20" cy="20" r="4.5" stroke="#70745a" strokeWidth="1.5" />
-      <path d="M20 4.5V9.5" stroke="#70745a" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M20 30.5V35.5" stroke="#70745a" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M4.5 20H9.5" stroke="#70745a" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M30.5 20H35.5" stroke="#70745a" strokeLinecap="round" strokeWidth="1.5" />
+      <circle cx="20" cy="20" r="10.5" stroke="#b6bea1" strokeWidth="1.5" />
+      <circle cx="20" cy="20" r="4.5" stroke="#b6bea1" strokeWidth="1.5" />
+      <path d="M20 4.5V9.5" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
+      <path d="M20 30.5V35.5" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
+      <path d="M4.5 20H9.5" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
+      <path d="M30.5 20H35.5" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
     </svg>
   );
 }
@@ -434,9 +434,9 @@ function IdentityLayerIcon() {
 function FundamentalsLayerIcon() {
   return (
     <svg className="size-9" fill="none" viewBox="0 0 40 40">
-      <rect height="5.5" rx="1.2" stroke="#70745a" strokeWidth="1.5" width="23" x="8.5" y="25.5" />
-      <rect height="5.5" rx="1.2" stroke="#70745a" strokeWidth="1.5" width="17" x="11.5" y="18.2" />
-      <rect height="5.5" rx="1.2" stroke="#70745a" strokeWidth="1.5" width="11" x="14.5" y="10.9" />
+      <rect height="5.5" rx="1.2" stroke="#b6bea1" strokeWidth="1.5" width="23" x="8.5" y="25.5" />
+      <rect height="5.5" rx="1.2" stroke="#b6bea1" strokeWidth="1.5" width="17" x="11.5" y="18.2" />
+      <rect height="5.5" rx="1.2" stroke="#b6bea1" strokeWidth="1.5" width="11" x="14.5" y="10.9" />
     </svg>
   );
 }
@@ -444,11 +444,11 @@ function FundamentalsLayerIcon() {
 function ArchitectureLayerIcon() {
   return (
     <svg className="size-9" fill="none" viewBox="0 0 40 40">
-      <rect height="23" rx="2" stroke="#70745a" strokeWidth="1.5" width="23" x="8.5" y="8.5" />
-      <path d="M8.5 16.2H31.5" stroke="#70745a" strokeWidth="1.5" />
-      <path d="M16.2 8.5V31.5" stroke="#70745a" strokeWidth="1.5" />
-      <path d="M22 22H31.5" stroke="#70745a" strokeWidth="1.5" />
-      <path d="M22 31.5V22" stroke="#70745a" strokeWidth="1.5" />
+      <rect height="23" rx="2" stroke="#b6bea1" strokeWidth="1.5" width="23" x="8.5" y="8.5" />
+      <path d="M8.5 16.2H31.5" stroke="#b6bea1" strokeWidth="1.5" />
+      <path d="M16.2 8.5V31.5" stroke="#b6bea1" strokeWidth="1.5" />
+      <path d="M22 22H31.5" stroke="#b6bea1" strokeWidth="1.5" />
+      <path d="M22 31.5V22" stroke="#b6bea1" strokeWidth="1.5" />
     </svg>
   );
 }
@@ -456,15 +456,15 @@ function ArchitectureLayerIcon() {
 function OperatingSystemLayerIcon() {
   return (
     <svg className="size-9" fill="none" viewBox="0 0 40 40">
-      <circle cx="20" cy="20" r="6.2" stroke="#70745a" strokeWidth="1.5" />
-      <path d="M20 7.2V11.2" stroke="#70745a" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M20 28.8V32.8" stroke="#70745a" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M7.2 20H11.2" stroke="#70745a" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M28.8 20H32.8" stroke="#70745a" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M11 11L13.8 13.8" stroke="#70745a" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M26.2 26.2L29 29" stroke="#70745a" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M29 11L26.2 13.8" stroke="#70745a" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M13.8 26.2L11 29" stroke="#70745a" strokeLinecap="round" strokeWidth="1.5" />
+      <circle cx="20" cy="20" r="6.2" stroke="#b6bea1" strokeWidth="1.5" />
+      <path d="M20 7.2V11.2" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
+      <path d="M20 28.8V32.8" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
+      <path d="M7.2 20H11.2" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
+      <path d="M28.8 20H32.8" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
+      <path d="M11 11L13.8 13.8" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
+      <path d="M26.2 26.2L29 29" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
+      <path d="M29 11L26.2 13.8" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
+      <path d="M13.8 26.2L11 29" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
     </svg>
   );
 }
@@ -472,16 +472,16 @@ function OperatingSystemLayerIcon() {
 function IntelligenceLayerIcon() {
   return (
     <svg className="size-9" fill="none" viewBox="0 0 40 40">
-      <circle cx="10" cy="11" fill="#70745a" r="2.2" />
-      <circle cx="29.8" cy="10.5" fill="#70745a" r="2.2" />
-      <circle cx="20" cy="20" fill="#70745a" r="2.2" />
-      <circle cx="10.5" cy="29.2" fill="#70745a" r="2.2" />
-      <circle cx="30" cy="29" fill="#70745a" r="2.2" />
-      <path d="M12 12.5L18.3 18.2" stroke="#70745a" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M27.8 12L21.7 18.1" stroke="#70745a" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M12.4 27.8L18.1 21.9" stroke="#70745a" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M27.8 27.4L21.9 21.7" stroke="#70745a" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M12.2 11.1H27.6" stroke="#70745a" strokeLinecap="round" strokeWidth="1.5" />
+      <circle cx="10" cy="11" fill="#b6bea1" r="2.2" />
+      <circle cx="29.8" cy="10.5" fill="#b6bea1" r="2.2" />
+      <circle cx="20" cy="20" fill="#b6bea1" r="2.2" />
+      <circle cx="10.5" cy="29.2" fill="#b6bea1" r="2.2" />
+      <circle cx="30" cy="29" fill="#b6bea1" r="2.2" />
+      <path d="M12 12.5L18.3 18.2" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
+      <path d="M27.8 12L21.7 18.1" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
+      <path d="M12.4 27.8L18.1 21.9" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
+      <path d="M27.8 27.4L21.9 21.7" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
+      <path d="M12.2 11.1H27.6" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
     </svg>
   );
 }
@@ -597,9 +597,9 @@ const featureItems = ["Design isolado.", "Código isolado.", "Marketing isolado.
 const marqueeText = "Most players optimize pieces. We optimize the system.";
 
 const socialLinks = [
-  { name: "LinkedIn", Icon: LinkedInIcon },
-  { name: "Instagram", Icon: InstagramIcon },
-  { name: "GitHub", Icon: GitHubIcon },
+  { name: "LinkedIn", href: "https://www.linkedin.com/company/shiftlabs-br/", Icon: LinkedInIcon },
+  { name: "Instagram", href: "https://instagram.com/shiftlabs.br", Icon: InstagramIcon },
+  { name: "GitHub", href: "https://github.com/shiftlabs-br", Icon: GitHubIcon },
 ];
 
 const careersSocialLinks = [
@@ -1950,24 +1950,32 @@ function LandingPage() {
                 isHeaderCondensed ? "max-w-none px-6" : "max-w-[1512px] px-6 xl:px-[192px]"
               }`}
             >
-              <a href="/" className="inline-flex items-center gap-2">
+              <a href="/" aria-label="ShiftLabs" title="ShiftLabs" className="inline-flex min-h-[44px] items-center gap-2 py-1">
                 <ShiftLabsIcon />
                 <ShiftLabsWordmark />
               </a>
               <div className="flex items-center gap-4 md:gap-6">
                 <a
                   href="/vagas"
-                  className="text-[#70745a] hover:text-[#101700] transition-colors text-[14px]"
+                  className="inline-flex min-h-[44px] items-center px-2 text-[#5f644c] hover:text-[#101700] transition-colors text-[14px]"
                   style={{ fontFamily: mono, fontWeight: 400, lineHeight: "normal" }}
                 >
                   /VAGAS
                 </a>
                 <span aria-hidden className="h-4 w-px bg-[#d6dace]" />
                 <div className="flex items-center gap-3 md:gap-4">
-                  {socialLinks.map(({ name, Icon }) => (
-                    <span key={`header-${name}`} aria-label={name} className="inline-flex items-center opacity-70">
+                  {socialLinks.map(({ name, href, Icon }) => (
+                    <a
+                      key={`header-${name}`}
+                      href={href}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={name}
+                      title={name}
+                      className="inline-flex h-11 w-11 items-center justify-center opacity-70 transition-opacity hover:opacity-100"
+                    >
                       <Icon />
-                    </span>
+                    </a>
                   ))}
                 </div>
               </div>
@@ -1976,6 +1984,7 @@ function LandingPage() {
         </div>
       </div>
 
+      <main className="text-[#101700]">
       {/* ===== HERO ===== */}
       <div id="inicio" data-reveal="section" className="border-y border-[#d6dace] scroll-mt-[96px]">
         <div className="max-w-[1512px] mx-auto flex relative">
@@ -1992,7 +2001,7 @@ function LandingPage() {
                 </div>
                 <p
                   data-reveal="text"
-                  className="text-[#70745a] text-[14px] md:text-[16px] max-w-[343px]"
+                  className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[343px]"
                   style={{ fontFamily: body, lineHeight: 1.333 }}
                 >
                   A Shift Labs transforma ideias, operações confusas ou produtos mal estruturados em negócios organizados, previsíveis e escaláveis.
@@ -2058,7 +2067,7 @@ function LandingPage() {
             </div>
             <p
               data-reveal="text"
-              className="text-[#70745a] text-[14px] md:text-[16px] max-w-[335px]"
+              className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[335px]"
               style={{ fontFamily: body, lineHeight: 1.022 }}
             >
               A maioria das empresas cresce mais rápido do que sua própria estrutura consegue sustentar.
@@ -2134,7 +2143,7 @@ function LandingPage() {
           </div>
           <p
             data-reveal="text"
-            className="text-[#70745a] text-[14px] md:text-[16px] max-w-[320px]"
+            className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[320px]"
             style={{ fontFamily: body, lineHeight: 1.022 }}
           >
             <span>A Shift Labs não é </span>
@@ -2158,7 +2167,7 @@ function LandingPage() {
               </SectionTitle>
               <p
                 data-reveal="text"
-                className="text-[#70745a] text-[14px] md:text-[16px] uppercase mt-4"
+                className="text-[#5f644c] text-[14px] md:text-[16px] uppercase mt-4"
                 style={{ fontFamily: mono }}
               >
                 Trabalhamos na interseção de:
@@ -2242,7 +2251,7 @@ function LandingPage() {
                 <p data-reveal="text" className={`text-[#101700] text-[14px] md:text-[16px] ${svc.titleMaxClass}`} style={{ fontFamily: display, fontWeight: 500, lineHeight: "normal" }}>
                   {svc.title}
                 </p>
-                <p data-reveal="text" className="text-[#70745a] text-[14px] md:text-[16px] max-w-[235px]" style={{ fontFamily: body, lineHeight: 1.076 }}>
+                <p data-reveal="text" className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[235px]" style={{ fontFamily: body, lineHeight: 1.076 }}>
                   {svc.desc}
                 </p>
               </div>
@@ -2274,7 +2283,7 @@ function LandingPage() {
           <div className="hidden xl:block w-[192px] shrink-0 border-y border-[#d6dace]" />
           <div className="flex-1 bg-[#101700] px-6 py-16 flex flex-col items-center gap-12">
             <div className="flex flex-col items-center gap-6 text-center max-w-[450px]">
-              <p data-reveal="text" className="text-[#70745a] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
+              <p data-reveal="text" className="text-[#b6bea1] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
                 Engineering Predictable Growth
               </p>
               <p data-reveal="title" className="text-[#f2f3ef] text-[20px] md:text-[24px]" style={{ fontFamily: heading, fontWeight: 500 }}>
@@ -2282,7 +2291,7 @@ function LandingPage() {
               </p>
               <p
                 data-reveal="text"
-                className="text-[#70745a] text-[14px] md:text-[16px] max-w-[343px]"
+                className="text-[#b6bea1] text-[14px] md:text-[16px] max-w-[343px]"
                 style={{ fontFamily: heading, fontWeight: 400, lineHeight: 1.1 }}
               >
                 Estruturamos cada projeto em camadas:
@@ -2294,10 +2303,10 @@ function LandingPage() {
                   key={layer.label}
                   className={`flex flex-col items-center gap-6 ${layer.widthClass}`}
                 >
-                  <div className="w-[85px] h-[85px] rounded-full border border-[#70745a] flex items-center justify-center">
+                  <div className="w-[85px] h-[85px] rounded-full border border-[#b6bea1] flex items-center justify-center">
                     <layer.Icon />
                   </div>
-                  <p data-reveal="text" className="text-[#70745a] text-[14px] md:text-[16px] text-center" style={{ fontFamily: body, lineHeight: 1.3 }}>
+                  <p data-reveal="text" className="text-[#b6bea1] text-[14px] md:text-[16px] text-center" style={{ fontFamily: body, lineHeight: 1.3 }}>
                     {layer.label}
                   </p>
                 </div>
@@ -2332,7 +2341,7 @@ function LandingPage() {
                 <MenuxLogo />
                 <div className="flex flex-col gap-4 mt-6">
                   <p data-reveal="text" className="text-[#101700] text-[14px] md:text-[16px]" style={{ fontFamily: display, fontWeight: 500 }}>The AI at the table.</p>
-                  <p data-reveal="text" className="text-[#70745a] text-[14px] md:text-[16px] max-w-[315px]" style={{ fontFamily: body, lineHeight: 1.076 }}>
+                  <p data-reveal="text" className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[315px]" style={{ fontFamily: body, lineHeight: 1.076 }}>
                     IA aplicada à experiência de restaurante, conectando cliente, equipe e gestor.
                   </p>
                 </div>
@@ -2346,7 +2355,7 @@ function LandingPage() {
                 <CortexLogo />
                 <div className="flex flex-col gap-4 mt-6">
                   <p data-reveal="text" className="text-[#101700] text-[14px] md:text-[16px]" style={{ fontFamily: display, fontWeight: 500 }}>Organizational Intelligence Layer.</p>
-                  <p data-reveal="text" className="text-[#70745a] text-[14px] md:text-[16px] max-w-[315px]" style={{ fontFamily: body, lineHeight: 1.076 }}>
+                  <p data-reveal="text" className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[315px]" style={{ fontFamily: body, lineHeight: 1.076 }}>
                     Estrutura organizacional inteligente para empresas que crescem mais rápido que sua capacidade operacional.
                   </p>
                 </div>
@@ -2386,7 +2395,7 @@ function LandingPage() {
             <div className="relative z-[1] flex flex-col items-center gap-6 text-center">
               <p
                 data-reveal="text"
-                className="text-[#70745a] text-[14px] md:text-[16px] uppercase"
+                className="text-[#5f644c] text-[14px] md:text-[16px] uppercase"
                 style={{ fontFamily: mono, textShadow: audienceTextHalo }}
               >
                 /Para Quem é a Shift Labs
@@ -2433,7 +2442,7 @@ function LandingPage() {
         <div className="flex flex-col items-center gap-8 max-w-[430px]">
           <p
             data-reveal="text"
-            className="text-[#70745a] text-[12px] md:text-[14px] uppercase"
+            className="text-[#5f644c] text-[12px] md:text-[14px] uppercase"
             style={{ fontFamily: mono }}
           >
             Não somos para quem quer apenas “uma landing page”.
@@ -2502,7 +2511,7 @@ function LandingPage() {
           <div className="flex flex-col lg:flex-row flex-1 min-w-0 bg-[#b4eb38]">
             <div className="flex flex-col justify-between p-6 w-full lg:w-1/2 min-h-[360px] lg:h-[462px]">
               <div className="flex flex-col gap-6 max-w-[450px]">
-                <p data-reveal="text" className="text-[#517400] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
+                <p data-reveal="text" className="text-[#456300] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
                   /Call to Action
                 </p>
                 <SectionTitle className="text-[28px] md:text-[36px] lg:text-[40px]">
@@ -2511,7 +2520,7 @@ function LandingPage() {
               </div>
               <p
                 data-reveal="text"
-                className="text-[#517400] text-[14px] md:text-[16px] max-w-[360px] mt-8"
+                className="text-[#456300] text-[14px] md:text-[16px] max-w-[360px] mt-8"
                 style={{ fontFamily: body, lineHeight: 1.076 }}
               >
                 Se você sente que sua empresa poderia estar melhor organizada, mais previsível e mais eficiente, o problema provavelmente não é esforço.
@@ -2540,32 +2549,38 @@ function LandingPage() {
             <ShiftLabsIcon />
             <p
               data-reveal="text"
-              className="text-[#70745a] text-[14px] md:text-[16px]"
+              className="text-[#5f644c] text-[14px] md:text-[16px]"
               style={{ fontFamily: body, lineHeight: 1.3 }}
             >
               Arquitetamos produto, tecnologia, comercial e operação em fluxos coordenados, com inteligência aplicada de ponta a ponta.
             </p>
             <p
               data-reveal="text"
-              className="text-[#70745a] text-[14px] md:text-[16px]"
+              className="text-[#5f644c] text-[14px] md:text-[16px]"
               style={{ fontFamily: body, lineHeight: 1.3 }}
             >
               <span className="text-[#101700]" style={{ fontFamily: display, fontWeight: 500 }}>© 2026 ShiftLabs.</span>
               <span> Todos os direitos reservados.</span>
             </p>
           </div>
-          <div className="flex flex-col gap-6">
-            <p data-reveal="text" className="text-[#70745a] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
-              /Call to Action
-            </p>
-            <div className="flex items-center gap-5">
-              {socialLinks.map(({ name, Icon }) => (
-                <span key={name} className="flex items-center gap-2">
+            <div className="flex flex-col gap-6">
+              <p data-reveal="text" className="text-[#5f644c] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
+                /Call to Action
+              </p>
+              <div className="flex items-center gap-5">
+              {socialLinks.map(({ name, href, Icon }) => (
+                <a
+                  key={name}
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex min-h-[44px] items-center gap-2 py-1"
+                >
                   <Icon />
-                  <span className="text-[#70745a] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+                  <span className="text-[#5f644c] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
                     {name}
                   </span>
-                </span>
+                </a>
               ))}
             </div>
           </div>
@@ -2575,6 +2590,7 @@ function LandingPage() {
           <BigWordmark />
         </div>
       </div>
+      </main>
 
       {isContactModalOpen ? (
         <div className="fixed inset-0 z-[140] flex items-center justify-center px-4 py-6" onClick={closeContactModal}>
@@ -2588,14 +2604,14 @@ function LandingPage() {
           >
             <div className="border-b border-[#d6dace] px-5 py-4 md:px-6">
               <div className="flex items-center justify-between gap-4">
-                <p className="text-[#70745a] text-[13px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
+                <p className="text-[#5f644c] text-[13px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
                   {isContactSuccess ? "/contato enviado" : "/contato"}
                 </p>
                 <button
                   type="button"
                   onClick={closeContactModal}
                   disabled={isContactSubmitting}
-                  className="inline-flex border border-[#d6dace] px-3 py-1.5 text-[12px] uppercase text-[#70745a] hover:text-[#101700]"
+                  className="inline-flex min-h-[44px] items-center border border-[#d6dace] px-4 py-3 text-[12px] uppercase text-[#5f644c] hover:text-[#101700]"
                   style={{ fontFamily: mono, lineHeight: "normal" }}
                 >
                   fechar
@@ -2616,7 +2632,7 @@ function LandingPage() {
                           <span className="shiftlabs-success-check">✓</span>
                         </span>
                         <div className="flex flex-col gap-1">
-                          <p className="text-[12px] uppercase text-[#70745a]" style={{ fontFamily: mono }}>
+                          <p className="text-[12px] uppercase text-[#5f644c]" style={{ fontFamily: mono }}>
                             /envio concluído
                           </p>
                           <p className="text-[25px] md:text-[36px] text-[#101700]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: 1.03 }}>
@@ -2635,19 +2651,19 @@ function LandingPage() {
 
                     <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                       <div className="shiftlabs-success-step border border-[#d6dace] p-3">
-                        <p className="text-[11px] uppercase text-[#70745a]" style={{ fontFamily: mono }}>/passo 01</p>
+                        <p className="text-[11px] uppercase text-[#5f644c]" style={{ fontFamily: mono }}>/passo 01</p>
                         <p className="mt-1 text-[14px] text-[#101700]" style={{ fontFamily: body, lineHeight: 1.3 }}>
                           Lead registrado no nosso pipeline.
                         </p>
                       </div>
                       <div className="shiftlabs-success-step border border-[#d6dace] p-3">
-                        <p className="text-[11px] uppercase text-[#70745a]" style={{ fontFamily: mono }}>/passo 02</p>
+                        <p className="text-[11px] uppercase text-[#5f644c]" style={{ fontFamily: mono }}>/passo 02</p>
                         <p className="mt-1 text-[14px] text-[#101700]" style={{ fontFamily: body, lineHeight: 1.3 }}>
                           Time de estratégia valida contexto e objetivo.
                         </p>
                       </div>
                       <div className="shiftlabs-success-step border border-[#d6dace] p-3">
-                        <p className="text-[11px] uppercase text-[#70745a]" style={{ fontFamily: mono }}>/passo 03</p>
+                        <p className="text-[11px] uppercase text-[#5f644c]" style={{ fontFamily: mono }}>/passo 03</p>
                         <p className="mt-1 text-[14px] text-[#101700]" style={{ fontFamily: body, lineHeight: 1.3 }}>
                           Retorno em breve para alinhar próximos passos.
                         </p>
@@ -2660,7 +2676,7 @@ function LandingPage() {
                       <button
                         type="button"
                         onClick={resetContactModalFeedback}
-                        className="inline-flex border border-[#d6dace] px-4 py-3 text-[13px] uppercase text-[#70745a] hover:text-[#101700]"
+                        className="inline-flex min-h-[44px] items-center border border-[#d6dace] px-4 py-3 text-[13px] uppercase text-[#5f644c] hover:text-[#101700]"
                         style={{ fontFamily: mono, lineHeight: "normal" }}
                       >
                         enviar novo contato
@@ -2673,62 +2689,62 @@ function LandingPage() {
               <form onSubmit={submitHeroContactForm} className="p-5 md:p-6">
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#70745a]" style={{ fontFamily: body }}>Nome</span>
+                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Nome</span>
                     <input
                       type="text"
                       required
                       autoFocus
                       value={heroContactForm.name}
                       onChange={(event) => updateHeroContactField("name", event.target.value)}
-                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#70745a]"
+                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body }}
                     />
                   </label>
 
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#70745a]" style={{ fontFamily: body }}>Whatsapp</span>
+                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Whatsapp</span>
                     <input
                       type="tel"
                       required
                       value={heroContactForm.whatsapp}
                       onChange={(event) => updateHeroContactField("whatsapp", event.target.value)}
-                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#70745a]"
+                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body }}
                     />
                   </label>
 
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#70745a]" style={{ fontFamily: body }}>Email</span>
+                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Email</span>
                     <input
                       type="email"
                       required
                       value={heroContactForm.email}
                       onChange={(event) => updateHeroContactField("email", event.target.value)}
-                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#70745a]"
+                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body }}
                     />
                   </label>
 
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#70745a]" style={{ fontFamily: body }}>Empresa</span>
+                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Empresa</span>
                     <input
                       type="text"
                       required
                       value={heroContactForm.company}
                       onChange={(event) => updateHeroContactField("company", event.target.value)}
-                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#70745a]"
+                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body }}
                     />
                   </label>
 
                   <label className="flex flex-col gap-1.5 md:col-span-2">
-                    <span className="text-[13px] text-[#70745a]" style={{ fontFamily: body }}>Assunto</span>
+                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Assunto</span>
                     <input
                       type="text"
                       required
                       value={heroContactForm.subject}
                       onChange={(event) => updateHeroContactField("subject", event.target.value)}
-                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#70745a]"
+                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body }}
                     />
                   </label>
@@ -2739,7 +2755,7 @@ function LandingPage() {
                     type="button"
                     onClick={closeContactModal}
                     disabled={isContactSubmitting}
-                    className="inline-flex border border-[#d6dace] px-4 py-3 text-[13px] uppercase text-[#70745a] hover:text-[#101700]"
+                    className="inline-flex min-h-[44px] items-center border border-[#d6dace] px-4 py-3 text-[13px] uppercase text-[#5f644c] hover:text-[#101700]"
                     style={{ fontFamily: mono, lineHeight: "normal" }}
                   >
                     cancelar
@@ -2747,7 +2763,7 @@ function LandingPage() {
                   <button
                     type="submit"
                     disabled={isContactSubmitting}
-                    className="inline-flex bg-[#101700] px-4 py-3 text-[13px] uppercase text-[#f2f3ef]"
+                    className="inline-flex min-h-[44px] items-center bg-[#101700] px-4 py-3 text-[13px] uppercase text-[#f2f3ef]"
                     style={{ fontFamily: mono, lineHeight: "normal" }}
                   >
                     {isContactSubmitting ? "enviando..." : "enviar contato"}
@@ -2773,13 +2789,13 @@ function CareersHeader() {
   return (
     <header className="fixed left-0 top-0 z-[120] w-full border-b border-[#d6dace] bg-[#f2f3ef]">
       <div className="mx-auto flex h-[66px] w-full max-w-[1512px] items-center justify-between px-6 py-4 md:px-8">
-        <a href="/" className="inline-flex items-center">
+        <a href="/" aria-label="ShiftLabs" title="ShiftLabs" className="inline-flex min-h-[44px] items-center py-1">
           <ShiftLabsIcon />
         </a>
         <div className="flex items-center gap-2.5">
           <a
             href="/vagas"
-            className="text-[16px] text-[#70745a] transition-colors hover:text-[#101700]"
+            className="inline-flex min-h-[44px] items-center px-2 text-[16px] text-[#5f644c] transition-colors hover:text-[#101700]"
             style={{ fontFamily: body, fontWeight: 400, lineHeight: "normal" }}
           >
             Vagas
@@ -2788,7 +2804,7 @@ function CareersHeader() {
             href="https://instagram.com/shiftlabs.br"
             target="_blank"
             rel="noreferrer"
-            className="text-[16px] text-[#70745a] transition-colors hover:text-[#101700]"
+            className="inline-flex min-h-[44px] items-center px-2 text-[16px] text-[#5f644c] transition-colors hover:text-[#101700]"
             style={{ fontFamily: body, fontWeight: 400, lineHeight: "normal" }}
           >
             @shiftlabs.br
@@ -2802,7 +2818,7 @@ function CareersHeader() {
 function RoleMetaPill({ children }: { children: React.ReactNode }) {
   return (
     <span
-      className="inline-flex items-center justify-center border border-[#d6dace] bg-[#ecefe7] px-2.5 py-1.5 text-[12px] text-[#70745a] md:px-3 md:py-2 md:text-[14px]"
+      className="inline-flex items-center justify-center border border-[#d6dace] bg-[#ecefe7] px-2.5 py-1.5 text-[12px] text-[#5f644c] md:px-3 md:py-2 md:text-[14px]"
       style={{ fontFamily: body, fontWeight: 400, lineHeight: "normal" }}
     >
       {children}
@@ -2813,7 +2829,7 @@ function RoleMetaPill({ children }: { children: React.ReactNode }) {
 function RoleSeniorityBadge({ label }: { label: string }) {
   return (
     <span
-      className="inline-flex items-center justify-center self-center border border-[#d6dace] bg-[#f2f3ef] px-3 py-2 text-[13px] text-[#70745a] uppercase md:text-[14px]"
+      className="inline-flex items-center justify-center self-center border border-[#d6dace] bg-[#f2f3ef] px-3 py-2 text-[13px] text-[#5f644c] uppercase md:text-[14px]"
       style={{ fontFamily: body, lineHeight: "normal" }}
     >
       {label}
@@ -2834,7 +2850,7 @@ function RoleContentSection({
   return (
     <section className="pt-6 md:pt-7">
       <h2
-        className={usesLabelStyle ? "text-[16px] text-[#70745a] uppercase tracking-[0.02em]" : "text-[24px] text-[#101700]"}
+        className={usesLabelStyle ? "text-[16px] text-[#5f644c] uppercase tracking-[0.02em]" : "text-[24px] text-[#101700]"}
         style={{
           fontFamily: usesLabelStyle ? mono : heading,
           fontWeight: usesLabelStyle ? 400 : 500,
@@ -2854,7 +2870,7 @@ function MarkdownBody({ markdown }: { markdown: string }) {
 
   return (
     <div
-      className="pt-2 text-[16px] text-[#101700] leading-[1.42] [&_h1]:mt-7 [&_h1]:text-[28px] [&_h1]:font-medium [&_h2]:mt-7 [&_h2]:text-[24px] [&_h2]:font-medium [&_h3]:mt-6 [&_h3]:text-[20px] [&_h3]:font-medium [&_h2.role-section-label]:mt-12 [&_h2.role-section-label]:text-[16px] [&_h2.role-section-label]:font-normal [&_h2.role-section-label]:uppercase [&_h2.role-section-label]:tracking-[0.02em] [&_h2.role-section-label]:text-[#70745a] [&_h2.role-section-label]:leading-[1.1] [&_h3.role-section-label]:mt-12 [&_h3.role-section-label]:text-[16px] [&_h3.role-section-label]:font-normal [&_h3.role-section-label]:uppercase [&_h3.role-section-label]:tracking-[0.02em] [&_h3.role-section-label]:text-[#70745a] [&_h3.role-section-label]:leading-[1.1] [&_p]:m-0 [&_p+p]:mt-3 [&_p+ul]:mt-3 [&_p+ol]:mt-3 [&_p+h2.role-section-label]:mt-12 [&_p+h3.role-section-label]:mt-12 [&_ul]:m-0 [&_ul]:list-disc [&_ul]:pl-6 [&_ul+*]:mt-3 [&_ul+h2.role-section-label]:mt-12 [&_ul+h3.role-section-label]:mt-12 [&_ol]:m-0 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol+*]:mt-3 [&_ol+h2.role-section-label]:mt-12 [&_ol+h3.role-section-label]:mt-12 [&_li]:mb-2 [&_li:last-child]:mb-0 [&_a]:underline [&_a]:underline-offset-2 [&_a:hover]:opacity-80 [&_code]:rounded-none [&_code]:border [&_code]:border-[#d6dace] [&_code]:bg-[#ecefe7] [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[14px]"
+      className="pt-2 text-[16px] text-[#101700] leading-[1.42] [&_h1]:mt-7 [&_h1]:text-[28px] [&_h1]:font-medium [&_h2]:mt-7 [&_h2]:text-[24px] [&_h2]:font-medium [&_h3]:mt-6 [&_h3]:text-[20px] [&_h3]:font-medium [&_h2.role-section-label]:mt-12 [&_h2.role-section-label]:text-[16px] [&_h2.role-section-label]:font-normal [&_h2.role-section-label]:uppercase [&_h2.role-section-label]:tracking-[0.02em] [&_h2.role-section-label]:text-[#5f644c] [&_h2.role-section-label]:leading-[1.1] [&_h3.role-section-label]:mt-12 [&_h3.role-section-label]:text-[16px] [&_h3.role-section-label]:font-normal [&_h3.role-section-label]:uppercase [&_h3.role-section-label]:tracking-[0.02em] [&_h3.role-section-label]:text-[#5f644c] [&_h3.role-section-label]:leading-[1.1] [&_p]:m-0 [&_p+p]:mt-3 [&_p+ul]:mt-3 [&_p+ol]:mt-3 [&_p+h2.role-section-label]:mt-12 [&_p+h3.role-section-label]:mt-12 [&_ul]:m-0 [&_ul]:list-disc [&_ul]:pl-6 [&_ul+*]:mt-3 [&_ul+h2.role-section-label]:mt-12 [&_ul+h3.role-section-label]:mt-12 [&_ol]:m-0 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol+*]:mt-3 [&_ol+h2.role-section-label]:mt-12 [&_ol+h3.role-section-label]:mt-12 [&_li]:mb-2 [&_li:last-child]:mb-0 [&_a]:underline [&_a]:underline-offset-2 [&_a:hover]:opacity-80 [&_code]:rounded-none [&_code]:border [&_code]:border-[#d6dace] [&_code]:bg-[#ecefe7] [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[14px]"
       style={{ fontFamily: body }}
       dangerouslySetInnerHTML={{ __html: html }}
     />
@@ -2918,14 +2934,14 @@ function CareerRolePage({ role }: { role: CareersRole }) {
                 isHeaderCondensed ? "max-w-none px-6" : "max-w-[1512px] px-6 xl:px-[192px]"
               }`}
             >
-              <a href="/" className="inline-flex items-center gap-2">
+              <a href="/" aria-label="ShiftLabs" title="ShiftLabs" className="inline-flex min-h-[44px] items-center gap-2 py-1">
                 <ShiftLabsIcon />
                 <ShiftLabsWordmark />
               </a>
               <div className="flex items-center gap-4 md:gap-6">
                 <a
                   href="/vagas"
-                  className="text-[#101700] transition-colors text-[14px]"
+                  className="inline-flex min-h-[44px] items-center px-2 text-[#101700] transition-colors text-[14px]"
                   style={{ fontFamily: mono, fontWeight: 400, lineHeight: "normal" }}
                 >
                   /VAGAS
@@ -2939,7 +2955,7 @@ function CareerRolePage({ role }: { role: CareersRole }) {
                       target="_blank"
                       rel="noreferrer"
                       aria-label={name}
-                      className="inline-flex items-center opacity-70 hover:opacity-100 transition-opacity"
+                      className="inline-flex h-11 w-11 items-center justify-center opacity-70 hover:opacity-100 transition-opacity"
                     >
                       <Icon />
                     </a>
@@ -2962,11 +2978,11 @@ function CareerRolePage({ role }: { role: CareersRole }) {
                   href="/vagas"
                   aria-label="Voltar para vagas"
                   title="Voltar para vagas"
-                  className="inline-flex w-fit items-center justify-center text-[#70745a] hover:text-[#101700] transition-colors"
+                  className="inline-flex h-11 w-11 items-center justify-center border border-[#d6dace] text-[#5f644c] hover:text-[#101700] transition-colors"
                 >
                   <CareersBackIcon />
                 </a>
-                <p className="text-[#70745a] text-[13px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
+                <p className="text-[#5f644c] text-[13px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
                   /{displayArea}
                 </p>
                 <div className="flex flex-wrap items-center gap-3 md:gap-4">
@@ -2979,7 +2995,7 @@ function CareerRolePage({ role }: { role: CareersRole }) {
                   {seniorityBadge ? <RoleSeniorityBadge label={seniorityBadge} /> : null}
                 </div>
                 <p
-                  className="text-[#70745a] text-[18px] md:text-[24px] max-w-[980px]"
+                  className="text-[#5f644c] text-[18px] md:text-[24px] max-w-[980px]"
                   style={{ fontFamily: body, lineHeight: 1.3 }}
                 >
                   {roleSummary}
@@ -2989,21 +3005,21 @@ function CareerRolePage({ role }: { role: CareersRole }) {
               <div className="flex flex-col gap-4">
                 <div className="flex flex-wrap gap-2">
                   <span
-                    className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#70745a]"
+                    className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#5f644c]"
                     style={{ fontFamily: body, lineHeight: "normal" }}
                   >
                     <CareersLocationIcon />
                     {role.location}
                   </span>
                   <span
-                    className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#70745a]"
+                    className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#5f644c]"
                     style={{ fontFamily: body, lineHeight: "normal" }}
                   >
                     <CareersClockIcon />
                     {displayCommitment}
                   </span>
                   <span
-                    className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#70745a]"
+                    className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#5f644c]"
                     style={{ fontFamily: body, lineHeight: "normal" }}
                   >
                     <CareersWorkModeIcon />
@@ -3013,14 +3029,14 @@ function CareerRolePage({ role }: { role: CareersRole }) {
                 <div className="flex flex-wrap gap-3">
                   <a
                     href="/vagas"
-                    className="inline-flex border border-[#101700] text-[#101700] px-4 py-3 text-[14px] uppercase"
+                    className="inline-flex min-h-[44px] items-center border border-[#101700] text-[#101700] px-4 py-3 text-[14px] uppercase"
                     style={{ fontFamily: mono, lineHeight: "normal" }}
                   >
                     ver outras vagas
                   </a>
                   <a
                     href={applyHref}
-                    className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-3 text-[14px] uppercase"
+                    className="inline-flex min-h-[44px] items-center bg-[#101700] text-[#f2f3ef] px-4 py-3 text-[14px] uppercase"
                     style={{ fontFamily: mono, lineHeight: "normal" }}
                   >
                     candidatar-se
@@ -3154,7 +3170,7 @@ function CareerRolePage({ role }: { role: CareersRole }) {
             <div className="flex flex-col lg:flex-row flex-1 min-w-0 bg-[#b4eb38]">
               <div className="flex flex-col justify-between p-6 w-full lg:w-1/2 min-h-[300px] lg:h-[360px]">
                 <div className="flex flex-col gap-6 max-w-[450px]">
-                  <p className="text-[#517400] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
+                  <p className="text-[#456300] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
                     /call to action
                   </p>
                   <div className="text-[#101700] text-[28px] md:text-[36px] lg:text-[40px]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: "normal" }}>
@@ -3162,7 +3178,7 @@ function CareerRolePage({ role }: { role: CareersRole }) {
                   </div>
                 </div>
                 <p
-                  className="text-[#517400] text-[14px] md:text-[16px] max-w-[390px] mt-8"
+                  className="text-[#456300] text-[14px] md:text-[16px] max-w-[390px] mt-8"
                   style={{ fontFamily: body, lineHeight: 1.3 }}
                 >
                   Candidate-se agora ou explore outras oportunidades abertas no time.
@@ -3171,14 +3187,14 @@ function CareerRolePage({ role }: { role: CareersRole }) {
               <div className="flex items-end justify-end p-6 w-full lg:w-1/2 min-h-[120px] lg:h-[360px] gap-3">
                 <a
                   href="/vagas"
-                  className="inline-flex border border-[#101700] text-[#101700] px-4 py-4 text-[14px] md:text-[16px] uppercase"
+                  className="inline-flex min-h-[44px] items-center border border-[#101700] text-[#101700] px-4 py-4 text-[14px] md:text-[16px] uppercase"
                   style={{ fontFamily: mono, lineHeight: "normal" }}
                 >
                   ver outras vagas
                 </a>
                 <a
                   href={applyHref}
-                  className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase"
+                  className="inline-flex min-h-[44px] items-center bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase"
                   style={{ fontFamily: mono, lineHeight: "normal" }}
                 >
                   candidatar-se
@@ -3194,23 +3210,23 @@ function CareerRolePage({ role }: { role: CareersRole }) {
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 pb-9">
             <div className="flex flex-col gap-8 max-w-[356px]">
               <ShiftLabsIcon />
-              <p className="text-[#70745a] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+              <p className="text-[#5f644c] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
                 Construímos estruturas para produto, tecnologia, comercial e operação evoluírem no mesmo ritmo.
               </p>
-              <p className="text-[#70745a] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+              <p className="text-[#5f644c] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
                 <span className="text-[#101700]" style={{ fontFamily: display, fontWeight: 500 }}>© 2026 ShiftLabs.</span>
                 <span> Todos os direitos reservados.</span>
               </p>
             </div>
             <div className="flex flex-col gap-6">
-              <p className="text-[#70745a] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
+              <p className="text-[#5f644c] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
                 /social
               </p>
               <div className="flex items-center gap-5">
                 {careersSocialLinks.map(({ name, href, Icon }) => (
-                  <a key={`careers-role-footer-${name}`} href={href} target="_blank" rel="noreferrer" className="flex items-center gap-2">
+                  <a key={`careers-role-footer-${name}`} href={href} target="_blank" rel="noreferrer" className="inline-flex min-h-[44px] items-center gap-2 py-1">
                     <Icon />
-                    <span className="text-[#70745a] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+                    <span className="text-[#5f644c] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
                       {name}
                     </span>
                   </a>
@@ -3412,7 +3428,7 @@ function CareersEditorPage({
             <h1 className="text-[30px] text-[#101700] md:text-[32px]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: "normal" }}>
               Editor de Vagas
             </h1>
-            <p className="mt-2 text-[14px] text-[#70745a] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+            <p className="mt-2 text-[14px] text-[#5f644c] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
               Crie, edite e remova vagas. As alterações são salvas no Supabase e ficam disponíveis para todos.
             </p>
           </div>
@@ -3431,7 +3447,7 @@ function CareersEditorPage({
         {hasSupabaseConfig && authLoading ? (
           <div className="max-w-[1512px] mx-auto px-6 py-8 md:px-8 md:py-10">
             <div className={`mx-auto w-full max-w-[460px] border ${careersBorder} bg-[#f2f3ef] p-5`}>
-              <p className="text-[14px] text-[#70745a]" style={{ fontFamily: body }}>
+              <p className="text-[14px] text-[#5f644c]" style={{ fontFamily: body }}>
                 Verificando sessão...
               </p>
             </div>
@@ -3448,24 +3464,24 @@ function CareersEditorPage({
               </div>
               <div className="grid grid-cols-1 gap-4 p-5">
                 <label className="flex flex-col gap-1.5">
-                  <span className="text-[13px] text-[#70745a]" style={{ fontFamily: body }}>E-mail</span>
+                  <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>E-mail</span>
                   <input
                     type="email"
                     autoComplete="email"
                     value={authState.email}
                     onChange={(event) => setAuthState((current) => ({ ...current, email: event.target.value }))}
-                    className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#70745a]"
+                    className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                     style={{ fontFamily: body }}
                   />
                 </label>
                 <label className="flex flex-col gap-1.5">
-                  <span className="text-[13px] text-[#70745a]" style={{ fontFamily: body }}>Senha</span>
+                  <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Senha</span>
                   <input
                     type="password"
                     autoComplete="current-password"
                     value={authState.password}
                     onChange={(event) => setAuthState((current) => ({ ...current, password: event.target.value }))}
-                    className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#70745a]"
+                    className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                     style={{ fontFamily: body }}
                   />
                 </label>
@@ -3481,7 +3497,7 @@ function CareersEditorPage({
                 </button>
                 {feedback ? (
                   <p
-                    className={`text-[13px] ${feedback.type === "error" ? "text-[#9f2b2b]" : "text-[#70745a]"}`}
+                    className={`text-[13px] ${feedback.type === "error" ? "text-[#9f2b2b]" : "text-[#5f644c]"}`}
                     style={{ fontFamily: body }}
                   >
                     {feedback.message}
@@ -3499,7 +3515,7 @@ function CareersEditorPage({
                 type="button"
                 onClick={handleRefresh}
                 disabled={isRefreshing || isLoadingRoles}
-                className="inline-flex border border-[#d6dace] px-3 py-2 text-[12px] uppercase text-[#70745a] hover:text-[#101700] disabled:cursor-not-allowed disabled:opacity-70"
+                className="inline-flex border border-[#d6dace] px-3 py-2 text-[12px] uppercase text-[#5f644c] hover:text-[#101700] disabled:cursor-not-allowed disabled:opacity-70"
                 style={{ fontFamily: mono }}
               >
                 {isRefreshing || isLoadingRoles ? "Atualizando..." : "Atualizar lista"}
@@ -3509,7 +3525,7 @@ function CareersEditorPage({
                 onClick={() => {
                   void onSignOut();
                 }}
-                className="inline-flex border border-[#d6dace] px-3 py-2 text-[12px] uppercase text-[#70745a] hover:text-[#101700]"
+                className="inline-flex border border-[#d6dace] px-3 py-2 text-[12px] uppercase text-[#5f644c] hover:text-[#101700]"
                 style={{ fontFamily: mono }}
               >
                 Sair
@@ -3525,57 +3541,57 @@ function CareersEditorPage({
                 </div>
                 <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 md:gap-5 md:p-5">
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#70745a]" style={{ fontFamily: body }}>Título *</span>
+                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Título *</span>
                     <input
                       value={formState.title}
                       onChange={(event) => setFieldValue("title", event.target.value)}
-                      className="h-10 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#70745a]"
+                      className="h-10 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body }}
                     />
                   </label>
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#70745a]" style={{ fontFamily: body }}>Slug (opcional)</span>
+                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Slug (opcional)</span>
                     <input
                       value={formState.slug}
                       onChange={(event) => setFieldValue("slug", event.target.value)}
                       placeholder="gerado automaticamente"
-                      className="h-10 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#70745a]"
+                      className="h-10 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: mono }}
                     />
                   </label>
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#70745a]" style={{ fontFamily: body }}>Localização *</span>
+                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Localização *</span>
                     <input
                       value={formState.location}
                       onChange={(event) => setFieldValue("location", event.target.value)}
-                      className="h-10 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#70745a]"
+                      className="h-10 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body }}
                     />
                   </label>
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#70745a]" style={{ fontFamily: body }}>Regime *</span>
+                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Regime *</span>
                     <input
                       value={formState.commitment}
                       onChange={(event) => setFieldValue("commitment", event.target.value)}
-                      className="h-10 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#70745a]"
+                      className="h-10 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body }}
                     />
                   </label>
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#70745a]" style={{ fontFamily: body }}>Modelo *</span>
+                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Modelo *</span>
                     <input
                       value={formState.model}
                       onChange={(event) => setFieldValue("model", event.target.value)}
-                      className="h-10 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#70745a]"
+                      className="h-10 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body }}
                     />
                   </label>
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#70745a]" style={{ fontFamily: body }}>Área (opcional)</span>
+                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Área (opcional)</span>
                     <input
                       value={formState.area}
                       onChange={(event) => setFieldValue("area", event.target.value)}
-                      className="h-10 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#70745a]"
+                      className="h-10 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body }}
                     />
                   </label>
@@ -3583,7 +3599,7 @@ function CareersEditorPage({
 
                 <div className={`border-y ${careersBorder} p-4 md:p-5`}>
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#70745a]" style={{ fontFamily: body }}>
+                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>
                       Corpo da vaga (Markdown)
                     </span>
                     <textarea
@@ -3591,10 +3607,10 @@ function CareersEditorPage({
                       onChange={(event) => setFieldValue("bodyMarkdown", event.target.value)}
                       rows={22}
                       placeholder={"## Why ShiftLabs?\nCole aqui o texto em Markdown do Notion.\n\n## What you'll do\n- Item 1\n- Item 2"}
-                      className="min-h-[460px] border border-[#d6dace] bg-[#f2f3ef] px-3 py-3 text-[14px] text-[#101700] outline-none focus:border-[#70745a]"
+                      className="min-h-[460px] border border-[#d6dace] bg-[#f2f3ef] px-3 py-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body, lineHeight: 1.45 }}
                     />
-                    <p className="text-[12px] text-[#70745a]" style={{ fontFamily: body }}>
+                    <p className="text-[12px] text-[#5f644c]" style={{ fontFamily: body }}>
                       Aceita títulos (`##`), listas (`-` e `1.`), negrito (`**texto**`), itálico (`*texto*`) e links (`[texto](url)`).
                     </p>
                   </label>
@@ -3612,14 +3628,14 @@ function CareersEditorPage({
                   <button
                     type="button"
                     onClick={resetEditor}
-                    className="inline-flex border border-[#d6dace] px-4 py-3 text-[14px] uppercase text-[#70745a]"
+                    className="inline-flex border border-[#d6dace] px-4 py-3 text-[14px] uppercase text-[#5f644c]"
                     style={{ fontFamily: mono, lineHeight: "normal" }}
                   >
                     Limpar
                   </button>
                   {feedback ? (
                     <p
-                      className={`text-[13px] ${feedback.type === "error" ? "text-[#9f2b2b]" : "text-[#70745a]"}`}
+                      className={`text-[13px] ${feedback.type === "error" ? "text-[#9f2b2b]" : "text-[#5f644c]"}`}
                       style={{ fontFamily: body }}
                     >
                       {feedback.message}
@@ -3635,12 +3651,12 @@ function CareersEditorPage({
                   </h2>
                 </div>
                 {isLoadingRoles ? (
-                  <p className="p-4 text-[13px] text-[#70745a] md:p-5" style={{ fontFamily: body }}>
+                  <p className="p-4 text-[13px] text-[#5f644c] md:p-5" style={{ fontFamily: body }}>
                     Carregando vagas...
                   </p>
                 ) : null}
                 {!isLoadingRoles && !orderedRoles.length ? (
-                  <p className="p-4 text-[13px] text-[#70745a] md:p-5" style={{ fontFamily: body }}>
+                  <p className="p-4 text-[13px] text-[#5f644c] md:p-5" style={{ fontFamily: body }}>
                     Nenhuma vaga cadastrada.
                   </p>
                 ) : null}
@@ -3654,12 +3670,12 @@ function CareersEditorPage({
                             <p className="text-[18px] text-[#101700]" style={{ fontFamily: heading, fontWeight: 500 }}>
                               {role.title}
                             </p>
-                            <p className="mt-1 text-[12px] text-[#70745a]" style={{ fontFamily: mono }}>
+                            <p className="mt-1 text-[12px] text-[#5f644c]" style={{ fontFamily: mono }}>
                               /{role.slug}
                             </p>
                           </div>
                           <span
-                            className={`inline-flex px-2 py-1 text-[11px] uppercase ${isBase ? "bg-[#f2f3ef] text-[#70745a] border border-[#d6dace]" : "bg-[#ecefe7] text-[#101700]"}`}
+                            className={`inline-flex px-2 py-1 text-[11px] uppercase ${isBase ? "bg-[#f2f3ef] text-[#5f644c] border border-[#d6dace]" : "bg-[#ecefe7] text-[#101700]"}`}
                             style={{ fontFamily: mono }}
                           >
                             {isBase ? "base" : "custom"}
@@ -3669,7 +3685,7 @@ function CareersEditorPage({
                           <button
                             type="button"
                             onClick={() => startEditing(role)}
-                            className="inline-flex border border-[#d6dace] px-3 py-2 text-[12px] uppercase text-[#70745a] hover:text-[#101700]"
+                            className="inline-flex border border-[#d6dace] px-3 py-2 text-[12px] uppercase text-[#5f644c] hover:text-[#101700]"
                             style={{ fontFamily: mono }}
                           >
                             Editar
@@ -3685,7 +3701,7 @@ function CareersEditorPage({
                           </button>
                           <a
                             href={`/vagas/${role.slug}`}
-                            className="inline-flex border border-[#d6dace] px-3 py-2 text-[12px] uppercase text-[#70745a] hover:text-[#101700]"
+                            className="inline-flex border border-[#d6dace] px-3 py-2 text-[12px] uppercase text-[#5f644c] hover:text-[#101700]"
                             style={{ fontFamily: mono }}
                           >
                             Ver página
@@ -3764,14 +3780,14 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                 isHeaderCondensed ? "max-w-none px-6" : "max-w-[1512px] px-6 xl:px-[192px]"
               }`}
             >
-              <a href="/" className="inline-flex items-center gap-2">
+              <a href="/" aria-label="ShiftLabs" title="ShiftLabs" className="inline-flex min-h-[44px] items-center gap-2 py-1">
                 <ShiftLabsIcon />
                 <ShiftLabsWordmark />
               </a>
               <div className="flex items-center gap-4 md:gap-6">
                 <a
                   href="/vagas"
-                  className="text-[#101700] transition-colors text-[14px]"
+                  className="inline-flex min-h-[44px] items-center px-2 text-[#101700] transition-colors text-[14px]"
                   style={{ fontFamily: mono, fontWeight: 400, lineHeight: "normal" }}
                 >
                   /VAGAS
@@ -3785,7 +3801,7 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                       target="_blank"
                       rel="noreferrer"
                       aria-label={name}
-                      className="inline-flex items-center opacity-70 hover:opacity-100 transition-opacity"
+                      className="inline-flex h-11 w-11 items-center justify-center opacity-70 hover:opacity-100 transition-opacity"
                     >
                       <Icon />
                     </a>
@@ -3805,7 +3821,7 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
               <div className="flex flex-col justify-between p-6 w-full lg:w-1/2 min-h-[300px] lg:h-[462px]">
                 <div className="flex flex-col gap-8 max-w-[520px]">
                   <p
-                    className="text-[#70745a] text-[14px] md:text-[16px] uppercase"
+                    className="text-[#5f644c] text-[14px] md:text-[16px] uppercase"
                     style={{ fontFamily: mono }}
                   >
                     /carreiras shiftlabs
@@ -3817,7 +3833,7 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                     Estruture o futuro com a gente.
                   </div>
                   <p
-                    className="text-[#70745a] text-[14px] md:text-[16px] max-w-[420px]"
+                    className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[420px]"
                     style={{ fontFamily: body, lineHeight: 1.3 }}
                   >
                     Procuramos pessoas que pensam em sistemas, executam com autonomia e querem construir operações
@@ -3839,7 +3855,7 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                 <div className="w-full max-w-[532px] border border-[#d6dace]">
                   <div className="grid grid-cols-2">
                     <div className="border-b border-r border-[#d6dace] p-6 min-h-[146px] flex flex-col justify-end gap-2">
-                      <p className="text-[#70745a] text-[12px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
+                      <p className="text-[#5f644c] text-[12px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
                         vagas ativas
                       </p>
                       <p className="text-[#101700] text-[36px] md:text-[48px]" style={{ fontFamily: heading, fontWeight: 500 }}>
@@ -3847,7 +3863,7 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                       </p>
                     </div>
                     <div className="border-b border-[#d6dace] p-6 min-h-[146px] flex flex-col justify-end gap-2">
-                      <p className="text-[#70745a] text-[12px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
+                      <p className="text-[#5f644c] text-[12px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
                         foco
                       </p>
                       <p className="text-[#101700] text-[18px] md:text-[24px]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: 1.1 }}>
@@ -3855,7 +3871,7 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                       </p>
                     </div>
                     <div className="border-r border-[#d6dace] p-6 min-h-[146px] flex flex-col justify-end gap-2">
-                      <p className="text-[#70745a] text-[12px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
+                      <p className="text-[#5f644c] text-[12px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
                         modelo
                       </p>
                       <p className="text-[#101700] text-[18px] md:text-[24px]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: 1.1 }}>
@@ -3863,7 +3879,7 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                       </p>
                     </div>
                     <div className="p-6 min-h-[146px] flex flex-col justify-end gap-2">
-                      <p className="text-[#70745a] text-[12px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
+                      <p className="text-[#5f644c] text-[12px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
                         abordagem
                       </p>
                       <p className="text-[#101700] text-[18px] md:text-[24px]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: 1.1 }}>
@@ -3883,7 +3899,7 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
             <div className="flex flex-col gap-6 max-w-[560px]">
               <p
-                className="text-[#70745a] text-[14px] md:text-[16px] uppercase"
+                className="text-[#5f644c] text-[14px] md:text-[16px] uppercase"
                 style={{ fontFamily: mono }}
               >
                 /vagas abertas
@@ -3896,7 +3912,7 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
               </div>
             </div>
             <p
-              className="text-[#70745a] text-[14px] md:text-[16px] max-w-[340px]"
+              className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[340px]"
               style={{ fontFamily: body, lineHeight: 1.3 }}
             >
               {isLoading
@@ -3909,7 +3925,7 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
         {isLoading ? (
           <div className="border-y border-[#d6dace]">
             <div className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-10">
-              <p className="text-[16px] text-[#70745a]" style={{ fontFamily: body }}>
+              <p className="text-[16px] text-[#5f644c]" style={{ fontFamily: body }}>
                 Carregando vagas...
               </p>
             </div>
@@ -3919,7 +3935,7 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
         {!isLoading && !roles.length ? (
           <div className="border-y border-[#d6dace]">
             <div className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-10">
-              <p className="text-[16px] text-[#70745a]" style={{ fontFamily: body }}>
+              <p className="text-[16px] text-[#5f644c]" style={{ fontFamily: body }}>
                 Nenhuma vaga publicada no momento.
               </p>
             </div>
@@ -3947,7 +3963,7 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                     <a href={`/vagas/${role.slug}`} className="group block h-full transition-colors hover:bg-[#ecefe7]">
                       <article className="flex h-full min-h-[318px] flex-col justify-between gap-8 p-6">
                         <div className="flex flex-col gap-4">
-                          <p className="text-[#70745a] text-[13px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
+                          <p className="text-[#5f644c] text-[13px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
                             /{displayArea}
                           </p>
                           <div className="flex flex-wrap items-center gap-2 md:gap-3">
@@ -3960,7 +3976,7 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                             {seniorityBadge ? <RoleSeniorityBadge label={seniorityBadge} /> : null}
                           </div>
                           <p
-                            className="text-[#70745a] text-[14px] md:text-[16px] max-w-[480px]"
+                            className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[480px]"
                             style={{
                               fontFamily: body,
                               lineHeight: 1.3,
@@ -3978,14 +3994,14 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                         <div className="flex flex-col gap-4">
                           <div className="flex flex-wrap gap-2">
                             <span
-                              className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#70745a]"
+                              className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#5f644c]"
                               style={{ fontFamily: body, lineHeight: "normal" }}
                             >
                               <CareersLocationIcon />
                               {role.location}
                             </span>
                             <span
-                              className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#70745a]"
+                              className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#5f644c]"
                               style={{ fontFamily: body, lineHeight: "normal" }}
                             >
                               <CareersWorkModeIcon />
@@ -4016,7 +4032,7 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
             <div className="flex flex-col lg:flex-row flex-1 min-w-0 bg-[#b4eb38]">
               <div className="flex flex-col justify-between p-6 w-full lg:w-1/2 min-h-[300px] lg:h-[360px]">
                 <div className="flex flex-col gap-6 max-w-[450px]">
-                  <p className="text-[#517400] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
+                  <p className="text-[#456300] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
                     /call to action
                   </p>
                   <div className="text-[#101700] text-[28px] md:text-[36px] lg:text-[40px]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: "normal" }}>
@@ -4024,7 +4040,7 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                   </div>
                 </div>
                 <p
-                  className="text-[#517400] text-[14px] md:text-[16px] max-w-[390px] mt-8"
+                  className="text-[#456300] text-[14px] md:text-[16px] max-w-[390px] mt-8"
                   style={{ fontFamily: body, lineHeight: 1.3 }}
                 >
                   Envie seu perfil e contexto. Se fizer sentido para o momento da operação, a gente conversa.
@@ -4049,23 +4065,23 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 pb-9">
             <div className="flex flex-col gap-8 max-w-[356px]">
               <ShiftLabsIcon />
-              <p className="text-[#70745a] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+              <p className="text-[#5f644c] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
                 Construímos estruturas para produto, tecnologia, comercial e operação evoluírem no mesmo ritmo.
               </p>
-              <p className="text-[#70745a] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+              <p className="text-[#5f644c] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
                 <span className="text-[#101700]" style={{ fontFamily: display, fontWeight: 500 }}>© 2026 ShiftLabs.</span>
                 <span> Todos os direitos reservados.</span>
               </p>
             </div>
             <div className="flex flex-col gap-6">
-              <p className="text-[#70745a] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
+              <p className="text-[#5f644c] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
                 /social
               </p>
               <div className="flex items-center gap-5">
                 {careersSocialLinks.map(({ name, href, Icon }) => (
-                  <a key={`careers-footer-${name}`} href={href} target="_blank" rel="noreferrer" className="flex items-center gap-2">
+                  <a key={`careers-footer-${name}`} href={href} target="_blank" rel="noreferrer" className="inline-flex min-h-[44px] items-center gap-2 py-1">
                     <Icon />
-                    <span className="text-[#70745a] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+                    <span className="text-[#5f644c] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
                       {name}
                     </span>
                   </a>
@@ -4084,12 +4100,19 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
 
 export default function App() {
   const pathname = typeof window !== "undefined" ? window.location.pathname.replace(/\/+$/, "") || "/" : "/";
-  const [careersRoles, setCareersRoles] = useState<CareersRole[]>(hasSupabaseConfig ? [] : defaultCareersRoles);
+  const isCareersEditorRoute = pathname === "/vagas/editor";
+  const isCareersListRoute = pathname === "/vagas";
+  const isCareersRoleRoute = pathname.startsWith("/vagas/") && !isCareersEditorRoute;
+  const shouldLoadCareersData = isCareersEditorRoute || isCareersListRoute || isCareersRoleRoute;
+
+  const [careersRoles, setCareersRoles] = useState<CareersRole[]>(
+    hasSupabaseConfig && shouldLoadCareersData ? [] : defaultCareersRoles,
+  );
   const [editorRoles, setEditorRoles] = useState<CareersRole[]>([]);
-  const [isLoadingPublicRoles, setIsLoadingPublicRoles] = useState(hasSupabaseConfig);
+  const [isLoadingPublicRoles, setIsLoadingPublicRoles] = useState(hasSupabaseConfig && shouldLoadCareersData);
   const [isLoadingEditorRoles, setIsLoadingEditorRoles] = useState(false);
   const [editorSession, setEditorSession] = useState<Session | null>(null);
-  const [authLoading, setAuthLoading] = useState(hasSupabaseConfig);
+  const [authLoading, setAuthLoading] = useState(hasSupabaseConfig && shouldLoadCareersData && isCareersEditorRoute);
 
   const fetchPublishedRoles = async () => {
     if (!supabase) {
@@ -4202,6 +4225,13 @@ export default function App() {
   };
 
   useEffect(() => {
+    if (!shouldLoadCareersData) {
+      setAuthLoading(false);
+      setIsLoadingPublicRoles(false);
+      setEditorRoles([]);
+      return;
+    }
+
     if (!supabase) {
       setAuthLoading(false);
       setIsLoadingPublicRoles(false);
@@ -4210,6 +4240,15 @@ export default function App() {
     }
 
     let isActive = true;
+
+    if (!isCareersEditorRoute) {
+      setAuthLoading(false);
+      setEditorSession(null);
+      void fetchPublishedRoles();
+      return () => {
+        isActive = false;
+      };
+    }
 
     const initialize = async () => {
       const { data, error } = await supabase.auth.getSession();
@@ -4246,7 +4285,7 @@ export default function App() {
       isActive = false;
       authData.subscription.unsubscribe();
     };
-  }, []);
+  }, [isCareersEditorRoute, shouldLoadCareersData]);
 
   const handleSignIn = async (email: string, password: string) => {
     if (!supabase) {
@@ -4326,9 +4365,6 @@ export default function App() {
     await fetchPublishedRoles();
   };
 
-  const isCareersEditorRoute = pathname === "/vagas/editor";
-  const isCareersListRoute = pathname === "/vagas";
-  const isCareersRoleRoute = pathname.startsWith("/vagas/") && !isCareersEditorRoute;
   const roleSlugFromPath = isCareersRoleRoute ? decodeURIComponent(pathname.slice("/vagas/".length)) : null;
   const selectedRole = roleSlugFromPath ? careersRoles.find((role) => role.slug === roleSlugFromPath) : undefined;
   const shouldShowRoleLoadingState = Boolean(isCareersRoleRoute && isLoadingPublicRoles);

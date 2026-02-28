@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /vagas/editor
+
+Sitemap: https://shiftlabs.digital/sitemap.xml

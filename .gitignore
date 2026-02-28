@@ -11,3 +11,4 @@ vite.config.js
 .env.local
 postcss.config.mjs
 tailwind.config.js
+.vercel

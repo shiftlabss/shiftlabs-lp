@@ -1,0 +1,17 @@
+{
+  "name": "ShiftLabs",
+  "short_name": "ShiftLabs",
+  "description": "Arquitetura de produto, tecnologia, growth e operacoes para empresas em crescimento.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f2f3ef",
+  "theme_color": "#f2f3ef",
+  "icons": [
+    {
+      "src": "/fav-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

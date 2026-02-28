@@ -9,6 +9,8 @@ create table if not exists public.careers_roles (
   slug text not null unique check (slug ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$'),
   title text not null,
   display_title text not null default '',
+  display_seniority text not null default '',
+  display_commitment text not null default '',
   location text not null,
   commitment text not null,
   model text not null,
@@ -176,6 +178,47 @@ language sql
 immutable
 as $$
   select public.strip_role_seniority_suffix(public.apply_role_title_alias(raw_title));
+$$;
+
+create or replace function public.get_display_role_seniority(raw_title text, raw_slug text default null)
+returns text
+language plpgsql
+immutable
+as $$
+declare
+  normalized_title text := public.normalize_search_text(raw_title);
+  normalized_slug text := public.normalize_search_text(replace(coalesce(raw_slug, ''), '-', ' '));
+begin
+  if normalized_title ~ '(^| )(jr|junior)( |$)' then return 'JUNIOR'; end if;
+  if normalized_title ~ '(^| )pleno( |$)' then return 'PLENO'; end if;
+  if normalized_title ~ '(^| )senior( |$)' then return 'SENIOR'; end if;
+  if normalized_title ~ '(^| )especialista( |$)' then return 'ESPECIALISTA'; end if;
+  if normalized_title ~ '(^| )(lead|lider)( |$)' then return 'LEAD'; end if;
+  if normalized_title ~ '(^| )(mid|middle)( |$)' then return 'MID'; end if;
+
+  if normalized_slug ~ '(^| )(jr|junior)( |$)' then return 'JUNIOR'; end if;
+  if normalized_slug ~ '(^| )pleno( |$)' then return 'PLENO'; end if;
+  if normalized_slug ~ '(^| )senior( |$)' then return 'SENIOR'; end if;
+  if normalized_slug ~ '(^| )especialista( |$)' then return 'ESPECIALISTA'; end if;
+  if normalized_slug ~ '(^| )(lead|lider)( |$)' then return 'LEAD'; end if;
+  if normalized_slug ~ '(^| )(mid|middle)( |$)' then return 'MID'; end if;
+  return '';
+end;
+$$;
+
+create or replace function public.get_display_role_commitment(raw_commitment text)
+returns text
+language plpgsql
+immutable
+as $$
+declare
+  normalized text := public.normalize_search_text(raw_commitment);
+begin
+  if normalized = 'tempo integral' then
+    return 'Segunda à Sexta, 09h às 18h';
+  end if;
+  return btrim(coalesce(raw_commitment, ''));
+end;
 $$;
 
 create or replace function public.detect_role_area(haystack text)
@@ -371,6 +414,8 @@ begin
   new.area := inferred_area;
   new.display_area := inferred_area;
   new.display_title := public.get_display_role_title(new.title);
+  new.display_seniority := public.get_display_role_seniority(new.title, new.slug);
+  new.display_commitment := public.get_display_role_commitment(new.commitment);
   new.card_summary := public.get_role_card_summary(new.intro, new.role_one_liner, new.body_markdown, about_first);
 
   return new;

@@ -23,6 +23,12 @@ const supabase = hasSupabaseConfig
       },
     })
   : null;
+const fallbackSiteUrl = "https://shiftlabs.digital";
+const configuredSiteUrl = ((import.meta.env.VITE_SITE_URL as string | undefined) ?? fallbackSiteUrl).trim();
+const siteUrl = configuredSiteUrl.replace(/\/+$/, "") || fallbackSiteUrl;
+const seoDefaultDescription =
+  "A ShiftLabs estrutura produto, tecnologia, growth e operacoes para empresas crescerem com previsibilidade e execucao coordenada.";
+const seoDefaultImagePath = "/fav-icon.svg";
 
 /* ─── Reusable sub-components ─── */
 
@@ -387,6 +393,15 @@ function CareersWorkModeIcon() {
   );
 }
 
+function CareersBackIcon() {
+  return (
+    <svg className="size-[18px] shrink-0" fill="none" viewBox="0 0 18 18">
+      <path d="M11.2 4.2L6.5 8.9L11.2 13.6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6" />
+      <path d="M6.9 8.9H14.1" stroke="currentColor" strokeLinecap="round" strokeWidth="1.6" />
+    </svg>
+  );
+}
+
 function CareersPill({
   children,
 }: {
@@ -597,6 +612,8 @@ type CareersRole = {
   slug: string;
   title: string;
   displayTitle?: string;
+  displaySeniority?: string;
+  displayCommitment?: string;
   location: string;
   commitment: string;
   model: string;
@@ -626,6 +643,8 @@ type CareersRoleRow = {
   slug: string;
   title: string;
   display_title?: string | null;
+  display_seniority?: string | null;
+  display_commitment?: string | null;
   location: string;
   commitment: string;
   model: string;
@@ -799,6 +818,49 @@ function getDisplayRoleTitle(title: string, precomputedDisplayTitle?: string): s
   return stripRoleSenioritySuffix(applyRoleTitleAlias(title));
 }
 
+function detectSeniorityLabelInText(normalizedText: string): string | undefined {
+  if (!normalizedText) return undefined;
+
+  const firstMatchIndex = (patterns: RegExp[]): number => {
+    let best = Number.POSITIVE_INFINITY;
+    for (const pattern of patterns) {
+      const index = normalizedText.search(pattern);
+      if (index >= 0 && index < best) {
+        best = index;
+      }
+    }
+    return Number.isFinite(best) ? best : -1;
+  };
+
+  const matches = [
+    { label: "JUNIOR", index: firstMatchIndex([/\bjunior\b/, /\bjr\b/]) },
+    { label: "PLENO", index: firstMatchIndex([/\bpleno\b/]) },
+    { label: "SENIOR", index: firstMatchIndex([/\bsenior\b/]) },
+    { label: "ESPECIALISTA", index: firstMatchIndex([/\bespecialista\b/]) },
+    { label: "LEAD", index: firstMatchIndex([/\blead\b/, /\blider\b/]) },
+    { label: "MID", index: firstMatchIndex([/\bmid\b/, /\bmiddle\b/]) },
+  ].filter((entry) => entry.index >= 0);
+
+  if (!matches.length) return undefined;
+
+  matches.sort((first, second) => first.index - second.index);
+  return matches[0].label;
+}
+
+function inferRoleSeniorityLabel(title: string, slug?: string): string | undefined {
+  const fromTitle = detectSeniorityLabelInText(normalizeSearchText(title));
+  if (fromTitle) return fromTitle;
+
+  const slugAsText = (slug ?? "").replace(/-/g, " ");
+  return detectSeniorityLabelInText(normalizeSearchText(slugAsText));
+}
+
+function getRoleSeniorityBadge(title: string, precomputedDisplaySeniority?: string, slug?: string): string | undefined {
+  const persisted = precomputedDisplaySeniority?.trim();
+  if (persisted) return persisted.toUpperCase();
+  return inferRoleSeniorityLabel(title, slug);
+}
+
 function toRoleIntroPreview(value: string): string {
   return value
     .replace(/\[(.*?)\]\((.*?)\)/g, "$1")
@@ -868,6 +930,233 @@ function getRoleCardArea(
   });
 }
 
+function getRoleDisplayCommitment(commitment: string, precomputedDisplayCommitment?: string): string {
+  const persisted = precomputedDisplayCommitment?.trim();
+  if (persisted) return persisted;
+
+  const normalized = normalizeSearchText(commitment);
+  if (normalized === "tempo integral") {
+    return "Segunda à Sexta, 09h às 18h";
+  }
+
+  return commitment;
+}
+
+type SeoPayload = {
+  title: string;
+  description: string;
+  path: string;
+  noindex?: boolean;
+  type?: "website" | "article";
+  imagePath?: string;
+  pageSchema?: Record<string, unknown> | Array<Record<string, unknown>> | null;
+};
+
+function truncateWithEllipsis(value: string, maxLength = 160): string {
+  const normalized = value.replace(/\s+/g, " ").trim();
+  if (normalized.length <= maxLength) return normalized;
+  const truncated = normalized.slice(0, maxLength - 1);
+  const safeBreak = truncated.lastIndexOf(" ");
+  if (safeBreak <= 60) return `${truncated.trim()}...`;
+  return `${truncated.slice(0, safeBreak).trim()}...`;
+}
+
+function toAbsoluteUrl(pathname: string): string {
+  const normalizedPath = pathname.startsWith("/") ? pathname : `/${pathname}`;
+  const finalPath = normalizedPath === "/" ? "/" : normalizedPath.replace(/\/+$/, "");
+  return `${siteUrl}${finalPath}`;
+}
+
+function upsertMetaByName(name: string, content: string): void {
+  const selector = `meta[name="${name}"]`;
+  let element = document.head.querySelector(selector) as HTMLMetaElement | null;
+  if (!element) {
+    element = document.createElement("meta");
+    element.setAttribute("name", name);
+    document.head.appendChild(element);
+  }
+  element.setAttribute("content", content);
+}
+
+function upsertMetaByProperty(property: string, content: string): void {
+  const selector = `meta[property="${property}"]`;
+  let element = document.head.querySelector(selector) as HTMLMetaElement | null;
+  if (!element) {
+    element = document.createElement("meta");
+    element.setAttribute("property", property);
+    document.head.appendChild(element);
+  }
+  element.setAttribute("content", content);
+}
+
+function upsertLink(rel: string, href: string): void {
+  const selector = `link[rel="${rel}"]`;
+  let element = document.head.querySelector(selector) as HTMLLinkElement | null;
+  if (!element) {
+    element = document.createElement("link");
+    element.setAttribute("rel", rel);
+    document.head.appendChild(element);
+  }
+  element.setAttribute("href", href);
+}
+
+function upsertJsonLdScript(id: string, payload: Record<string, unknown> | Array<Record<string, unknown>> | null): void {
+  const scriptId = `seo-jsonld-${id}`;
+  const current = document.getElementById(scriptId);
+  if (!payload) {
+    if (current) current.remove();
+    return;
+  }
+
+  let script = current as HTMLScriptElement | null;
+  if (!script) {
+    script = document.createElement("script");
+    script.id = scriptId;
+    script.type = "application/ld+json";
+    document.head.appendChild(script);
+  }
+  script.textContent = JSON.stringify(payload);
+}
+
+function mapCommitmentToEmploymentType(commitment: string): string {
+  const normalized = normalizeSearchText(commitment);
+  if (/(part time|meio periodo|parttime)/.test(normalized)) return "PART_TIME";
+  if (/(estagio|intern)/.test(normalized)) return "INTERN";
+  if (/(freela|freelance|contract|pj)/.test(normalized)) return "CONTRACTOR";
+  return "FULL_TIME";
+}
+
+function buildOrganizationSchema(): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "ShiftLabs",
+    url: `${siteUrl}/`,
+    logo: toAbsoluteUrl(seoDefaultImagePath),
+    sameAs: careersSocialLinks.map((link) => link.href),
+  };
+}
+
+function buildLandingPageSchema(): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "ShiftLabs",
+    url: `${siteUrl}/`,
+    description: seoDefaultDescription,
+    inLanguage: "pt-BR",
+  };
+}
+
+function buildCareersCollectionSchema(roles: CareersRole[]): Record<string, unknown> {
+  const sorted = [...roles].sort((first, second) =>
+    getDisplayRoleTitle(first.title, first.displayTitle).localeCompare(getDisplayRoleTitle(second.title, second.displayTitle), "pt-BR", {
+      sensitivity: "base",
+    }),
+  );
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Vagas ShiftLabs",
+    url: toAbsoluteUrl("/vagas"),
+    description:
+      "Lista de vagas abertas da ShiftLabs para areas de produto, tecnologia, growth, comercial e operacoes.",
+    inLanguage: "pt-BR",
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: sorted.map((role, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: getDisplayRoleTitle(role.title, role.displayTitle),
+        url: toAbsoluteUrl(`/vagas/${role.slug}`),
+      })),
+    },
+  };
+}
+
+function buildJobPostingSchema(role: CareersRole): Record<string, unknown> {
+  const displayRoleTitle = getDisplayRoleTitle(role.title, role.displayTitle);
+  const displayArea = getRoleCardArea(role);
+  const normalizedDescription = truncateWithEllipsis(
+    toRoleIntroPreview(role.bodyMarkdown ?? role.intro ?? getRoleCardSummary(role)),
+    5000,
+  );
+  const isRemoteModel = /(remot|remote)/i.test(role.model);
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    title: displayRoleTitle,
+    description: normalizedDescription,
+    identifier: {
+      "@type": "PropertyValue",
+      name: "ShiftLabs",
+      value: role.slug,
+    },
+    employmentType: mapCommitmentToEmploymentType(role.commitment),
+    hiringOrganization: {
+      "@type": "Organization",
+      name: "ShiftLabs",
+      sameAs: `${siteUrl}/`,
+      logo: toAbsoluteUrl(seoDefaultImagePath),
+    },
+    industry: displayArea,
+    workHours: role.commitment,
+    jobLocationType: isRemoteModel ? "TELECOMMUTE" : undefined,
+    applicantLocationRequirements: isRemoteModel
+      ? {
+          "@type": "Country",
+          name: "Brasil",
+        }
+      : undefined,
+    jobLocation: isRemoteModel
+      ? undefined
+      : {
+          "@type": "Place",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: role.location,
+            addressCountry: "BR",
+          },
+        },
+    url: toAbsoluteUrl(`/vagas/${role.slug}`),
+  };
+}
+
+function applySeoPayload(payload: SeoPayload): void {
+  const normalizedTitle = payload.title.includes("ShiftLabs") ? payload.title : `${payload.title} | ShiftLabs`;
+  const normalizedDescription = truncateWithEllipsis(payload.description, 160);
+  const canonicalUrl = toAbsoluteUrl(payload.path);
+  const imageUrl = toAbsoluteUrl(payload.imagePath ?? seoDefaultImagePath);
+
+  document.documentElement.lang = "pt-BR";
+  document.title = normalizedTitle;
+
+  upsertMetaByName("description", normalizedDescription);
+  upsertMetaByName("robots", payload.noindex ? "noindex, nofollow, noarchive" : "index, follow, max-image-preview:large");
+  upsertMetaByName("theme-color", "#f2f3ef");
+  upsertMetaByName("author", "ShiftLabs");
+
+  upsertMetaByProperty("og:site_name", "ShiftLabs");
+  upsertMetaByProperty("og:locale", "pt_BR");
+  upsertMetaByProperty("og:type", payload.type ?? "website");
+  upsertMetaByProperty("og:title", normalizedTitle);
+  upsertMetaByProperty("og:description", normalizedDescription);
+  upsertMetaByProperty("og:url", canonicalUrl);
+  upsertMetaByProperty("og:image", imageUrl);
+  upsertMetaByProperty("og:image:alt", "ShiftLabs");
+
+  upsertMetaByName("twitter:card", "summary_large_image");
+  upsertMetaByName("twitter:title", normalizedTitle);
+  upsertMetaByName("twitter:description", normalizedDescription);
+  upsertMetaByName("twitter:image", imageUrl);
+
+  upsertLink("canonical", canonicalUrl);
+  upsertJsonLdScript("organization", buildOrganizationSchema());
+  upsertJsonLdScript("page", payload.pageSchema ?? null);
+}
+
 function rowToCareersRole(row: CareersRoleRow): CareersRole {
   const about = toTextArray(row.about);
   const responsibilities = toTextArray(row.responsibilities);
@@ -888,6 +1177,8 @@ function rowToCareersRole(row: CareersRoleRow): CareersRole {
     slug: row.slug,
     title: row.title,
     displayTitle: row.display_title?.trim() || undefined,
+    displaySeniority: row.display_seniority?.trim() || undefined,
+    displayCommitment: row.display_commitment?.trim() || getRoleDisplayCommitment(row.commitment),
     location: row.location,
     commitment: row.commitment,
     model: row.model,
@@ -1043,6 +1334,27 @@ function escapeHtml(value: string): string {
     .replace(/'/g, "&#39;");
 }
 
+function stripInlineMarkdown(value: string): string {
+  return value
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, "$1")
+    .replace(/[*_`~]/g, "")
+    .trim();
+}
+
+function isStyledRoleSectionHeading(rawHeading: string): boolean {
+  const normalized = normalizeSearchText(stripInlineMarkdown(rawHeading));
+  return (
+    normalized === "missao do cargo" ||
+    normalized === "responsabilidades no dia a dia" ||
+    normalized === "perfil esperado" ||
+    normalized === "o que esperamos nos primeiros 60 90 dias"
+  );
+}
+
+function formatRoleSectionHeading(rawHeading: string): string {
+  return `/${stripInlineMarkdown(rawHeading).toLocaleUpperCase("pt-BR")}`;
+}
+
 function inlineMarkdownToHtml(value: string): string {
   const links: Array<{ token: string; html: string }> = [];
   const withTokens = value.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (_match, label: string, url: string) => {
@@ -1087,7 +1399,14 @@ function markdownToHtml(markdown: string): string {
     const headingMatch = trimmed.match(/^(#{1,6})\s+(.+)$/);
     if (headingMatch) {
       const level = Math.min(6, headingMatch[1].length);
-      html.push(`<h${level}>${inlineMarkdownToHtml(headingMatch[2])}</h${level}>`);
+      const headingText = headingMatch[2].trim();
+      if (level >= 2 && isStyledRoleSectionHeading(headingText)) {
+        html.push(
+          `<h${level} class="role-section-label" style="font-family: 'Basis Grotesque Pro Mono', 'InterDisplay', sans-serif;">${escapeHtml(formatRoleSectionHeading(headingText))}</h${level}>`,
+        );
+      } else {
+        html.push(`<h${level}>${inlineMarkdownToHtml(headingText)}</h${level}>`);
+      }
       index += 1;
       continue;
     }
@@ -1163,6 +1482,8 @@ function normalizeCareersRole(raw: unknown): CareersRole | null {
     slug: entry.slug.trim(),
     title: entry.title.trim(),
     displayTitle: getDisplayRoleTitle(entry.title.trim()),
+    displaySeniority: getRoleSeniorityBadge(entry.title.trim(), undefined, entry.slug.trim()),
+    displayCommitment: getRoleDisplayCommitment(entry.commitment.trim()),
     location: entry.location.trim(),
     commitment: entry.commitment.trim(),
     model: entry.model.trim(),
@@ -2135,6 +2456,17 @@ function RoleMetaPill({ children }: { children: React.ReactNode }) {
   );
 }
 
+function RoleSeniorityBadge({ label }: { label: string }) {
+  return (
+    <span
+      className="inline-flex items-center justify-center self-center border border-[#d6dace] bg-[#f2f3ef] px-3 py-2 text-[13px] text-[#70745a] uppercase md:text-[14px]"
+      style={{ fontFamily: body, lineHeight: "normal" }}
+    >
+      {label}
+    </span>
+  );
+}
+
 function RoleContentSection({
   title,
   children,
@@ -2142,13 +2474,20 @@ function RoleContentSection({
   title: string;
   children: React.ReactNode;
 }) {
+  const usesLabelStyle = isStyledRoleSectionHeading(title);
+  const renderedTitle = usesLabelStyle ? formatRoleSectionHeading(title) : title;
+
   return (
     <section className="pt-6 md:pt-7">
       <h2
-        className="text-[24px] text-[#101700]"
-        style={{ fontFamily: heading, fontWeight: 500, lineHeight: 1.08 }}
+        className={usesLabelStyle ? "text-[16px] text-[#70745a] uppercase" : "text-[24px] text-[#101700]"}
+        style={{
+          fontFamily: usesLabelStyle ? mono : heading,
+          fontWeight: usesLabelStyle ? 400 : 500,
+          lineHeight: usesLabelStyle ? 1.1 : 1.08,
+        }}
       >
-        {title}
+        {renderedTitle}
       </h2>
       <div aria-hidden className="mt-3 h-px w-full bg-[#d6dace]" />
       <div className="mt-4">{children}</div>
@@ -2161,7 +2500,7 @@ function MarkdownBody({ markdown }: { markdown: string }) {
 
   return (
     <div
-      className="pt-2 text-[16px] text-[#101700] leading-[1.42] [&_h1]:mt-7 [&_h1]:text-[28px] [&_h1]:font-medium [&_h2]:mt-7 [&_h2]:text-[24px] [&_h2]:font-medium [&_h3]:mt-6 [&_h3]:text-[20px] [&_h3]:font-medium [&_p]:m-0 [&_p+*]:mt-3 [&_ul]:m-0 [&_ul]:list-disc [&_ul]:pl-6 [&_ul+*]:mt-3 [&_ol]:m-0 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol+*]:mt-3 [&_li]:mb-2 [&_li:last-child]:mb-0 [&_a]:underline [&_a]:underline-offset-2 [&_a:hover]:opacity-80 [&_code]:rounded-none [&_code]:border [&_code]:border-[#d6dace] [&_code]:bg-[#ecefe7] [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[14px]"
+      className="pt-2 text-[16px] text-[#101700] leading-[1.42] [&_h1]:mt-7 [&_h1]:text-[28px] [&_h1]:font-medium [&_h2]:mt-7 [&_h2]:text-[24px] [&_h2]:font-medium [&_h3]:mt-6 [&_h3]:text-[20px] [&_h3]:font-medium [&_h2.role-section-label]:mt-12 [&_h2.role-section-label]:text-[16px] [&_h2.role-section-label]:font-normal [&_h2.role-section-label]:uppercase [&_h2.role-section-label]:text-[#70745a] [&_h2.role-section-label]:leading-[1.1] [&_h3.role-section-label]:mt-12 [&_h3.role-section-label]:text-[16px] [&_h3.role-section-label]:font-normal [&_h3.role-section-label]:uppercase [&_h3.role-section-label]:text-[#70745a] [&_h3.role-section-label]:leading-[1.1] [&_p]:m-0 [&_p+p]:mt-3 [&_p+ul]:mt-3 [&_p+ol]:mt-3 [&_p+h2.role-section-label]:mt-12 [&_p+h3.role-section-label]:mt-12 [&_ul]:m-0 [&_ul]:list-disc [&_ul]:pl-6 [&_ul+*]:mt-3 [&_ul+h2.role-section-label]:mt-12 [&_ul+h3.role-section-label]:mt-12 [&_ol]:m-0 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol+*]:mt-3 [&_ol+h2.role-section-label]:mt-12 [&_ol+h3.role-section-label]:mt-12 [&_li]:mb-2 [&_li:last-child]:mb-0 [&_a]:underline [&_a]:underline-offset-2 [&_a:hover]:opacity-80 [&_code]:rounded-none [&_code]:border [&_code]:border-[#d6dace] [&_code]:bg-[#ecefe7] [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[14px]"
       style={{ fontFamily: body }}
       dangerouslySetInnerHTML={{ __html: html }}
     />
@@ -2171,6 +2510,8 @@ function MarkdownBody({ markdown }: { markdown: string }) {
 function CareerRolePage({ role }: { role: CareersRole }) {
   const [isHeaderCondensed, setIsHeaderCondensed] = useState(false);
   const displayRoleTitle = getDisplayRoleTitle(role.title, role.displayTitle);
+  const seniorityBadge = getRoleSeniorityBadge(role.title, role.displaySeniority, role.slug);
+  const displayCommitment = getRoleDisplayCommitment(role.commitment, role.displayCommitment);
   const displayArea = getRoleCardArea(role);
   const roleSummary = getRoleCardSummary(role);
   const applyHref = `mailto:careers@shiftlabs.digital?subject=${encodeURIComponent(`Candidatura - ${displayRoleTitle}`)}`;
@@ -2265,20 +2606,24 @@ function CareerRolePage({ role }: { role: CareersRole }) {
               <div className="flex flex-col gap-4 max-w-[880px]">
                 <a
                   href="/vagas"
-                  className="inline-flex w-fit text-[#70745a] hover:text-[#101700] transition-colors text-[14px] md:text-[16px] uppercase"
-                  style={{ fontFamily: mono }}
+                  aria-label="Voltar para vagas"
+                  title="Voltar para vagas"
+                  className="inline-flex w-fit items-center justify-center text-[#70745a] hover:text-[#101700] transition-colors"
                 >
-                  /voltar para vagas
+                  <CareersBackIcon />
                 </a>
                 <p className="text-[#70745a] text-[13px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
                   /{displayArea}
                 </p>
-                <h1
-                  className="text-[#101700] text-[32px] md:text-[44px] lg:text-[56px] leading-[1.03]"
-                  style={{ fontFamily: display, fontWeight: 500 }}
-                >
-                  {displayRoleTitle}
-                </h1>
+                <div className="flex flex-wrap items-center gap-3 md:gap-4">
+                  <h1
+                    className="text-[#101700] text-[32px] md:text-[44px] lg:text-[56px] leading-[1.03]"
+                    style={{ fontFamily: display, fontWeight: 500 }}
+                  >
+                    {displayRoleTitle}
+                  </h1>
+                  {seniorityBadge ? <RoleSeniorityBadge label={seniorityBadge} /> : null}
+                </div>
                 <p
                   className="text-[#70745a] text-[18px] md:text-[24px] max-w-[980px]"
                   style={{ fontFamily: body, lineHeight: 1.3 }}
@@ -2301,7 +2646,7 @@ function CareerRolePage({ role }: { role: CareersRole }) {
                     style={{ fontFamily: body, lineHeight: "normal" }}
                   >
                     <CareersClockIcon />
-                    {role.commitment}
+                    {displayCommitment}
                   </span>
                   <span
                     className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#70745a]"
@@ -2339,95 +2684,14 @@ function CareerRolePage({ role }: { role: CareersRole }) {
           <div className="max-w-[1512px] mx-auto flex relative">
             <XlHelper className="border-r border-[#d6dace]" />
             <article className="flex-1 border-x border-[#d6dace] px-6 md:px-8 xl:px-10 py-10 md:py-12">
-              {role.bodyMarkdown?.trim() ? (
-                <MarkdownBody markdown={role.bodyMarkdown} />
-              ) : (
-                <>
-                  <RoleContentSection title={role.whyTitle ?? "Why ShiftLabs?"}>
-                    <div className="flex flex-col gap-3">
-                      {role.about.map((paragraph) => (
-                        <p
-                          key={paragraph}
-                          className="text-[16px] text-[#101700]"
-                          style={{ fontFamily: body, fontWeight: 400, lineHeight: 1.42 }}
-                        >
-                          {paragraph}
-                        </p>
-                      ))}
-                    </div>
-                  </RoleContentSection>
-
-                  <RoleContentSection title={role.roleTitle ?? "The Role"}>
-                    <div className="flex flex-col gap-3">
-                      <p
-                        className="text-[16px] text-[#101700]"
-                        style={{ fontFamily: body, fontWeight: 400, lineHeight: 1.42 }}
-                      >
-                        {role.intro}
-                      </p>
-                      <p
-                        className="text-[16px] text-[#101700]"
-                        style={{ fontFamily: body, fontWeight: 400, lineHeight: 1.42 }}
-                      >
-                        {role.roleOneLiner ?? `Área de atuação: ${role.area}.`}
-                      </p>
-                    </div>
-                  </RoleContentSection>
-
-                  <RoleContentSection title={role.doTitle ?? "What you'll do"}>
-                    <ul className="m-0 list-disc pl-6">
-                      {role.responsibilities.map((item) => (
-                        <li
-                          key={item}
-                          className="mb-2 text-[16px] text-[#101700] last:mb-0"
-                          style={{ fontFamily: body, fontWeight: 400, lineHeight: 1.42 }}
-                        >
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </RoleContentSection>
-
-                  <RoleContentSection title={role.bringTitle ?? "What you'll bring"}>
-                    <ul className="m-0 list-disc pl-6">
-                      {role.requirements.map((item) => (
-                        <li
-                          key={item}
-                          className="mb-2 text-[16px] text-[#101700] last:mb-0"
-                          style={{ fontFamily: body, fontWeight: 400, lineHeight: 1.42 }}
-                        >
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </RoleContentSection>
-
-                  <RoleContentSection title={role.stackTitle ?? "Stack"}>
-                    <div className="flex flex-wrap gap-2">
-                      {role.stack.map((tool) => (
-                        <RoleMetaPill key={tool}>{tool}</RoleMetaPill>
-                      ))}
-                    </div>
-                  </RoleContentSection>
-
-                  <RoleContentSection title={role.processTitle ?? "Hiring process"}>
-                    <ol className="m-0 list-decimal pl-6">
-                      {role.process.map((step) => (
-                        <li
-                          key={step}
-                          className="mb-2 text-[16px] text-[#101700] last:mb-0"
-                          style={{ fontFamily: body, fontWeight: 400, lineHeight: 1.42 }}
-                        >
-                          {step}
-                        </li>
-                      ))}
-                    </ol>
-                  </RoleContentSection>
-
-                  {role.joinUs?.length ? (
-                    <RoleContentSection title={role.joinTitle ?? "Join Us"}>
+              <div className="mx-auto w-full max-w-[1080px]">
+                {role.bodyMarkdown?.trim() ? (
+                  <MarkdownBody markdown={role.bodyMarkdown} />
+                ) : (
+                  <>
+                    <RoleContentSection title={role.whyTitle ?? "Why ShiftLabs?"}>
                       <div className="flex flex-col gap-3">
-                        {role.joinUs.map((paragraph) => (
+                        {role.about.map((paragraph) => (
                           <p
                             key={paragraph}
                             className="text-[16px] text-[#101700]"
@@ -2438,9 +2702,92 @@ function CareerRolePage({ role }: { role: CareersRole }) {
                         ))}
                       </div>
                     </RoleContentSection>
-                  ) : null}
-                </>
-              )}
+
+                    <RoleContentSection title={role.roleTitle ?? "The Role"}>
+                      <div className="flex flex-col gap-3">
+                        <p
+                          className="text-[16px] text-[#101700]"
+                          style={{ fontFamily: body, fontWeight: 400, lineHeight: 1.42 }}
+                        >
+                          {role.intro}
+                        </p>
+                        <p
+                          className="text-[16px] text-[#101700]"
+                          style={{ fontFamily: body, fontWeight: 400, lineHeight: 1.42 }}
+                        >
+                          {role.roleOneLiner ?? `Área de atuação: ${role.area}.`}
+                        </p>
+                      </div>
+                    </RoleContentSection>
+
+                    <RoleContentSection title={role.doTitle ?? "What you'll do"}>
+                      <ul className="m-0 list-disc pl-6">
+                        {role.responsibilities.map((item) => (
+                          <li
+                            key={item}
+                            className="mb-2 text-[16px] text-[#101700] last:mb-0"
+                            style={{ fontFamily: body, fontWeight: 400, lineHeight: 1.42 }}
+                          >
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </RoleContentSection>
+
+                    <RoleContentSection title={role.bringTitle ?? "What you'll bring"}>
+                      <ul className="m-0 list-disc pl-6">
+                        {role.requirements.map((item) => (
+                          <li
+                            key={item}
+                            className="mb-2 text-[16px] text-[#101700] last:mb-0"
+                            style={{ fontFamily: body, fontWeight: 400, lineHeight: 1.42 }}
+                          >
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </RoleContentSection>
+
+                    <RoleContentSection title={role.stackTitle ?? "Stack"}>
+                      <div className="flex flex-wrap gap-2">
+                        {role.stack.map((tool) => (
+                          <RoleMetaPill key={tool}>{tool}</RoleMetaPill>
+                        ))}
+                      </div>
+                    </RoleContentSection>
+
+                    <RoleContentSection title={role.processTitle ?? "Hiring process"}>
+                      <ol className="m-0 list-decimal pl-6">
+                        {role.process.map((step) => (
+                          <li
+                            key={step}
+                            className="mb-2 text-[16px] text-[#101700] last:mb-0"
+                            style={{ fontFamily: body, fontWeight: 400, lineHeight: 1.42 }}
+                          >
+                            {step}
+                          </li>
+                        ))}
+                      </ol>
+                    </RoleContentSection>
+
+                    {role.joinUs?.length ? (
+                      <RoleContentSection title={role.joinTitle ?? "Join Us"}>
+                        <div className="flex flex-col gap-3">
+                          {role.joinUs.map((paragraph) => (
+                            <p
+                              key={paragraph}
+                              className="text-[16px] text-[#101700]"
+                              style={{ fontFamily: body, fontWeight: 400, lineHeight: 1.42 }}
+                            >
+                              {paragraph}
+                            </p>
+                          ))}
+                        </div>
+                      </RoleContentSection>
+                    ) : null}
+                  </>
+                )}
+              </div>
             </article>
             <XlHelper className="border-l border-[#d6dace]" />
             <SectionBorderTicks positions={["192px", "calc(100% - 192px)"]} />
@@ -3233,6 +3580,8 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                 const introPreview = getRoleCardSummary(role);
                 const displayArea = getRoleCardArea(role);
                 const displayRoleTitle = getDisplayRoleTitle(role.title, role.displayTitle);
+                const seniorityBadge = getRoleSeniorityBadge(role.title, role.displaySeniority, role.slug);
+                const displayCommitment = getRoleDisplayCommitment(role.commitment, role.displayCommitment);
                 return (
                   <li
                     key={role.slug}
@@ -3248,12 +3597,15 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                           <p className="text-[#70745a] text-[13px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
                             /{displayArea}
                           </p>
-                          <h2
-                            className="text-[#101700] text-[28px] md:text-[32px] leading-[1.08] transition-transform duration-200 lg:group-hover:translate-x-2"
-                            style={{ fontFamily: display, fontWeight: 500 }}
-                          >
-                            {displayRoleTitle}
-                          </h2>
+                          <div className="flex flex-wrap items-center gap-2 md:gap-3">
+                            <h2
+                              className="text-[#101700] text-[28px] md:text-[32px] leading-[1.08] transition-transform duration-200 lg:group-hover:translate-x-2"
+                              style={{ fontFamily: display, fontWeight: 500 }}
+                            >
+                              {displayRoleTitle}
+                            </h2>
+                            {seniorityBadge ? <RoleSeniorityBadge label={seniorityBadge} /> : null}
+                          </div>
                           <p
                             className="text-[#70745a] text-[14px] md:text-[16px] max-w-[480px]"
                             style={{
@@ -3284,7 +3636,7 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                               style={{ fontFamily: body, lineHeight: "normal" }}
                             >
                               <CareersClockIcon />
-                              {role.commitment}
+                              {displayCommitment}
                             </span>
                             <span
                               className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#70745a]"
@@ -3440,6 +3792,8 @@ export default function App() {
     }
 
     const rows = (data ?? []) as CareersRoleRow[];
+    const hasDisplaySeniorityColumn = rows.some((row) => Object.prototype.hasOwnProperty.call(row, "display_seniority"));
+    const hasDisplayCommitmentColumn = rows.some((row) => Object.prototype.hasOwnProperty.call(row, "display_commitment"));
     const rowsNeedingNormalization = rows
       .map((row) => ({
         id: row.id,
@@ -3447,6 +3801,8 @@ export default function App() {
         currentDisplayArea: row.display_area?.trim() ?? "",
         currentDisplayTitle: row.display_title?.trim() ?? "",
         currentCardSummary: row.card_summary?.trim() ?? "",
+        currentDisplaySeniority: row.display_seniority?.trim() ?? "",
+        currentDisplayCommitment: row.display_commitment?.trim() ?? "",
         inferredArea: inferRoleArea({
           area: row.area,
           title: row.title,
@@ -3463,12 +3819,16 @@ export default function App() {
           about: toTextArray(row.about),
           cardSummary: undefined,
         }),
+        inferredDisplaySeniority: getRoleSeniorityBadge(row.title, undefined, row.slug) ?? "",
+        inferredDisplayCommitment: getRoleDisplayCommitment(row.commitment),
       }))
       .filter((entry) =>
         entry.inferredArea !== entry.currentArea ||
         entry.currentDisplayArea !== entry.inferredArea ||
         entry.currentDisplayTitle !== entry.inferredDisplayTitle ||
-        entry.currentCardSummary !== entry.inferredCardSummary,
+        entry.currentCardSummary !== entry.inferredCardSummary ||
+        (hasDisplaySeniorityColumn && entry.currentDisplaySeniority !== entry.inferredDisplaySeniority) ||
+        (hasDisplayCommitmentColumn && entry.currentDisplayCommitment !== entry.inferredDisplayCommitment),
       );
 
     if (rowsNeedingNormalization.length) {
@@ -3619,7 +3979,68 @@ export default function App() {
     await fetchPublishedRoles();
   };
 
-  if (pathname === "/vagas/editor") {
+  const isCareersEditorRoute = pathname === "/vagas/editor";
+  const isCareersListRoute = pathname === "/vagas";
+  const isCareersRoleRoute = pathname.startsWith("/vagas/") && !isCareersEditorRoute;
+  const roleSlugFromPath = isCareersRoleRoute ? decodeURIComponent(pathname.slice("/vagas/".length)) : null;
+  const selectedRole = roleSlugFromPath ? careersRoles.find((role) => role.slug === roleSlugFromPath) : undefined;
+  const shouldShowRoleLoadingState = Boolean(isCareersRoleRoute && isLoadingPublicRoles);
+  const isUnknownRoleRoute = Boolean(isCareersRoleRoute && !isLoadingPublicRoles && roleSlugFromPath && !selectedRole);
+
+  useEffect(() => {
+    if (isCareersEditorRoute) {
+      applySeoPayload({
+        title: "Editor de Vagas | ShiftLabs",
+        description: "Painel interno para publicacao e manutencao das vagas da ShiftLabs.",
+        path: "/vagas/editor",
+        noindex: true,
+        pageSchema: null,
+      });
+      return;
+    }
+
+    if (isCareersRoleRoute && selectedRole) {
+      const displayRoleTitle = getDisplayRoleTitle(selectedRole.title, selectedRole.displayTitle);
+      applySeoPayload({
+        title: `${displayRoleTitle} | Vagas ShiftLabs`,
+        description: getRoleCardSummary(selectedRole),
+        path: `/vagas/${selectedRole.slug}`,
+        type: "article",
+        pageSchema: buildJobPostingSchema(selectedRole),
+      });
+      return;
+    }
+
+    if (isCareersListRoute || isCareersRoleRoute) {
+      applySeoPayload({
+        title: "Vagas na ShiftLabs | Carreiras",
+        description:
+          "Explore as vagas abertas da ShiftLabs em produto, tecnologia, growth, comercial e operacoes.",
+        path: isCareersRoleRoute ? "/vagas" : pathname,
+        noindex: Boolean(isUnknownRoleRoute || shouldShowRoleLoadingState),
+        pageSchema: buildCareersCollectionSchema(careersRoles),
+      });
+      return;
+    }
+
+    applySeoPayload({
+      title: "ShiftLabs | Arquitetura de Produto, Tecnologia e Operacao",
+      description: seoDefaultDescription,
+      path: "/",
+      pageSchema: buildLandingPageSchema(),
+    });
+  }, [
+    pathname,
+    isCareersEditorRoute,
+    isCareersListRoute,
+    isCareersRoleRoute,
+    isUnknownRoleRoute,
+    shouldShowRoleLoadingState,
+    selectedRole,
+    careersRoles,
+  ]);
+
+  if (isCareersEditorRoute) {
     return (
       <CareersEditorPage
         roles={editorRoles}
@@ -3635,16 +4056,14 @@ export default function App() {
     );
   }
 
-  if (pathname === "/vagas") {
+  if (isCareersListRoute) {
     return <CareersPage roles={careersRoles} isLoading={isLoadingPublicRoles} />;
   }
 
-  if (pathname.startsWith("/vagas/")) {
-    const roleSlug = decodeURIComponent(pathname.slice("/vagas/".length));
-    if (isLoadingPublicRoles) {
+  if (isCareersRoleRoute) {
+    if (shouldShowRoleLoadingState) {
       return <CareersPage roles={[]} isLoading />;
     }
-    const selectedRole = careersRoles.find((role) => role.slug === roleSlug);
     if (selectedRole) {
       return <CareerRolePage role={selectedRole} />;
     }

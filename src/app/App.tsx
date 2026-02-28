@@ -3628,7 +3628,6 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                 const displayArea = getRoleCardArea(role);
                 const displayRoleTitle = getDisplayRoleTitle(role.title, role.displayTitle);
                 const seniorityBadge = getRoleSeniorityBadge(role.title, role.displaySeniority, role.slug);
-                const cardCommitment = role.commitment.trim();
                 return (
                   <li
                     key={role.slug}
@@ -3677,13 +3676,6 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                             >
                               <CareersLocationIcon />
                               {role.location}
-                            </span>
-                            <span
-                              className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#70745a]"
-                              style={{ fontFamily: body, lineHeight: "normal" }}
-                            >
-                              <CareersClockIcon />
-                              {cardCommitment}
                             </span>
                             <span
                               className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#70745a]"

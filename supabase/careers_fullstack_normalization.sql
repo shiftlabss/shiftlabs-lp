@@ -117,6 +117,10 @@ begin
     return 'Gestor de RH';
   end if;
 
+  if normalized ~ '^(criador editor de video com i a|videomaker i a first)( |$)' then
+    return 'Videomaker I.A First';
+  end if;
+
   return trimmed;
 end;
 $$;

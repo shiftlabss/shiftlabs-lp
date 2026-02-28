@@ -55,19 +55,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://shiftlabs.digital/vagas/executivo-comercial-sdr-closer</loc>
-    <lastmod>2026-02-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://shiftlabs.digital/vagas/gerente-operacional</loc>
-    <lastmod>2026-02-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://shiftlabs.digital/vagas/product-manager</loc>
     <lastmod>2026-02-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -79,7 +67,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://shiftlabs.digital/vagas/social-media</loc>
+    <loc>https://shiftlabs.digital/vagas/product-manager</loc>
+    <lastmod>2026-02-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://shiftlabs.digital/vagas/executivo-comercial-sdr-closer</loc>
     <lastmod>2026-02-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>

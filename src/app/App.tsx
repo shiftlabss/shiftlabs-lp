@@ -808,6 +808,10 @@ function applyRoleTitleAlias(title: string): string {
     return "Gestor de RH";
   }
 
+  if (/^(criador editor de video com i a|videomaker i a first)\b/.test(normalized)) {
+    return "Videomaker I.A First";
+  }
+
   return trimmed;
 }
 
@@ -950,6 +954,12 @@ type SeoPayload = {
   pageSchema?: Record<string, unknown> | Array<Record<string, unknown>> | null;
 };
 
+const hiddenCareerRoleSlugs = new Set(["social-media"]);
+
+function filterVisibleCareersRoles<T extends { slug: string }>(roles: T[]): T[] {
+  return roles.filter((role) => !hiddenCareerRoleSlugs.has(role.slug));
+}
+
 function truncateWithEllipsis(value: string, maxLength = 160): string {
   const normalized = value.replace(/\s+/g, " ").trim();
   if (normalized.length <= maxLength) return normalized;
@@ -1047,7 +1057,7 @@ function buildLandingPageSchema(): Record<string, unknown> {
 }
 
 function buildCareersCollectionSchema(roles: CareersRole[]): Record<string, unknown> {
-  const sorted = [...roles].sort((first, second) =>
+  const sorted = [...filterVisibleCareersRoles(roles)].sort((first, second) =>
     getDisplayRoleTitle(first.title, first.displayTitle).localeCompare(getDisplayRoleTitle(second.title, second.displayTitle), "pt-BR", {
       sensitivity: "base",
     }),
@@ -3618,7 +3628,7 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                 const displayArea = getRoleCardArea(role);
                 const displayRoleTitle = getDisplayRoleTitle(role.title, role.displayTitle);
                 const seniorityBadge = getRoleSeniorityBadge(role.title, role.displaySeniority, role.slug);
-                const displayCommitment = getRoleDisplayCommitment(role.commitment, role.displayCommitment);
+                const cardCommitment = role.commitment.trim();
                 return (
                   <li
                     key={role.slug}
@@ -3673,7 +3683,7 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                               style={{ fontFamily: body, lineHeight: "normal" }}
                             >
                               <CareersClockIcon />
-                              {displayCommitment}
+                              {cardCommitment}
                             </span>
                             <span
                               className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#70745a]"
@@ -3804,7 +3814,8 @@ export default function App() {
     }
 
     const mapped = ((data ?? []) as CareersRoleRow[]).map(rowToCareersRole);
-    setCareersRoles(mapped.length ? mapped : defaultCareersRoles);
+    const visibleMapped = filterVisibleCareersRoles(mapped);
+    setCareersRoles(visibleMapped.length ? visibleMapped : defaultCareersRoles);
     setIsLoadingPublicRoles(false);
   };
 
@@ -3887,7 +3898,7 @@ export default function App() {
       }
     }
 
-    setEditorRoles(rows.map(rowToCareersRole));
+    setEditorRoles(filterVisibleCareersRoles(rows.map(rowToCareersRole)));
     setIsLoadingEditorRoles(false);
   };
 

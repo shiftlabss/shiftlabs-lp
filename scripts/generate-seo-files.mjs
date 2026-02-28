@@ -4,6 +4,7 @@ import path from "node:path";
 const fallbackSiteUrl = "https://shiftlabs.digital";
 const fallbackSupabaseUrl = "https://cjoyxelowsfkhgswkipd.supabase.co";
 const fallbackSupabaseAnonKey = "sb_publishable_EWydN_Aqm9YbtXkQUNGfrA_BpB8LD4R";
+const hiddenCareerRoleSlugs = new Set(["social-media"]);
 
 const projectRoot = process.cwd();
 const publicDir = path.resolve(projectRoot, "public");
@@ -73,6 +74,7 @@ async function fetchPublishedRoles() {
     for (const row of rows) {
       const slug = typeof row?.slug === "string" ? row.slug.trim() : "";
       if (!slug) continue;
+      if (hiddenCareerRoleSlugs.has(slug)) continue;
       const lastmod = toDateOnly(row?.updated_at);
       unique.set(slug, lastmod);
     }

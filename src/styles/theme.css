@@ -212,6 +212,141 @@
   }
 }
 
+@keyframes shiftlabs-success-enter {
+  from {
+    opacity: 0.001;
+    transform: translate3d(0, 18px, 0) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes shiftlabs-success-halo {
+  0% {
+    transform: scale(0.88);
+    opacity: 0.55;
+  }
+
+  70% {
+    transform: scale(1.22);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1.24);
+    opacity: 0;
+  }
+}
+
+@keyframes shiftlabs-success-breathe {
+  0% {
+    box-shadow: 0 0 0 0 rgba(81, 116, 0, 0.22);
+  }
+
+  100% {
+    box-shadow: 0 0 0 9px rgba(81, 116, 0, 0);
+  }
+}
+
+@keyframes shiftlabs-success-shimmer {
+  from {
+    transform: translateX(-72%);
+  }
+
+  to {
+    transform: translateX(72%);
+  }
+}
+
+.shiftlabs-success-shell {
+  position: relative;
+  overflow: hidden;
+  background: #f2f3ef;
+  animation: shiftlabs-success-enter 520ms cubic-bezier(0.2, 0.75, 0.2, 1) both;
+}
+
+.shiftlabs-success-shell::before {
+  content: none;
+  pointer-events: none;
+}
+
+.shiftlabs-success-shell::after {
+  content: none;
+  pointer-events: none;
+}
+
+.shiftlabs-success-orb {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border: 1px solid #d6dace;
+  background: #101700;
+  color: #f2f3ef;
+  flex-shrink: 0;
+}
+
+.shiftlabs-success-orb::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(81, 116, 0, 0.5);
+  animation: shiftlabs-success-halo 2.3s ease-out infinite;
+}
+
+.shiftlabs-success-check {
+  position: relative;
+  z-index: 1;
+  font-size: 23px;
+  line-height: 1;
+  animation: shiftlabs-success-breathe 1.6s ease-out infinite;
+}
+
+.shiftlabs-success-chip {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #d6dace;
+  background: rgba(242, 243, 239, 0.74);
+  color: #5f644c;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 0.48rem 0.64rem;
+  text-transform: uppercase;
+}
+
+.shiftlabs-success-step {
+  background: rgba(242, 243, 239, 0.82);
+}
+
+.shiftlabs-success-progress {
+  position: relative;
+  height: 7px;
+  border: 1px solid #d6dace;
+  background: rgba(214, 218, 206, 0.22);
+  overflow: hidden;
+}
+
+.shiftlabs-success-progress::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #8cab47 0%, #517400 50%, #8cab47 100%);
+}
+
+.shiftlabs-success-progress::after {
+  content: "";
+  position: absolute;
+  inset: -18% 0;
+  width: 42%;
+  background: linear-gradient(90deg, rgba(242, 243, 239, 0) 0%, rgba(242, 243, 239, 0.55) 48%, rgba(242, 243, 239, 0) 100%);
+  animation: shiftlabs-success-shimmer 1.4s linear infinite;
+}
+
 .marquee-track {
   animation: marquee-left 28s linear infinite;
   will-change: transform;
@@ -264,6 +399,13 @@
     transform: none;
     transition: none;
   }
+
+  .shiftlabs-success-shell,
+  .shiftlabs-success-orb::before,
+  .shiftlabs-success-check,
+  .shiftlabs-success-progress::after {
+    animation: none;
+  }
 }
 
 @media (hover: none) and (pointer: coarse) {
@@ -278,5 +420,11 @@
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  .shiftlabs-success-orb::before,
+  .shiftlabs-success-check,
+  .shiftlabs-success-progress::after {
+    animation-duration: 2s;
   }
 }

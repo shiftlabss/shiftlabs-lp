@@ -1775,10 +1775,109 @@ const defaultCareersRoles: CareersRole[] = [
 
 type CaseLogoKey = "menux" | "cortex";
 
+type HeroContactFormState = {
+  name: string;
+  whatsapp: string;
+  email: string;
+  company: string;
+  subject: string;
+};
+
+type HeroContactFeedback = {
+  type: "success" | "error";
+  message: string;
+};
+
+const initialHeroContactFormState: HeroContactFormState = {
+  name: "",
+  whatsapp: "",
+  email: "",
+  company: "",
+  subject: "",
+};
+
 /* ════════════════════════════════════════════ */
 function LandingPage() {
   const [activeCaseLogo, setActiveCaseLogo] = useState<CaseLogoKey>("menux");
   const [isHeaderCondensed, setIsHeaderCondensed] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [heroContactForm, setHeroContactForm] = useState<HeroContactFormState>(initialHeroContactFormState);
+  const [isContactSubmitting, setIsContactSubmitting] = useState(false);
+  const [heroContactFeedback, setHeroContactFeedback] = useState<HeroContactFeedback | null>(null);
+  const isContactSuccess = heroContactFeedback?.type === "success";
+  const isContactError = heroContactFeedback?.type === "error";
+
+  const updateHeroContactField = (field: keyof HeroContactFormState, value: string) => {
+    setHeroContactForm((current) => ({ ...current, [field]: value }));
+  };
+
+  const openContactModal = () => {
+    setHeroContactFeedback(null);
+    setIsContactModalOpen(true);
+  };
+
+  const closeContactModal = () => {
+    setIsContactModalOpen(false);
+    setHeroContactFeedback(null);
+  };
+
+  const resetContactModalFeedback = () => {
+    setHeroContactFeedback(null);
+  };
+
+  const submitHeroContactForm = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (isContactSubmitting) return;
+
+    const name = heroContactForm.name.trim();
+    const whatsapp = heroContactForm.whatsapp.trim();
+    const email = heroContactForm.email.trim();
+    const company = heroContactForm.company.trim();
+    const subject = heroContactForm.subject.trim();
+
+    if (!name || !whatsapp || !email || !company || !subject) {
+      setHeroContactFeedback({
+        type: "error",
+        message: "Preencha todos os campos para enviar.",
+      });
+      return;
+    }
+
+    if (!supabase) {
+      setHeroContactFeedback({
+        type: "error",
+        message: "Configuração de backend indisponível no momento.",
+      });
+      return;
+    }
+
+    setIsContactSubmitting(true);
+    setHeroContactFeedback(null);
+    const { error } = await supabase.from("contact_leads").insert({
+      name,
+      whatsapp,
+      email,
+      company,
+      subject,
+      source_page: typeof window !== "undefined" ? window.location.pathname : "/",
+      user_agent: typeof navigator !== "undefined" ? navigator.userAgent : null,
+    });
+    setIsContactSubmitting(false);
+
+    if (error) {
+      setHeroContactFeedback({
+        type: "error",
+        message: "Não foi possível enviar agora. Tente novamente.",
+      });
+      return;
+    }
+
+    setHeroContactForm(initialHeroContactFormState);
+    setHeroContactFeedback({
+      type: "success",
+      message: "Contato enviado com sucesso. Retornaremos em breve.",
+    });
+  };
 
   useEffect(() => {
     const revealNodes = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
@@ -1813,6 +1912,22 @@ function LandingPage() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (!isContactModalOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeContactModal();
+      }
+    };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeydown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeydown);
+    };
+  }, [isContactModalOpen]);
 
   return (
     <div className="bg-[#f2f3ef] min-h-screen w-full overflow-x-hidden pt-[72px]">
@@ -1884,13 +1999,14 @@ function LandingPage() {
                 </p>
               </div>
               <div className="mt-8 lg:mt-0">
-                <a
-                  href="/vagas"
+                <button
+                  type="button"
+                  onClick={openContactModal}
                   className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase cursor-pointer"
                   style={{ fontFamily: mono }}
                 >
                   conhecer mais
-                </a>
+                </button>
               </div>
             </div>
             <div className="flex items-center justify-center p-6 w-full lg:w-1/2 min-h-[300px] lg:h-[462px] lg:border-l border-[#d6dace]">
@@ -2402,13 +2518,14 @@ function LandingPage() {
               </p>
             </div>
             <div className="flex items-end justify-end p-6 w-full lg:w-1/2 min-h-[120px] lg:h-[462px]">
-              <a
-                href="/vagas"
+              <button
+                type="button"
+                onClick={openContactModal}
                 className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase cursor-pointer"
                 style={{ fontFamily: mono }}
               >
                 conhecer mais
-              </a>
+              </button>
             </div>
           </div>
           <XlHelper className="border-l border-[#d6dace]" />
@@ -2458,6 +2575,196 @@ function LandingPage() {
           <BigWordmark />
         </div>
       </div>
+
+      {isContactModalOpen ? (
+        <div className="fixed inset-0 z-[140] flex items-center justify-center px-4 py-6" onClick={closeContactModal}>
+          <div className="absolute inset-0 bg-[#101700]/45 backdrop-blur-[1px]" />
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Formulário de contato"
+            className="relative w-full max-w-[760px] border border-[#d6dace] bg-[#f2f3ef]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="border-b border-[#d6dace] px-5 py-4 md:px-6">
+              <div className="flex items-center justify-between gap-4">
+                <p className="text-[#70745a] text-[13px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
+                  {isContactSuccess ? "/contato enviado" : "/contato"}
+                </p>
+                <button
+                  type="button"
+                  onClick={closeContactModal}
+                  disabled={isContactSubmitting}
+                  className="inline-flex border border-[#d6dace] px-3 py-1.5 text-[12px] uppercase text-[#70745a] hover:text-[#101700]"
+                  style={{ fontFamily: mono, lineHeight: "normal" }}
+                >
+                  fechar
+                </button>
+              </div>
+              <p className="mt-3 text-[#101700] text-[24px] md:text-[30px]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: "normal" }}>
+                {isContactSuccess ? "Contato confirmado" : "Fale com a ShiftLabs"}
+              </p>
+            </div>
+
+            {isContactSuccess ? (
+              <div className="p-5 md:p-6">
+                <div className="shiftlabs-success-shell border border-[#d6dace] p-5 md:p-6">
+                  <div className="relative z-[1] flex flex-col gap-5 md:gap-6">
+                    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                      <div className="flex items-center gap-3">
+                        <span aria-hidden className="shiftlabs-success-orb">
+                          <span className="shiftlabs-success-check">✓</span>
+                        </span>
+                        <div className="flex flex-col gap-1">
+                          <p className="text-[12px] uppercase text-[#70745a]" style={{ fontFamily: mono }}>
+                            /envio concluído
+                          </p>
+                          <p className="text-[25px] md:text-[36px] text-[#101700]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: 1.03 }}>
+                            Obrigado. Sua mensagem chegou.
+                          </p>
+                        </div>
+                      </div>
+                      <span className="shiftlabs-success-chip" style={{ fontFamily: mono }}>
+                        STATUS: RECEBIDO
+                      </span>
+                    </div>
+
+                    <p className="text-[#50543f] text-[15px] md:text-[18px] max-w-[560px]" style={{ fontFamily: body, lineHeight: 1.35 }}>
+                      {heroContactFeedback?.message}
+                    </p>
+
+                    <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                      <div className="shiftlabs-success-step border border-[#d6dace] p-3">
+                        <p className="text-[11px] uppercase text-[#70745a]" style={{ fontFamily: mono }}>/passo 01</p>
+                        <p className="mt-1 text-[14px] text-[#101700]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+                          Lead registrado no nosso pipeline.
+                        </p>
+                      </div>
+                      <div className="shiftlabs-success-step border border-[#d6dace] p-3">
+                        <p className="text-[11px] uppercase text-[#70745a]" style={{ fontFamily: mono }}>/passo 02</p>
+                        <p className="mt-1 text-[14px] text-[#101700]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+                          Time de estratégia valida contexto e objetivo.
+                        </p>
+                      </div>
+                      <div className="shiftlabs-success-step border border-[#d6dace] p-3">
+                        <p className="text-[11px] uppercase text-[#70745a]" style={{ fontFamily: mono }}>/passo 03</p>
+                        <p className="mt-1 text-[14px] text-[#101700]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+                          Retorno em breve para alinhar próximos passos.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div aria-hidden className="shiftlabs-success-progress" />
+
+                    <div className="flex flex-wrap items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={resetContactModalFeedback}
+                        className="inline-flex border border-[#d6dace] px-4 py-3 text-[13px] uppercase text-[#70745a] hover:text-[#101700]"
+                        style={{ fontFamily: mono, lineHeight: "normal" }}
+                      >
+                        enviar novo contato
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={submitHeroContactForm} className="p-5 md:p-6">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <label className="flex flex-col gap-1.5">
+                    <span className="text-[13px] text-[#70745a]" style={{ fontFamily: body }}>Nome</span>
+                    <input
+                      type="text"
+                      required
+                      autoFocus
+                      value={heroContactForm.name}
+                      onChange={(event) => updateHeroContactField("name", event.target.value)}
+                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#70745a]"
+                      style={{ fontFamily: body }}
+                    />
+                  </label>
+
+                  <label className="flex flex-col gap-1.5">
+                    <span className="text-[13px] text-[#70745a]" style={{ fontFamily: body }}>Whatsapp</span>
+                    <input
+                      type="tel"
+                      required
+                      value={heroContactForm.whatsapp}
+                      onChange={(event) => updateHeroContactField("whatsapp", event.target.value)}
+                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#70745a]"
+                      style={{ fontFamily: body }}
+                    />
+                  </label>
+
+                  <label className="flex flex-col gap-1.5">
+                    <span className="text-[13px] text-[#70745a]" style={{ fontFamily: body }}>Email</span>
+                    <input
+                      type="email"
+                      required
+                      value={heroContactForm.email}
+                      onChange={(event) => updateHeroContactField("email", event.target.value)}
+                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#70745a]"
+                      style={{ fontFamily: body }}
+                    />
+                  </label>
+
+                  <label className="flex flex-col gap-1.5">
+                    <span className="text-[13px] text-[#70745a]" style={{ fontFamily: body }}>Empresa</span>
+                    <input
+                      type="text"
+                      required
+                      value={heroContactForm.company}
+                      onChange={(event) => updateHeroContactField("company", event.target.value)}
+                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#70745a]"
+                      style={{ fontFamily: body }}
+                    />
+                  </label>
+
+                  <label className="flex flex-col gap-1.5 md:col-span-2">
+                    <span className="text-[13px] text-[#70745a]" style={{ fontFamily: body }}>Assunto</span>
+                    <input
+                      type="text"
+                      required
+                      value={heroContactForm.subject}
+                      onChange={(event) => updateHeroContactField("subject", event.target.value)}
+                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#70745a]"
+                      style={{ fontFamily: body }}
+                    />
+                  </label>
+                </div>
+
+                <div className="mt-5 flex flex-wrap items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={closeContactModal}
+                    disabled={isContactSubmitting}
+                    className="inline-flex border border-[#d6dace] px-4 py-3 text-[13px] uppercase text-[#70745a] hover:text-[#101700]"
+                    style={{ fontFamily: mono, lineHeight: "normal" }}
+                  >
+                    cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isContactSubmitting}
+                    className="inline-flex bg-[#101700] px-4 py-3 text-[13px] uppercase text-[#f2f3ef]"
+                    style={{ fontFamily: mono, lineHeight: "normal" }}
+                  >
+                    {isContactSubmitting ? "enviando..." : "enviar contato"}
+                  </button>
+                </div>
+                {isContactError ? (
+                  <div className="mt-3 border border-[#d8bbb9] bg-[#f8eceb] px-3 py-2">
+                    <p className="text-[13px] text-[#9f2b2b]" style={{ fontFamily: body }}>
+                      {heroContactFeedback?.message}
+                    </p>
+                  </div>
+                ) : null}
+              </form>
+            )}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -2565,80 +2565,375 @@ function CareersEditorPage({
 }
 
 function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoading?: boolean }) {
-  const careersBorder = "border-[#d6dace]";
-  return (
-    <div className="relative min-h-screen w-full overflow-x-hidden bg-[#f2f3ef] text-[#101700]">
-      <CareersHeader />
+  const [isHeaderCondensed, setIsHeaderCondensed] = useState(false);
+  const careersSocialLinks = [
+    { name: "LinkedIn", href: "https://www.linkedin.com/company/shiftlabs-br/", Icon: LinkedInIcon },
+    { name: "Instagram", href: "https://instagram.com/shiftlabs.br", Icon: InstagramIcon },
+    { name: "GitHub", href: "https://github.com/shiftlabs-br", Icon: GitHubIcon },
+  ];
+  const toIntroPreview = (value: string) =>
+    value
+      .replace(/\[(.*?)\]\((.*?)\)/g, "$1")
+      .replace(/^#{1,6}\s+/gm, "")
+      .replace(/^\s*[-*+]\s+/gm, "")
+      .replace(/[*_`~]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
 
-      <main className={`mt-[66px] min-h-[calc(100vh-66px)] border-y ${careersBorder}`}>
-        <section className={`fixed left-0 top-[66px] z-[115] w-full border-b ${careersBorder} bg-[#f2f3ef]`}>
-          <div className="max-w-[1512px] mx-auto px-6 md:px-8">
-            <div className="flex items-center">
-              <div className={`relative inline-flex h-[60px] items-center justify-center border-x ${careersBorder} px-6 md:h-[76px] md:px-6`}>
-                <h1 className="text-[30px] text-[#101700] md:text-[32px]" style={{ fontFamily: display, fontWeight: 500, lineHeight: "normal" }}>
-                  Vagas
-                </h1>
-                <div aria-hidden className="pointer-events-none absolute inset-0 hidden md:block">
-                  <div className="absolute left-0 top-0">
-                    <span className="absolute top-0 -translate-x-1/2 h-[2px] w-[14px] bg-[#70745a]" />
-                    <span className="absolute top-0 -translate-x-1/2 h-[12px] w-[2px] bg-[#70745a]" />
+  useEffect(() => {
+    let rafId = 0;
+
+    const updateHeaderMode = () => {
+      const shouldCondense = window.scrollY > 28 && window.innerWidth >= 1024;
+      setIsHeaderCondensed((current) => (current === shouldCondense ? current : shouldCondense));
+    };
+
+    const scheduleHeaderUpdate = () => {
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = 0;
+        updateHeaderMode();
+      });
+    };
+
+    updateHeaderMode();
+    window.addEventListener("scroll", scheduleHeaderUpdate, { passive: true });
+    window.addEventListener("resize", scheduleHeaderUpdate);
+    return () => {
+      window.removeEventListener("scroll", scheduleHeaderUpdate);
+      window.removeEventListener("resize", scheduleHeaderUpdate);
+      if (rafId) {
+        window.cancelAnimationFrame(rafId);
+      }
+    };
+  }, []);
+
+  return (
+    <div className="bg-[#f2f3ef] min-h-screen w-full overflow-x-hidden pt-[72px]">
+      <div
+        className={`fixed inset-x-0 top-0 z-50 transition-[padding] duration-300 ease-out ${
+          isHeaderCondensed ? "pt-3" : "pt-0"
+        }`}
+      >
+        <div className={isHeaderCondensed ? "mx-auto w-full max-w-[1040px] px-4" : "w-full"}>
+          <header
+            className={`transition-all duration-300 ease-out ${
+              isHeaderCondensed
+                ? "rounded-[16px] border border-[#d6dace] bg-[#f2f3ef]"
+                : "border-b border-[#d6dace] bg-[#f2f3ef]"
+            }`}
+          >
+            <div
+              className={`mx-auto h-[72px] flex items-center justify-between gap-6 transition-[padding,max-width] duration-300 ease-out ${
+                isHeaderCondensed ? "max-w-none px-6" : "max-w-[1512px] px-6 xl:px-[192px]"
+              }`}
+            >
+              <a href="/" className="inline-flex items-center gap-2">
+                <ShiftLabsIcon />
+                <ShiftLabsWordmark />
+              </a>
+              <div className="flex items-center gap-4 md:gap-6">
+                <a
+                  href="/vagas"
+                  className="text-[#101700] transition-colors text-[14px]"
+                  style={{ fontFamily: mono, fontWeight: 400, lineHeight: "normal" }}
+                >
+                  /VAGAS
+                </a>
+                <span aria-hidden className="h-4 w-px bg-[#d6dace]" />
+                <div className="flex items-center gap-3 md:gap-4">
+                  {careersSocialLinks.map(({ name, href, Icon }) => (
+                    <a
+                      key={`careers-header-${name}`}
+                      href={href}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={name}
+                      className="inline-flex items-center opacity-70 hover:opacity-100 transition-opacity"
+                    >
+                      <Icon />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </header>
+        </div>
+      </div>
+
+      <main className="text-[#101700]">
+        <div className="border-y border-[#d6dace]">
+          <div className="max-w-[1512px] mx-auto flex relative">
+            <XlHelper className="border-r border-[#d6dace]" />
+            <div className="flex flex-col lg:flex-row flex-1 min-w-0">
+              <div className="flex flex-col justify-between p-6 w-full lg:w-1/2 min-h-[300px] lg:h-[462px]">
+                <div className="flex flex-col gap-8 max-w-[520px]">
+                  <p
+                    className="text-[#70745a] text-[14px] md:text-[16px] uppercase"
+                    style={{ fontFamily: mono }}
+                  >
+                    /carreiras shiftlabs
+                  </p>
+                  <div
+                    className="text-[#101700] text-[28px] md:text-[36px] lg:text-[40px] leading-[normal]"
+                    style={{ fontFamily: heading, fontWeight: 500 }}
+                  >
+                    Estruture o futuro com a gente.
                   </div>
-                  <div className="absolute right-0 top-0">
-                    <span className="absolute top-0 -translate-x-1/2 h-[2px] w-[14px] bg-[#70745a]" />
-                    <span className="absolute top-0 -translate-x-1/2 h-[12px] w-[2px] bg-[#70745a]" />
-                  </div>
-                  <div className="absolute bottom-0 left-0">
-                    <span className="absolute bottom-0 -translate-x-1/2 h-[2px] w-[14px] bg-[#70745a]" />
-                    <span className="absolute bottom-0 -translate-x-1/2 h-[12px] w-[2px] bg-[#70745a]" />
-                  </div>
-                  <div className="absolute bottom-0 right-0">
-                    <span className="absolute bottom-0 -translate-x-1/2 h-[2px] w-[14px] bg-[#70745a]" />
-                    <span className="absolute bottom-0 -translate-x-1/2 h-[12px] w-[2px] bg-[#70745a]" />
+                  <p
+                    className="text-[#70745a] text-[14px] md:text-[16px] max-w-[420px]"
+                    style={{ fontFamily: body, lineHeight: 1.3 }}
+                  >
+                    Procuramos pessoas que pensam em sistemas, executam com autonomia e querem construir operações
+                    previsíveis em negócios que crescem rápido.
+                  </p>
+                </div>
+                <div className="mt-8 lg:mt-0">
+                  <a
+                    href="#lista-vagas"
+                    className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase cursor-pointer"
+                    style={{ fontFamily: mono }}
+                  >
+                    ver vagas abertas
+                  </a>
+                </div>
+              </div>
+
+              <div className="w-full lg:w-1/2 border-t lg:border-t-0 lg:border-l border-[#d6dace] p-6 flex items-center justify-center">
+                <div className="w-full max-w-[532px] border border-[#d6dace]">
+                  <div className="grid grid-cols-2">
+                    <div className="border-b border-r border-[#d6dace] p-6 min-h-[146px] flex flex-col justify-end gap-2">
+                      <p className="text-[#70745a] text-[12px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
+                        vagas ativas
+                      </p>
+                      <p className="text-[#101700] text-[36px] md:text-[48px]" style={{ fontFamily: heading, fontWeight: 500 }}>
+                        {isLoading ? "..." : roles.length}
+                      </p>
+                    </div>
+                    <div className="border-b border-[#d6dace] p-6 min-h-[146px] flex flex-col justify-end gap-2">
+                      <p className="text-[#70745a] text-[12px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
+                        foco
+                      </p>
+                      <p className="text-[#101700] text-[18px] md:text-[24px]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: 1.1 }}>
+                        Produto, Tech, Growth e Operações
+                      </p>
+                    </div>
+                    <div className="border-r border-[#d6dace] p-6 min-h-[146px] flex flex-col justify-end gap-2">
+                      <p className="text-[#70745a] text-[12px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
+                        modelo
+                      </p>
+                      <p className="text-[#101700] text-[18px] md:text-[24px]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: 1.1 }}>
+                        Estruturas enxutas e ownership alto
+                      </p>
+                    </div>
+                    <div className="p-6 min-h-[146px] flex flex-col justify-end gap-2">
+                      <p className="text-[#70745a] text-[12px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
+                        abordagem
+                      </p>
+                      <p className="text-[#101700] text-[18px] md:text-[24px]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: 1.1 }}>
+                        Menos burocracia, mais entrega
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+            <XlHelper className="border-l border-[#d6dace]" />
+            <SectionBorderTicks positions={["192px", "calc(100% - 192px)"]} />
           </div>
-        </section>
+        </div>
 
-        <ul className="m-0 list-none p-0 pt-[60px] md:pt-[76px]">
-          {isLoading ? (
-            <li className={`border-b ${careersBorder}`}>
-              <div className="max-w-[1512px] mx-auto px-6 py-6 md:px-8 md:py-7">
-                <p className="text-[16px] text-[#70745a]" style={{ fontFamily: body }}>
-                  Carregando vagas...
-                </p>
-              </div>
-            </li>
-          ) : null}
-          {roles.map((role) => (
-            <li
-              key={role.slug}
-              className={`group border-b ${careersBorder} transition-colors hover:bg-[#ecefe7]`}
-            >
-              <a
-                href={`/vagas/${role.slug}`}
-                className="block"
+        <div id="lista-vagas" className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] pt-16 pb-9 scroll-mt-[96px]">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+            <div className="flex flex-col gap-6 max-w-[560px]">
+              <p
+                className="text-[#70745a] text-[14px] md:text-[16px] uppercase"
+                style={{ fontFamily: mono }}
               >
-                <div className="max-w-[1512px] mx-auto px-6 py-6 md:px-8 md:py-7">
-                  <div className="flex flex-col gap-3 transition-transform duration-200 lg:group-hover:translate-x-3">
-                    <h2
-                      className="text-[30px] text-[#101700] md:text-[32px]"
-                      style={{ fontFamily: display, fontWeight: 500, lineHeight: 1.12 }}
-                    >
-                      {role.title}
-                    </h2>
-                    <div className="flex flex-wrap gap-2">
-                      <CareersPill>{role.location}</CareersPill>
-                      <CareersPill>{role.commitment}</CareersPill>
-                      <CareersPill>{role.model}</CareersPill>
-                    </div>
+                /vagas abertas
+              </p>
+              <div
+                className="text-[#101700] text-[28px] md:text-[36px] lg:text-[40px] leading-[normal]"
+                style={{ fontFamily: heading, fontWeight: 500 }}
+              >
+                Onde você entra para construir sistema, não só tarefa.
+              </div>
+            </div>
+            <p
+              className="text-[#70745a] text-[14px] md:text-[16px] max-w-[340px]"
+              style={{ fontFamily: body, lineHeight: 1.3 }}
+            >
+              {isLoading
+                ? "Carregando vagas..."
+                : `${roles.length} oportunidades disponíveis agora.`}
+            </p>
+          </div>
+        </div>
+
+        {isLoading ? (
+          <div className="border-y border-[#d6dace]">
+            <div className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-10">
+              <p className="text-[16px] text-[#70745a]" style={{ fontFamily: body }}>
+                Carregando vagas...
+              </p>
+            </div>
+          </div>
+        ) : null}
+
+        {!isLoading && !roles.length ? (
+          <div className="border-y border-[#d6dace]">
+            <div className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-10">
+              <p className="text-[16px] text-[#70745a]" style={{ fontFamily: body }}>
+                Nenhuma vaga publicada no momento.
+              </p>
+            </div>
+          </div>
+        ) : null}
+
+        {!isLoading && roles.length ? (
+          <div className="max-w-[1512px] mx-auto flex relative">
+            <XlHelper className="border-t border-[#d6dace]" />
+            <ul className="m-0 p-0 list-none flex-1 grid grid-cols-1 md:grid-cols-2 border-x border-t border-[#d6dace]">
+              {roles.map((role, index) => {
+                const introPreview = toIntroPreview(role.intro) || "Detalhes da vaga disponíveis na página completa.";
+                return (
+                  <li
+                    key={role.slug}
+                    className={`${
+                      index > 0 ? "border-t border-[#d6dace]" : ""
+                    } ${index % 2 === 1 ? "md:border-l md:border-[#d6dace]" : ""} ${
+                      index >= 2 ? "md:border-t md:border-[#d6dace]" : ""
+                    } ${index === 1 ? "md:border-t-0" : ""}`}
+                  >
+                    <a href={`/vagas/${role.slug}`} className="group block h-full transition-colors hover:bg-[#ecefe7]">
+                      <article className="flex h-full min-h-[318px] flex-col justify-between gap-8 p-6">
+                        <div className="flex flex-col gap-4">
+                          <p className="text-[#70745a] text-[13px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
+                            /{role.area}
+                          </p>
+                          <h2
+                            className="text-[#101700] text-[28px] md:text-[32px] leading-[1.08] transition-transform duration-200 lg:group-hover:translate-x-2"
+                            style={{ fontFamily: display, fontWeight: 500 }}
+                          >
+                            {role.title}
+                          </h2>
+                          <p
+                            className="text-[#70745a] text-[14px] md:text-[16px] max-w-[480px]"
+                            style={{ fontFamily: body, lineHeight: 1.3 }}
+                          >
+                            {introPreview}
+                          </p>
+                        </div>
+
+                        <div className="flex flex-col gap-4">
+                          <div className="flex flex-wrap gap-2">
+                            <span
+                              className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#70745a]"
+                              style={{ fontFamily: body, lineHeight: "normal" }}
+                            >
+                              <CareersLocationIcon />
+                              {role.location}
+                            </span>
+                            <span
+                              className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#70745a]"
+                              style={{ fontFamily: body, lineHeight: "normal" }}
+                            >
+                              <CareersClockIcon />
+                              {role.commitment}
+                            </span>
+                            <span
+                              className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#70745a]"
+                              style={{ fontFamily: body, lineHeight: "normal" }}
+                            >
+                              <CareersWorkModeIcon />
+                              {role.model}
+                            </span>
+                          </div>
+                          <span
+                            className="inline-flex w-fit bg-[#101700] text-[#f2f3ef] px-4 py-3 text-[14px] uppercase"
+                            style={{ fontFamily: mono, lineHeight: "normal" }}
+                          >
+                            ver vaga
+                          </span>
+                        </div>
+                      </article>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+            <XlHelper className="border-t border-[#d6dace]" />
+            <SectionBorderTicks positions={["192px", "756px", "calc(100% - 192px)"]} />
+          </div>
+        ) : null}
+
+        <div className="border-y border-[#d6dace] mt-16">
+          <div className="max-w-[1512px] mx-auto flex relative">
+            <XlHelper className="border-r border-[#d6dace]" />
+            <div className="flex flex-col lg:flex-row flex-1 min-w-0 bg-[#b4eb38]">
+              <div className="flex flex-col justify-between p-6 w-full lg:w-1/2 min-h-[300px] lg:h-[360px]">
+                <div className="flex flex-col gap-6 max-w-[450px]">
+                  <p className="text-[#517400] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
+                    /call to action
+                  </p>
+                  <div className="text-[#101700] text-[28px] md:text-[36px] lg:text-[40px]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: "normal" }}>
+                    Não encontrou a vaga ideal?
                   </div>
                 </div>
-              </a>
-            </li>
-          ))}
-        </ul>
+                <p
+                  className="text-[#517400] text-[14px] md:text-[16px] max-w-[390px] mt-8"
+                  style={{ fontFamily: body, lineHeight: 1.3 }}
+                >
+                  Envie seu perfil e contexto. Se fizer sentido para o momento da operação, a gente conversa.
+                </p>
+              </div>
+              <div className="flex items-end justify-end p-6 w-full lg:w-1/2 min-h-[120px] lg:h-[360px]">
+                <a
+                  href="mailto:careers@shiftlabs.digital?subject=Candidatura%20ShiftLabs"
+                  className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase"
+                  style={{ fontFamily: mono, lineHeight: "normal" }}
+                >
+                  enviar perfil
+                </a>
+              </div>
+            </div>
+            <XlHelper className="border-l border-[#d6dace]" />
+            <SectionBorderTicks positions={["192px", "calc(100% - 192px)"]} />
+          </div>
+        </div>
+
+        <div className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-9">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 pb-9">
+            <div className="flex flex-col gap-8 max-w-[356px]">
+              <ShiftLabsIcon />
+              <p className="text-[#70745a] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+                Construímos estruturas para produto, tecnologia, comercial e operação evoluírem no mesmo ritmo.
+              </p>
+              <p className="text-[#70745a] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+                <span className="text-[#101700]" style={{ fontFamily: display, fontWeight: 500 }}>© 2026 ShiftLabs.</span>
+                <span> Todos os direitos reservados.</span>
+              </p>
+            </div>
+            <div className="flex flex-col gap-6">
+              <p className="text-[#70745a] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
+                /social
+              </p>
+              <div className="flex items-center gap-5">
+                {careersSocialLinks.map(({ name, href, Icon }) => (
+                  <a key={`careers-footer-${name}`} href={href} target="_blank" rel="noreferrer" className="flex items-center gap-2">
+                    <Icon />
+                    <span className="text-[#70745a] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+                      {name}
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="pt-9">
+            <BigWordmark />
+          </div>
+        </div>
       </main>
     </div>
   );

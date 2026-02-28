@@ -812,10 +812,8 @@ function applyRoleTitleAlias(title: string): string {
 }
 
 function getDisplayRoleTitle(title: string, precomputedDisplayTitle?: string): string {
-  if (precomputedDisplayTitle?.trim()) {
-    return precomputedDisplayTitle.trim();
-  }
-  return stripRoleSenioritySuffix(applyRoleTitleAlias(title));
+  const sourceTitle = precomputedDisplayTitle?.trim() || title;
+  return stripRoleSenioritySuffix(applyRoleTitleAlias(sourceTitle));
 }
 
 function detectSeniorityLabelInText(normalizedText: string): string | undefined {

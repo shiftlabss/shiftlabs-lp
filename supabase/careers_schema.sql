@@ -397,6 +397,7 @@ declare
   about_first text;
   inferred_area text;
 begin
+  new.title := public.apply_role_title_alias(new.title);
   about_first := case
     when new.about is not null and array_length(new.about, 1) >= 1 then new.about[1]
     else null

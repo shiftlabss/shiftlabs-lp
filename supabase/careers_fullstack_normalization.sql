@@ -373,6 +373,7 @@ declare
   about_first text;
   inferred_area text;
 begin
+  new.title := public.apply_role_title_alias(new.title);
   new.body_markdown := public.normalize_role_body_markdown(new.body_markdown);
 
   about_first := case

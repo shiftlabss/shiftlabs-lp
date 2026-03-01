@@ -3717,6 +3717,10 @@ type RoleApplicationFormState = {
   whatsapp: string;
   portfolio: string;
   message: string;
+  experienceFit: string;
+  availabilityWindow: string;
+  workModelAlignment: string;
+  aiFluency: string;
 };
 
 type RoleApplicationFeedback = {
@@ -3730,7 +3734,58 @@ const initialRoleApplicationFormState: RoleApplicationFormState = {
   whatsapp: "",
   portfolio: "",
   message: "",
+  experienceFit: "",
+  availabilityWindow: "",
+  workModelAlignment: "",
+  aiFluency: "",
 };
+
+type RoleApplicationOption = {
+  value: string;
+  label: string;
+};
+
+const roleApplicationExperienceOptions: RoleApplicationOption[] = [
+  {
+    value: "alta",
+    label: "Já atuei diretamente com responsabilidades similares.",
+  },
+  {
+    value: "media",
+    label: "Tenho experiência parcial e consigo executar com autonomia.",
+  },
+  {
+    value: "transicao",
+    label: "Estou em transição e aprendendo rápido para essa função.",
+  },
+];
+
+const roleApplicationAvailabilityOptions: RoleApplicationOption[] = [
+  { value: "imediata", label: "Posso iniciar imediatamente." },
+  { value: "15_dias", label: "Posso iniciar em até 15 dias." },
+  { value: "30_dias", label: "Posso iniciar em até 30 dias." },
+  { value: "a_combinar", label: "Preciso combinar prazo de início." },
+];
+
+const roleApplicationModelOptions: RoleApplicationOption[] = [
+  { value: "alinhado", label: "Estou alinhado(a) com o modelo da vaga." },
+  { value: "hibrido", label: "Prefiro híbrido." },
+  { value: "remoto", label: "Prefiro remoto." },
+  { value: "presencial", label: "Prefiro presencial." },
+];
+
+const roleApplicationAiOptions: RoleApplicationOption[] = [
+  { value: "avancado", label: "Uso IA diariamente no meu fluxo de trabalho." },
+  { value: "intermediario", label: "Uso IA ocasionalmente em tarefas pontuais." },
+  { value: "basico", label: "Ainda estou começando com IA." },
+];
+
+function getRoleApplicationOptionLabel(
+  options: RoleApplicationOption[],
+  value: string,
+): string {
+  return options.find((option) => option.value === value)?.label ?? "Não informado";
+}
 
 function CareerRolePage({ role }: { role: CareersRole }) {
   const [isHeaderCondensed, setIsHeaderCondensed] = useState(false);
@@ -4208,6 +4263,12 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedback, setFeedback] = useState<RoleApplicationFeedback | null>(null);
   const displayRoleTitle = getDisplayRoleTitle(role.title, role.displayTitle);
+  const displayCommitment = getRoleDisplayCommitment(
+    role.commitment,
+    role.displayCommitment,
+  );
+  const displayArea = getRoleCardArea(role);
+  const roleSummary = getRoleCardSummary(role);
   const roleHref = `/vagas/${role.slug}`;
   const applyHref = `mailto:careers@shiftlabs.digital?subject=${encodeURIComponent(`Candidatura - ${displayRoleTitle}`)}`;
   const isFeedbackSuccess = feedback?.type === "success";
@@ -4240,11 +4301,28 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
     const whatsapp = formState.whatsapp.trim();
     const portfolio = formState.portfolio.trim();
     const message = formState.message.trim();
+    const experienceFit = formState.experienceFit;
+    const availabilityWindow = formState.availabilityWindow;
+    const workModelAlignment = formState.workModelAlignment;
+    const aiFluency = formState.aiFluency;
 
     if (!name || !email || !whatsapp) {
       setFeedback({
         type: "error",
         message: "Preencha nome, e-mail e WhatsApp para enviar.",
+      });
+      return;
+    }
+
+    if (
+      !experienceFit ||
+      !availabilityWindow ||
+      !workModelAlignment ||
+      !aiFluency
+    ) {
+      setFeedback({
+        type: "error",
+        message: "Responda as perguntas do bloco 2 para enviar.",
       });
       return;
     }
@@ -4255,12 +4333,35 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
       return;
     }
 
+    const experienceFitLabel = getRoleApplicationOptionLabel(
+      roleApplicationExperienceOptions,
+      experienceFit,
+    );
+    const availabilityWindowLabel = getRoleApplicationOptionLabel(
+      roleApplicationAvailabilityOptions,
+      availabilityWindow,
+    );
+    const workModelAlignmentLabel = getRoleApplicationOptionLabel(
+      roleApplicationModelOptions,
+      workModelAlignment,
+    );
+    const aiFluencyLabel = getRoleApplicationOptionLabel(
+      roleApplicationAiOptions,
+      aiFluency,
+    );
+
     const fallbackMailtoBody = [
       `Vaga: ${displayRoleTitle}`,
       `Nome: ${name}`,
       `E-mail: ${email}`,
       `WhatsApp: ${whatsapp}`,
       `LinkedIn/Portfólio: ${portfolio || "Não informado"}`,
+      "",
+      "Perguntas da vaga:",
+      `Aderência: ${experienceFitLabel}`,
+      `Disponibilidade: ${availabilityWindowLabel}`,
+      `Modelo de trabalho: ${workModelAlignmentLabel}`,
+      `Fluência com IA: ${aiFluencyLabel}`,
       "",
       "Mensagem:",
       message || "Sem mensagem adicional.",
@@ -4279,6 +4380,10 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
 
     const subjectParts = [`Candidatura - ${displayRoleTitle}`];
     if (portfolio) subjectParts.push(`Portfolio: ${portfolio}`);
+    subjectParts.push(`Aderência: ${experienceFitLabel}`);
+    subjectParts.push(`Disponibilidade: ${availabilityWindowLabel}`);
+    subjectParts.push(`Modelo: ${workModelAlignmentLabel}`);
+    subjectParts.push(`IA: ${aiFluencyLabel}`);
     if (message) subjectParts.push(`Mensagem: ${message}`);
     const subject = subjectParts.join(" | ").slice(0, 1000);
 
@@ -4409,8 +4514,8 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
         <div className="border-y border-[#d6dace]">
           <div className="max-w-[1512px] mx-auto flex relative">
             <XlHelper className="border-r border-[#d6dace]" />
-            <article className="flex-1 border-x border-[#d6dace] px-6 py-10 md:px-8 xl:px-10 md:py-12">
-              <div className="mx-auto w-full max-w-[760px]">
+            <div className="flex-1 border-x border-[#d6dace] flex flex-col xl:flex-row">
+              <article className="w-full xl:w-[40%] border-b border-[#d6dace] p-6 md:p-8 xl:border-b-0 xl:border-r xl:p-10">
                 <a
                   href={roleHref}
                   aria-label="Voltar para vaga"
@@ -4426,20 +4531,19 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
                   /candidatura
                 </p>
                 <h1
-                  className="mt-3 text-[32px] leading-[1.03] md:text-[44px]"
+                  className="mt-3 text-[32px] leading-[1.03] md:text-[44px] lg:text-[52px]"
                   style={{ fontFamily: display, fontWeight: 500 }}
                 >
                   {displayRoleTitle}
                 </h1>
                 <p
-                  className="mt-4 max-w-[680px] text-[16px] text-[#5f644c] md:text-[18px]"
+                  className="mt-4 text-[16px] text-[#5f644c] md:text-[18px]"
                   style={{ fontFamily: body, lineHeight: 1.35 }}
                 >
-                  Preencha o formulário abaixo para se candidatar. Respondemos em
-                  até alguns dias úteis.
+                  {roleSummary}
                 </p>
 
-                <div className="mt-5 flex flex-wrap gap-2">
+                <div className="mt-6 flex flex-wrap gap-2">
                   <span
                     className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#5f644c]"
                     style={{ fontFamily: body, lineHeight: "normal" }}
@@ -4451,114 +4555,440 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
                     className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#5f644c]"
                     style={{ fontFamily: body, lineHeight: "normal" }}
                   >
+                    <CareersClockIcon />
+                    {displayCommitment}
+                  </span>
+                  <span
+                    className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#5f644c]"
+                    style={{ fontFamily: body, lineHeight: "normal" }}
+                  >
                     <CareersWorkModeIcon />
                     {role.model}
                   </span>
                 </div>
 
-                <form
-                  onSubmit={(event) => {
-                    void submitApplication(event);
-                  }}
-                  className="mt-8 grid grid-cols-1 gap-4"
-                >
-                  <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>
-                      Nome completo *
-                    </span>
-                    <input
-                      type="text"
-                      autoComplete="name"
-                      value={formState.name}
-                      onChange={(event) => updateField("name", event.target.value)}
-                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
-                      style={{ fontFamily: body }}
-                    />
-                  </label>
-
-                  <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>
-                      E-mail *
-                    </span>
-                    <input
-                      type="email"
-                      autoComplete="email"
-                      value={formState.email}
-                      onChange={(event) => updateField("email", event.target.value)}
-                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
-                      style={{ fontFamily: body }}
-                    />
-                  </label>
-
-                  <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>
-                      WhatsApp *
-                    </span>
-                    <input
-                      type="tel"
-                      autoComplete="tel"
-                      value={formState.whatsapp}
-                      onChange={(event) => updateField("whatsapp", event.target.value)}
-                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
-                      style={{ fontFamily: body }}
-                    />
-                  </label>
-
-                  <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>
-                      LinkedIn ou portfólio
-                    </span>
-                    <input
-                      type="text"
-                      value={formState.portfolio}
-                      onChange={(event) => updateField("portfolio", event.target.value)}
-                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
-                      style={{ fontFamily: body }}
-                    />
-                  </label>
-
-                  <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>
-                      Mensagem (opcional)
-                    </span>
-                    <textarea
-                      rows={4}
-                      value={formState.message}
-                      onChange={(event) => updateField("message", event.target.value)}
-                      className="min-h-[110px] border border-[#d6dace] bg-[#f2f3ef] px-3 py-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
-                      style={{ fontFamily: body, lineHeight: 1.4 }}
-                    />
-                  </label>
-
-                  <div className="mt-2 flex flex-wrap items-center gap-3">
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="inline-flex min-h-[44px] items-center bg-[#101700] px-4 py-3 text-[14px] uppercase text-[#f2f3ef] disabled:cursor-not-allowed disabled:opacity-70"
-                      style={{ fontFamily: mono, lineHeight: "normal" }}
-                    >
-                      {isSubmitting ? "enviando..." : "enviar candidatura"}
-                    </button>
-                    <a
-                      href={roleHref}
-                      className="inline-flex min-h-[44px] items-center border border-[#101700] px-4 py-3 text-[14px] uppercase text-[#101700]"
-                      style={{ fontFamily: mono, lineHeight: "normal" }}
-                    >
-                      voltar para vaga
-                    </a>
-                  </div>
-
-                  {feedback ? (
+                <div className="mt-8 border border-[#d6dace] bg-[#ecefe7]">
+                  <div className="border-b border-[#d6dace] px-4 py-3 md:px-5">
                     <p
-                      className={`text-[13px] ${isFeedbackSuccess ? "text-[#456300]" : "text-[#9f2b2b]"}`}
+                      className="text-[12px] uppercase text-[#5f644c]"
+                      style={{ fontFamily: mono }}
+                    >
+                      /como funciona
+                    </p>
+                    <p
+                      className="mt-1 text-[18px] text-[#101700] md:text-[20px]"
+                      style={{ fontFamily: heading, fontWeight: 500 }}
+                    >
+                      Processo rápido e direto
+                    </p>
+                  </div>
+                  <ol className="m-0 list-none p-0">
+                    <li className="border-b border-[#d6dace] px-4 py-3 md:px-5">
+                      <p
+                        className="text-[12px] uppercase text-[#5f644c]"
+                        style={{ fontFamily: mono }}
+                      >
+                        /passo 01
+                      </p>
+                      <p
+                        className="mt-1 text-[14px] text-[#101700]"
+                        style={{ fontFamily: body, lineHeight: 1.3 }}
+                      >
+                        Preencha os dados essenciais e envie sua candidatura.
+                      </p>
+                    </li>
+                    <li className="border-b border-[#d6dace] px-4 py-3 md:px-5">
+                      <p
+                        className="text-[12px] uppercase text-[#5f644c]"
+                        style={{ fontFamily: mono }}
+                      >
+                        /passo 02
+                      </p>
+                      <p
+                        className="mt-1 text-[14px] text-[#101700]"
+                        style={{ fontFamily: body, lineHeight: 1.3 }}
+                      >
+                        Nosso time revisa o perfil alinhado a /{displayArea}.
+                      </p>
+                    </li>
+                    <li className="px-4 py-3 md:px-5">
+                      <p
+                        className="text-[12px] uppercase text-[#5f644c]"
+                        style={{ fontFamily: mono }}
+                      >
+                        /passo 03
+                      </p>
+                      <p
+                        className="mt-1 text-[14px] text-[#101700]"
+                        style={{ fontFamily: body, lineHeight: 1.3 }}
+                      >
+                        Retornamos em alguns dias úteis com próximos passos.
+                      </p>
+                    </li>
+                  </ol>
+                </div>
+              </article>
+
+              <section className="flex-1 p-6 md:p-8 xl:p-10">
+                <div className="border border-[#d6dace] bg-[#f2f3ef]">
+                  <div className="border-b border-[#d6dace] px-4 py-3 md:px-5">
+                    <p
+                      className="text-[13px] uppercase text-[#5f644c]"
+                      style={{ fontFamily: mono }}
+                    >
+                      /formulário
+                    </p>
+                    <h2
+                      className="mt-1 text-[24px] text-[#101700] md:text-[30px]"
+                      style={{
+                        fontFamily: heading,
+                        fontWeight: 500,
+                        lineHeight: "normal",
+                      }}
+                    >
+                      Enviar candidatura
+                    </h2>
+                    <p
+                      className="mt-2 text-[14px] text-[#5f644c]"
                       style={{ fontFamily: body, lineHeight: 1.3 }}
                     >
-                      {feedback.message}
+                      Campos com * são obrigatórios.
                     </p>
-                  ) : null}
-                </form>
-              </div>
-            </article>
+                  </div>
+
+                  <form
+                    onSubmit={(event) => {
+                      void submitApplication(event);
+                    }}
+                  >
+                    <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 md:gap-5 md:p-5">
+                      <label className="flex flex-col gap-1.5">
+                        <span
+                          className="text-[13px] text-[#5f644c]"
+                          style={{ fontFamily: body }}
+                        >
+                          Nome completo *
+                        </span>
+                        <input
+                          type="text"
+                          required
+                          autoComplete="name"
+                          placeholder="Seu nome"
+                          value={formState.name}
+                          onChange={(event) =>
+                            updateField("name", event.target.value)
+                          }
+                          className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
+                          style={{ fontFamily: body }}
+                        />
+                      </label>
+
+                      <label className="flex flex-col gap-1.5">
+                        <span
+                          className="text-[13px] text-[#5f644c]"
+                          style={{ fontFamily: body }}
+                        >
+                          E-mail *
+                        </span>
+                        <input
+                          type="email"
+                          required
+                          autoComplete="email"
+                          placeholder="seuemail@exemplo.com"
+                          value={formState.email}
+                          onChange={(event) =>
+                            updateField("email", event.target.value)
+                          }
+                          className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
+                          style={{ fontFamily: body }}
+                        />
+                      </label>
+
+                      <label className="flex flex-col gap-1.5">
+                        <span
+                          className="text-[13px] text-[#5f644c]"
+                          style={{ fontFamily: body }}
+                        >
+                          WhatsApp *
+                        </span>
+                        <input
+                          type="tel"
+                          required
+                          autoComplete="tel"
+                          placeholder="(83) 99999-9999"
+                          value={formState.whatsapp}
+                          onChange={(event) =>
+                            updateField("whatsapp", event.target.value)
+                          }
+                          className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
+                          style={{ fontFamily: body }}
+                        />
+                      </label>
+
+                      <label className="flex flex-col gap-1.5">
+                        <span
+                          className="text-[13px] text-[#5f644c]"
+                          style={{ fontFamily: body }}
+                        >
+                          LinkedIn ou portfólio
+                        </span>
+                        <input
+                          type="text"
+                          placeholder="linkedin.com/in/seu-perfil"
+                          value={formState.portfolio}
+                          onChange={(event) =>
+                            updateField("portfolio", event.target.value)
+                          }
+                          className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
+                          style={{ fontFamily: body }}
+                        />
+                      </label>
+                    </div>
+
+                    <div className="border-b border-[#d6dace]">
+                      <div className="border-b border-[#d6dace] px-4 py-3 md:px-5">
+                        <p
+                          className="text-[13px] uppercase text-[#5f644c]"
+                          style={{ fontFamily: mono }}
+                        >
+                          /perguntas da vaga
+                        </p>
+                        <p
+                          className="mt-1 text-[14px] text-[#5f644c]"
+                          style={{ fontFamily: body, lineHeight: 1.3 }}
+                        >
+                          Bloco 2: respostas de múltipla escolha para triagem
+                          inicial.
+                        </p>
+                      </div>
+                      <div className="grid grid-cols-1 gap-4 p-4 md:gap-5 md:p-5">
+                        <fieldset className="border border-[#d6dace] p-3 md:p-4">
+                          <legend
+                            className="px-1 text-[13px] text-[#5f644c]"
+                            style={{ fontFamily: body }}
+                          >
+                            1. Qual sua aderência às responsabilidades da vaga?
+                            *
+                          </legend>
+                          <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                            {roleApplicationExperienceOptions.map((option) => {
+                              const isSelected =
+                                formState.experienceFit === option.value;
+                              return (
+                                <label
+                                  key={`experience-fit-${option.value}`}
+                                  className={`cursor-pointer border px-3 py-2 text-[13px] transition-colors ${
+                                    isSelected
+                                      ? "border-[#101700] bg-[#ecefe7] text-[#101700]"
+                                      : "border-[#d6dace] bg-[#f2f3ef] text-[#5f644c] hover:text-[#101700]"
+                                  }`}
+                                  style={{ fontFamily: body, lineHeight: 1.3 }}
+                                >
+                                  <input
+                                    type="radio"
+                                    name="experience-fit"
+                                    value={option.value}
+                                    checked={isSelected}
+                                    onChange={(event) =>
+                                      updateField(
+                                        "experienceFit",
+                                        event.target.value,
+                                      )
+                                    }
+                                    className="sr-only"
+                                  />
+                                  {option.label}
+                                </label>
+                              );
+                            })}
+                          </div>
+                        </fieldset>
+
+                        <fieldset className="border border-[#d6dace] p-3 md:p-4">
+                          <legend
+                            className="px-1 text-[13px] text-[#5f644c]"
+                            style={{ fontFamily: body }}
+                          >
+                            2. Qual sua disponibilidade para início? *
+                          </legend>
+                          <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                            {roleApplicationAvailabilityOptions.map((option) => {
+                              const isSelected =
+                                formState.availabilityWindow === option.value;
+                              return (
+                                <label
+                                  key={`availability-window-${option.value}`}
+                                  className={`cursor-pointer border px-3 py-2 text-[13px] transition-colors ${
+                                    isSelected
+                                      ? "border-[#101700] bg-[#ecefe7] text-[#101700]"
+                                      : "border-[#d6dace] bg-[#f2f3ef] text-[#5f644c] hover:text-[#101700]"
+                                  }`}
+                                  style={{ fontFamily: body, lineHeight: 1.3 }}
+                                >
+                                  <input
+                                    type="radio"
+                                    name="availability-window"
+                                    value={option.value}
+                                    checked={isSelected}
+                                    onChange={(event) =>
+                                      updateField(
+                                        "availabilityWindow",
+                                        event.target.value,
+                                      )
+                                    }
+                                    className="sr-only"
+                                  />
+                                  {option.label}
+                                </label>
+                              );
+                            })}
+                          </div>
+                        </fieldset>
+
+                        <fieldset className="border border-[#d6dace] p-3 md:p-4">
+                          <legend
+                            className="px-1 text-[13px] text-[#5f644c]"
+                            style={{ fontFamily: body }}
+                          >
+                            3. Sobre o modelo de trabalho desta vaga, você está:
+                            *
+                          </legend>
+                          <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                            {roleApplicationModelOptions.map((option) => {
+                              const isSelected =
+                                formState.workModelAlignment === option.value;
+                              return (
+                                <label
+                                  key={`work-model-alignment-${option.value}`}
+                                  className={`cursor-pointer border px-3 py-2 text-[13px] transition-colors ${
+                                    isSelected
+                                      ? "border-[#101700] bg-[#ecefe7] text-[#101700]"
+                                      : "border-[#d6dace] bg-[#f2f3ef] text-[#5f644c] hover:text-[#101700]"
+                                  }`}
+                                  style={{ fontFamily: body, lineHeight: 1.3 }}
+                                >
+                                  <input
+                                    type="radio"
+                                    name="work-model-alignment"
+                                    value={option.value}
+                                    checked={isSelected}
+                                    onChange={(event) =>
+                                      updateField(
+                                        "workModelAlignment",
+                                        event.target.value,
+                                      )
+                                    }
+                                    className="sr-only"
+                                  />
+                                  {option.label}
+                                </label>
+                              );
+                            })}
+                          </div>
+                        </fieldset>
+
+                        <fieldset className="border border-[#d6dace] p-3 md:p-4">
+                          <legend
+                            className="px-1 text-[13px] text-[#5f644c]"
+                            style={{ fontFamily: body }}
+                          >
+                            4. Qual seu nível de fluência no uso de IA no trabalho?
+                            *
+                          </legend>
+                          <div className="mt-3 grid grid-cols-1 gap-2">
+                            {roleApplicationAiOptions.map((option) => {
+                              const isSelected =
+                                formState.aiFluency === option.value;
+                              return (
+                                <label
+                                  key={`ai-fluency-${option.value}`}
+                                  className={`cursor-pointer border px-3 py-2 text-[13px] transition-colors ${
+                                    isSelected
+                                      ? "border-[#101700] bg-[#ecefe7] text-[#101700]"
+                                      : "border-[#d6dace] bg-[#f2f3ef] text-[#5f644c] hover:text-[#101700]"
+                                  }`}
+                                  style={{ fontFamily: body, lineHeight: 1.3 }}
+                                >
+                                  <input
+                                    type="radio"
+                                    name="ai-fluency"
+                                    value={option.value}
+                                    checked={isSelected}
+                                    onChange={(event) =>
+                                      updateField("aiFluency", event.target.value)
+                                    }
+                                    className="sr-only"
+                                  />
+                                  {option.label}
+                                </label>
+                              );
+                            })}
+                          </div>
+                        </fieldset>
+                      </div>
+                    </div>
+
+                    <div className="border-b border-[#d6dace] p-4 md:p-5">
+                      <label className="flex flex-col gap-1.5">
+                        <span
+                          className="text-[13px] text-[#5f644c]"
+                          style={{ fontFamily: body }}
+                        >
+                          Agora me fala aqui o que a ShiftLabs ganha contratando você
+                        </span>
+                        <textarea
+                          rows={5}
+                          value={formState.message}
+                          onChange={(event) =>
+                            updateField("message", event.target.value)
+                          }
+                          placeholder="Descreva de forma objetiva o impacto que você pode gerar."
+                          className="min-h-[130px] border border-[#d6dace] bg-[#f2f3ef] px-3 py-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
+                          style={{ fontFamily: body, lineHeight: 1.4 }}
+                        />
+                        <p
+                          className="text-[12px] text-[#5f644c]"
+                          style={{ fontFamily: body, lineHeight: 1.3 }}
+                        >
+                          Enviamos confirmação no pipeline interno da ShiftLabs.
+                        </p>
+                      </label>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-3 border-t border-[#d6dace] p-4 md:p-5">
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="inline-flex min-h-[44px] items-center bg-[#101700] px-4 py-3 text-[14px] uppercase text-[#f2f3ef] disabled:cursor-not-allowed disabled:opacity-70"
+                        style={{ fontFamily: mono, lineHeight: "normal" }}
+                      >
+                        {isSubmitting ? "enviando..." : "enviar candidatura"}
+                      </button>
+                      <a
+                        href={roleHref}
+                        className="inline-flex min-h-[44px] items-center border border-[#d6dace] px-4 py-3 text-[14px] uppercase text-[#5f644c] hover:text-[#101700]"
+                        style={{ fontFamily: mono, lineHeight: "normal" }}
+                      >
+                        voltar para vaga
+                      </a>
+                      {feedback ? (
+                        <p
+                          className={`w-full border px-3 py-2 text-[13px] ${
+                            isFeedbackSuccess
+                              ? "border-[#b6cf88] bg-[#eaf3d5] text-[#456300]"
+                              : "border-[#e4b6b6] bg-[#f8e6e6] text-[#9f2b2b]"
+                          }`}
+                          style={{ fontFamily: body, lineHeight: 1.3 }}
+                          aria-live="polite"
+                        >
+                          {feedback.message}
+                        </p>
+                      ) : null}
+                    </div>
+                  </form>
+                </div>
+              </section>
+            </div>
             <XlHelper className="border-l border-[#d6dace]" />
             <SectionBorderTicks positions={["192px", "calc(100% - 192px)"]} />
           </div>

@@ -1,7 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createClient, type Session } from "@supabase/supabase-js";
 import svgPaths from "../imports/svg-pgtixnbxan";
-import { MenuxLogo, CortexLogo, AtomLogo, AuraLogo } from "./components/BrandLogos";
+import {
+  MenuxLogo,
+  CortexLogo,
+  AtomLogo,
+  AuraLogo,
+} from "./components/BrandLogos";
 
 const mono = "'Basis Grotesque Pro Mono', 'InterDisplay', sans-serif";
 const heading = "'Inter Tight', 'InterDisplay', sans-serif";
@@ -10,9 +15,12 @@ const display = "'InterDisplay', 'Inter Tight', sans-serif";
 const audienceTextHalo =
   "0 0 0 #F2F3EF, 1px 0 0 #F2F3EF, -1px 0 0 #F2F3EF, 0 1px 0 #F2F3EF, 0 -1px 0 #F2F3EF, 2px 0 0 #F2F3EF, -2px 0 0 #F2F3EF, 0 2px 0 #F2F3EF, 0 -2px 0 #F2F3EF, 0 0 12px #F2F3EF, 0 0 22px #F2F3EF, 0 0 34px #F2F3EF";
 
-const supabaseUrl = (import.meta.env.VITE_SUPABASE_URL as string | undefined) ?? "https://cjoyxelowsfkhgswkipd.supabase.co";
+const supabaseUrl =
+  (import.meta.env.VITE_SUPABASE_URL as string | undefined) ??
+  "https://cjoyxelowsfkhgswkipd.supabase.co";
 const supabasePublishableKey =
-  (import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined) ?? "sb_publishable_EWydN_Aqm9YbtXkQUNGfrA_BpB8LD4R";
+  (import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined) ??
+  "sb_publishable_EWydN_Aqm9YbtXkQUNGfrA_BpB8LD4R";
 const hasSupabaseConfig = Boolean(supabaseUrl && supabasePublishableKey);
 const supabase = hasSupabaseConfig
   ? createClient(supabaseUrl, supabasePublishableKey, {
@@ -24,7 +32,9 @@ const supabase = hasSupabaseConfig
     })
   : null;
 const fallbackSiteUrl = "https://shiftlabs.digital";
-const configuredSiteUrl = ((import.meta.env.VITE_SITE_URL as string | undefined) ?? fallbackSiteUrl).trim();
+const configuredSiteUrl = (
+  (import.meta.env.VITE_SITE_URL as string | undefined) ?? fallbackSiteUrl
+).trim();
 const siteUrl = configuredSiteUrl.replace(/\/+$/, "") || fallbackSiteUrl;
 const seoDefaultDescription =
   "A ShiftLabs estrutura produto, tecnologia, growth e operacoes para empresas crescerem com previsibilidade e execucao coordenada.";
@@ -44,7 +54,13 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-function SectionTitle({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+function SectionTitle({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <div
       data-reveal="title"
@@ -56,10 +72,19 @@ function SectionTitle({ children, className = "" }: { children: React.ReactNode;
   );
 }
 
-function BorderBox({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+function BorderBox({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <div className={`relative ${className}`}>
-      <div aria-hidden className="absolute inset-0 border border-[#d6dace] pointer-events-none" />
+      <div
+        aria-hidden
+        className="absolute inset-0 border border-[#d6dace] pointer-events-none"
+      />
       {children}
     </div>
   );
@@ -79,7 +104,10 @@ function SectionBorderTicks({
   showBottom?: boolean;
 }) {
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 hidden xl:block z-10">
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-0 hidden xl:block z-10"
+    >
       {showTop &&
         positions.map((left) => (
           <div key={`top-${left}`} className="absolute top-0" style={{ left }}>
@@ -89,7 +117,11 @@ function SectionBorderTicks({
         ))}
       {showBottom &&
         positions.map((left) => (
-          <div key={`bottom-${left}`} className="absolute bottom-0" style={{ left }}>
+          <div
+            key={`bottom-${left}`}
+            className="absolute bottom-0"
+            style={{ left }}
+          >
             <span className="absolute bottom-0 -translate-x-1/2 h-[2px] w-[14px] bg-[#5f644c]" />
             <span className="absolute bottom-0 -translate-x-1/2 h-[12px] w-[2px] bg-[#5f644c]" />
           </div>
@@ -127,8 +159,10 @@ function AsciiStarfield({ className = "" }: { className?: string }) {
       window.matchMedia("(hover: none) and (pointer: coarse)").matches;
     const stepIntervalMs = 92;
 
-    const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
-    const rand = (min: number, max: number) => Math.random() * (max - min) + min;
+    const clamp = (value: number, min: number, max: number) =>
+      Math.max(min, Math.min(max, value));
+    const rand = (min: number, max: number) =>
+      Math.random() * (max - min) + min;
     const measureAsciiCell = () => {
       const probe = document.createElement("span");
       probe.textContent = "0".repeat(40);
@@ -145,7 +179,8 @@ function AsciiStarfield({ className = "" }: { className?: string }) {
       host.appendChild(probe);
       const rect = probe.getBoundingClientRect();
       const computed = window.getComputedStyle(probe);
-      const measuredLineHeight = Number.parseFloat(computed.lineHeight) || asciiLineHeightPx;
+      const measuredLineHeight =
+        Number.parseFloat(computed.lineHeight) || asciiLineHeightPx;
       probe.remove();
       cellWidth = Math.max(rect.width / 40, 4);
       cellHeight = Math.max(measuredLineHeight, 8);
@@ -163,7 +198,12 @@ function AsciiStarfield({ className = "" }: { className?: string }) {
       const grid = Array.from({ length: rows }, () => Array(cols).fill(" "));
 
       for (const ambient of ambientStars) {
-        if (ambient.x >= 0 && ambient.x < cols && ambient.y >= 0 && ambient.y < rows) {
+        if (
+          ambient.x >= 0 &&
+          ambient.x < cols &&
+          ambient.y >= 0 &&
+          ambient.y < rows
+        ) {
           grid[ambient.y][ambient.x] = ambient.char;
         }
       }
@@ -177,12 +217,17 @@ function AsciiStarfield({ className = "" }: { className?: string }) {
 
         const depth = 1 - star.z;
         const char =
-          depth > 0.84 ? "@" :
-          depth > 0.7 ? "#" :
-          depth > 0.56 ? "*" :
-          depth > 0.42 ? "+" :
-          depth > 0.3 ? ":" :
-          ".";
+          depth > 0.84
+            ? "@"
+            : depth > 0.7
+              ? "#"
+              : depth > 0.56
+                ? "*"
+                : depth > 0.42
+                  ? "+"
+                  : depth > 0.3
+                    ? ":"
+                    : ".";
         grid[y][x] = char;
 
         if (depth > 0.6 && x > 0 && grid[y][x - 1] === " ") {
@@ -208,7 +253,8 @@ function AsciiStarfield({ className = "" }: { className?: string }) {
       const ambientCount = clamp(Math.floor(cols * rows * 0.009), 36, 180);
       ambientStars = Array.from({ length: ambientCount }, () => {
         const charRoll = Math.random();
-        const char: "." | ":" | "+" = charRoll > 0.9 ? "+" : charRoll > 0.65 ? ":" : ".";
+        const char: "." | ":" | "+" =
+          charRoll > 0.9 ? "+" : charRoll > 0.65 ? ":" : ".";
         return {
           x: Math.floor(Math.random() * cols),
           y: Math.floor(Math.random() * rows),
@@ -283,7 +329,11 @@ function AsciiStarfield({ className = "" }: { className?: string }) {
   }, []);
 
   return (
-    <div ref={hostRef} aria-hidden className={`pointer-events-none overflow-hidden ${className}`}>
+    <div
+      ref={hostRef}
+      aria-hidden
+      className={`pointer-events-none overflow-hidden ${className}`}
+    >
       <pre
         className="absolute inset-0 m-0 select-none whitespace-pre"
         style={{
@@ -309,7 +359,11 @@ function AsciiStarfield({ className = "" }: { className?: string }) {
 function ShiftLabsIcon() {
   return (
     <div className="h-[34px] w-[34px] relative shrink-0">
-      <svg className="block size-full" fill="none" viewBox="0 0 33.9148 34.0638">
+      <svg
+        className="block size-full"
+        fill="none"
+        viewBox="0 0 33.9148 34.0638"
+      >
         <path d={svgPaths.p32570e00} fill="#101700" />
         <path d={svgPaths.p2aaefb00} fill="#101700" />
         <path d={svgPaths.p6d58c60} fill="#101700" />
@@ -325,7 +379,11 @@ function ShiftLabsIcon() {
 function ShiftLabsWordmark() {
   return (
     <div className="h-[15px] w-[80px] relative shrink-0">
-      <svg className="block size-full" fill="none" viewBox="0 0 79.7793 14.8396">
+      <svg
+        className="block size-full"
+        fill="none"
+        viewBox="0 0 79.7793 14.8396"
+      >
         <path d={svgPaths.pc4be800} fill="#101700" />
         <path d={svgPaths.p303e5b80} fill="#101700" />
         <path d={svgPaths.p29dd9600} fill="#101700" />
@@ -360,7 +418,12 @@ function InstagramIcon() {
 function GitHubIcon() {
   return (
     <svg className="size-[14px]" fill="none" viewBox="0 0 14 14">
-      <path clipRule="evenodd" d={svgPaths.p27f75600} fill="#101700" fillRule="evenodd" />
+      <path
+        clipRule="evenodd"
+        d={svgPaths.p27f75600}
+        fill="#101700"
+        fillRule="evenodd"
+      />
     </svg>
   );
 }
@@ -368,7 +431,11 @@ function GitHubIcon() {
 function CareersLocationIcon() {
   return (
     <svg className="size-[16px] shrink-0" fill="none" viewBox="0 0 14 14">
-      <path d="M7 12.2C7 12.2 11 8.7 11 5.8C11 3.9 9.4 2.4 7.5 2.4C7.3 2.4 7.1 2.4 7 2.5C6.9 2.4 6.7 2.4 6.5 2.4C4.6 2.4 3 3.9 3 5.8C3 8.7 7 12.2 7 12.2Z" stroke="#0E0E0C" strokeWidth="1.25" />
+      <path
+        d="M7 12.2C7 12.2 11 8.7 11 5.8C11 3.9 9.4 2.4 7.5 2.4C7.3 2.4 7.1 2.4 7 2.5C6.9 2.4 6.7 2.4 6.5 2.4C4.6 2.4 3 3.9 3 5.8C3 8.7 7 12.2 7 12.2Z"
+        stroke="#0E0E0C"
+        strokeWidth="1.25"
+      />
       <circle cx="7" cy="5.8" r="1.1" stroke="#0E0E0C" strokeWidth="1.25" />
     </svg>
   );
@@ -378,7 +445,12 @@ function CareersClockIcon() {
   return (
     <svg className="size-[16px] shrink-0" fill="none" viewBox="0 0 14 14">
       <circle cx="7" cy="7" r="4.9" stroke="#0E0E0C" strokeWidth="1.25" />
-      <path d="M7 4.4V7L8.8 8.1" stroke="#0E0E0C" strokeLinecap="round" strokeWidth="1.25" />
+      <path
+        d="M7 4.4V7L8.8 8.1"
+        stroke="#0E0E0C"
+        strokeLinecap="round"
+        strokeWidth="1.25"
+      />
     </svg>
   );
 }
@@ -386,8 +458,20 @@ function CareersClockIcon() {
 function CareersWorkModeIcon() {
   return (
     <svg className="size-[16px] shrink-0" fill="none" viewBox="0 0 14 14">
-      <rect height="6.2" rx="1.2" stroke="#0E0E0C" strokeWidth="1.25" width="8.8" x="2.6" y="5.2" />
-      <path d="M5 5.2V4.5C5 3.6 5.7 2.9 6.6 2.9H7.4C8.3 2.9 9 3.6 9 4.5V5.2" stroke="#0E0E0C" strokeWidth="1.25" />
+      <rect
+        height="6.2"
+        rx="1.2"
+        stroke="#0E0E0C"
+        strokeWidth="1.25"
+        width="8.8"
+        x="2.6"
+        y="5.2"
+      />
+      <path
+        d="M5 5.2V4.5C5 3.6 5.7 2.9 6.6 2.9H7.4C8.3 2.9 9 3.6 9 4.5V5.2"
+        stroke="#0E0E0C"
+        strokeWidth="1.25"
+      />
       <path d="M2.6 8.1H11.4" stroke="#0E0E0C" strokeWidth="1.25" />
     </svg>
   );
@@ -396,17 +480,24 @@ function CareersWorkModeIcon() {
 function CareersBackIcon() {
   return (
     <svg className="size-[18px] shrink-0" fill="none" viewBox="0 0 18 18">
-      <path d="M11.2 4.2L6.5 8.9L11.2 13.6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6" />
-      <path d="M6.9 8.9H14.1" stroke="currentColor" strokeLinecap="round" strokeWidth="1.6" />
+      <path
+        d="M11.2 4.2L6.5 8.9L11.2 13.6"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.6"
+      />
+      <path
+        d="M6.9 8.9H14.1"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="1.6"
+      />
     </svg>
   );
 }
 
-function CareersPill({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function CareersPill({ children }: { children: React.ReactNode }) {
   return (
     <span
       className="inline-flex items-center justify-center rounded-none border border-[#d6dace] bg-[#f2f3ef] p-2 text-[15px] text-[#5f644c]"
@@ -423,10 +514,30 @@ function IdentityLayerIcon() {
     <svg className="size-9" fill="none" viewBox="0 0 40 40">
       <circle cx="20" cy="20" r="10.5" stroke="#b6bea1" strokeWidth="1.5" />
       <circle cx="20" cy="20" r="4.5" stroke="#b6bea1" strokeWidth="1.5" />
-      <path d="M20 4.5V9.5" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M20 30.5V35.5" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M4.5 20H9.5" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M30.5 20H35.5" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
+      <path
+        d="M20 4.5V9.5"
+        stroke="#b6bea1"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M20 30.5V35.5"
+        stroke="#b6bea1"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M4.5 20H9.5"
+        stroke="#b6bea1"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M30.5 20H35.5"
+        stroke="#b6bea1"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
     </svg>
   );
 }
@@ -434,9 +545,33 @@ function IdentityLayerIcon() {
 function FundamentalsLayerIcon() {
   return (
     <svg className="size-9" fill="none" viewBox="0 0 40 40">
-      <rect height="5.5" rx="1.2" stroke="#b6bea1" strokeWidth="1.5" width="23" x="8.5" y="25.5" />
-      <rect height="5.5" rx="1.2" stroke="#b6bea1" strokeWidth="1.5" width="17" x="11.5" y="18.2" />
-      <rect height="5.5" rx="1.2" stroke="#b6bea1" strokeWidth="1.5" width="11" x="14.5" y="10.9" />
+      <rect
+        height="5.5"
+        rx="1.2"
+        stroke="#b6bea1"
+        strokeWidth="1.5"
+        width="23"
+        x="8.5"
+        y="25.5"
+      />
+      <rect
+        height="5.5"
+        rx="1.2"
+        stroke="#b6bea1"
+        strokeWidth="1.5"
+        width="17"
+        x="11.5"
+        y="18.2"
+      />
+      <rect
+        height="5.5"
+        rx="1.2"
+        stroke="#b6bea1"
+        strokeWidth="1.5"
+        width="11"
+        x="14.5"
+        y="10.9"
+      />
     </svg>
   );
 }
@@ -444,7 +579,15 @@ function FundamentalsLayerIcon() {
 function ArchitectureLayerIcon() {
   return (
     <svg className="size-9" fill="none" viewBox="0 0 40 40">
-      <rect height="23" rx="2" stroke="#b6bea1" strokeWidth="1.5" width="23" x="8.5" y="8.5" />
+      <rect
+        height="23"
+        rx="2"
+        stroke="#b6bea1"
+        strokeWidth="1.5"
+        width="23"
+        x="8.5"
+        y="8.5"
+      />
       <path d="M8.5 16.2H31.5" stroke="#b6bea1" strokeWidth="1.5" />
       <path d="M16.2 8.5V31.5" stroke="#b6bea1" strokeWidth="1.5" />
       <path d="M22 22H31.5" stroke="#b6bea1" strokeWidth="1.5" />
@@ -457,14 +600,54 @@ function OperatingSystemLayerIcon() {
   return (
     <svg className="size-9" fill="none" viewBox="0 0 40 40">
       <circle cx="20" cy="20" r="6.2" stroke="#b6bea1" strokeWidth="1.5" />
-      <path d="M20 7.2V11.2" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M20 28.8V32.8" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M7.2 20H11.2" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M28.8 20H32.8" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M11 11L13.8 13.8" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M26.2 26.2L29 29" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M29 11L26.2 13.8" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M13.8 26.2L11 29" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
+      <path
+        d="M20 7.2V11.2"
+        stroke="#b6bea1"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M20 28.8V32.8"
+        stroke="#b6bea1"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M7.2 20H11.2"
+        stroke="#b6bea1"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M28.8 20H32.8"
+        stroke="#b6bea1"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M11 11L13.8 13.8"
+        stroke="#b6bea1"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M26.2 26.2L29 29"
+        stroke="#b6bea1"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M29 11L26.2 13.8"
+        stroke="#b6bea1"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M13.8 26.2L11 29"
+        stroke="#b6bea1"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
     </svg>
   );
 }
@@ -477,11 +660,36 @@ function IntelligenceLayerIcon() {
       <circle cx="20" cy="20" fill="#b6bea1" r="2.2" />
       <circle cx="10.5" cy="29.2" fill="#b6bea1" r="2.2" />
       <circle cx="30" cy="29" fill="#b6bea1" r="2.2" />
-      <path d="M12 12.5L18.3 18.2" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M27.8 12L21.7 18.1" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M12.4 27.8L18.1 21.9" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M27.8 27.4L21.9 21.7" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
-      <path d="M12.2 11.1H27.6" stroke="#b6bea1" strokeLinecap="round" strokeWidth="1.5" />
+      <path
+        d="M12 12.5L18.3 18.2"
+        stroke="#b6bea1"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M27.8 12L21.7 18.1"
+        stroke="#b6bea1"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M12.4 27.8L18.1 21.9"
+        stroke="#b6bea1"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M27.8 27.4L21.9 21.7"
+        stroke="#b6bea1"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M12.2 11.1H27.6"
+        stroke="#b6bea1"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
     </svg>
   );
 }
@@ -490,7 +698,12 @@ function IntelligenceLayerIcon() {
 function BigWordmark() {
   return (
     <div className="w-full overflow-hidden">
-      <svg className="w-full h-auto" fill="none" viewBox="0 0 1128 209.816" preserveAspectRatio="xMidYMid meet">
+      <svg
+        className="w-full h-auto"
+        fill="none"
+        viewBox="0 0 1128 209.816"
+        preserveAspectRatio="xMidYMid meet"
+      >
         <path d={svgPaths.p7ab8900} fill="#101700" />
         <path d={svgPaths.p3b0eb280} fill="#101700" />
         <path d={svgPaths.p80dcd80} fill="#101700" />
@@ -541,7 +754,14 @@ const problemCards = [
   },
 ];
 
-const serviceTags = ["Produto", "Tecnologia", "Comercial", "Operações", "Growth", "Inteligência Artificial"];
+const serviceTags = [
+  "Produto",
+  "Tecnologia",
+  "Comercial",
+  "Operações",
+  "Growth",
+  "Inteligência Artificial",
+];
 
 const services = [
   {
@@ -582,29 +802,66 @@ const frameworkLayers = [
   { label: "Identidade", widthClass: "w-[85px]", Icon: IdentityLayerIcon },
   { label: "Fundamentos", widthClass: "w-[96px]", Icon: FundamentalsLayerIcon },
   { label: "Arquitetura", widthClass: "w-[85px]", Icon: ArchitectureLayerIcon },
-  { label: "Sistema Operacional", widthClass: "w-[86px]", Icon: OperatingSystemLayerIcon },
-  { label: "Camada de Inteligência", widthClass: "w-[85px]", Icon: IntelligenceLayerIcon },
+  {
+    label: "Sistema Operacional",
+    widthClass: "w-[86px]",
+    Icon: OperatingSystemLayerIcon,
+  },
+  {
+    label: "Camada de Inteligência",
+    widthClass: "w-[85px]",
+    Icon: IntelligenceLayerIcon,
+  },
 ];
 
 const audienceItems = [
   { text: "Empresas que já validaram mercado.", textMaxClass: "max-w-[162px]" },
-  { text: "Fundadores que querem previsibilidade.", textMaxClass: "max-w-[171px]" },
-  { text: "Negócios que cresceram rápido demais.", textMaxClass: "max-w-[194px]" },
-  { text: "Produtos que precisam de estrutura.", textMaxClass: "max-w-[162px]" },
+  {
+    text: "Fundadores que querem previsibilidade.",
+    textMaxClass: "max-w-[171px]",
+  },
+  {
+    text: "Negócios que cresceram rápido demais.",
+    textMaxClass: "max-w-[194px]",
+  },
+  {
+    text: "Produtos que precisam de estrutura.",
+    textMaxClass: "max-w-[162px]",
+  },
 ];
 
-const featureItems = ["Design isolado.", "Código isolado.", "Marketing isolado."];
+const featureItems = [
+  "Design isolado.",
+  "Código isolado.",
+  "Marketing isolado.",
+];
 const marqueeText = "Most players optimize pieces. We optimize the system.";
 
 const socialLinks = [
-  { name: "LinkedIn", href: "https://www.linkedin.com/company/shiftlabs-br/", Icon: LinkedInIcon },
-  { name: "Instagram", href: "https://instagram.com/shiftlabs.br", Icon: InstagramIcon },
+  {
+    name: "LinkedIn",
+    href: "https://www.linkedin.com/company/shiftlabs-br/",
+    Icon: LinkedInIcon,
+  },
+  {
+    name: "Instagram",
+    href: "https://instagram.com/shiftlabs.br",
+    Icon: InstagramIcon,
+  },
   { name: "GitHub", href: "https://github.com/shiftlabs-br", Icon: GitHubIcon },
 ];
 
 const careersSocialLinks = [
-  { name: "LinkedIn", href: "https://www.linkedin.com/company/shiftlabs-br/", Icon: LinkedInIcon },
-  { name: "Instagram", href: "https://instagram.com/shiftlabs.br", Icon: InstagramIcon },
+  {
+    name: "LinkedIn",
+    href: "https://www.linkedin.com/company/shiftlabs-br/",
+    Icon: LinkedInIcon,
+  },
+  {
+    name: "Instagram",
+    href: "https://instagram.com/shiftlabs.br",
+    Icon: InstagramIcon,
+  },
   { name: "GitHub", href: "https://github.com/shiftlabs-br", Icon: GitHubIcon },
 ];
 
@@ -675,7 +932,10 @@ type CareersRoleRow = {
 
 function toTextArray(value: unknown): string[] {
   if (!Array.isArray(value)) return [];
-  return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
+  return value.filter(
+    (item): item is string =>
+      typeof item === "string" && item.trim().length > 0,
+  );
 }
 
 function normalizeSearchText(value: string): string {
@@ -714,22 +974,39 @@ function inferRoleArea({
   }
 
   const detectArea = (haystack: string): string | null => {
-    if (/(finance|contab|fiscal|tesouraria|controlador|analista financeiro)/.test(haystack)) return "Financeiro";
+    if (
+      /(finance|contab|fiscal|tesouraria|controlador|analista financeiro)/.test(
+        haystack,
+      )
+    )
+      return "Financeiro";
     if (/(rh|people|recrut|talent|human)/.test(haystack)) return "Pessoas";
-    if (/(customer success|suporte|atendimento|cx|operac)/.test(haystack)) return "Operações";
-    if (/(video|criador|editor|conteudo|content)/.test(haystack)) return "Conteúdo";
+    if (/(customer success|suporte|atendimento|cx|operac)/.test(haystack))
+      return "Operações";
+    if (/(video|criador|editor|conteudo|content)/.test(haystack))
+      return "Conteúdo";
     if (/(design|ui|ux)/.test(haystack)) return "Design";
-    if (/(backend|frontend|fullstack|dev|engenhari|software|tech|tecnolog)/.test(haystack)) return "Tecnologia";
+    if (
+      /(backend|frontend|fullstack|dev|engenhari|software|tech|tecnolog)/.test(
+        haystack,
+      )
+    )
+      return "Tecnologia";
     if (/(produto|product|pm|manager)/.test(haystack)) return "Produto";
-    if (/(growth|marketing|comercial|sdr|closer|venda|sales)/.test(haystack)) return "Growth & Comercial";
+    if (/(growth|marketing|comercial|sdr|closer|venda|sales)/.test(haystack))
+      return "Growth & Comercial";
     return null;
   };
 
-  const titleMatch = detectArea(normalizeSearchText(`${title ?? ""} ${area ?? ""}`));
+  const titleMatch = detectArea(
+    normalizeSearchText(`${title ?? ""} ${area ?? ""}`),
+  );
   if (titleMatch) return titleMatch;
 
   const fullMatch = detectArea(
-    normalizeSearchText(`${title ?? ""} ${intro ?? ""} ${roleOneLiner ?? ""} ${aboutFirst ?? ""} ${bodyMarkdown ?? ""}`),
+    normalizeSearchText(
+      `${title ?? ""} ${intro ?? ""} ${roleOneLiner ?? ""} ${aboutFirst ?? ""} ${bodyMarkdown ?? ""}`,
+    ),
   );
   if (fullMatch) return fullMatch;
 
@@ -767,7 +1044,17 @@ function stripRoleSenioritySuffix(title: string): string {
       "e",
       "de",
     ]);
-    const levelTokens = new Set(["junior", "jr", "pleno", "senior", "especialista", "lead", "lider", "mid", "middle"]);
+    const levelTokens = new Set([
+      "junior",
+      "jr",
+      "pleno",
+      "senior",
+      "especialista",
+      "lead",
+      "lider",
+      "mid",
+      "middle",
+    ]);
 
     let hasLevel = false;
     for (const token of tokens) {
@@ -800,7 +1087,10 @@ function applyRoleTitleAlias(title: string): string {
 
   const normalized = normalizeSearchText(trimmed);
 
-  if (/^executivo comercial\b/.test(normalized) && /(sdr|closer)/.test(normalized)) {
+  if (
+    /^executivo comercial\b/.test(normalized) &&
+    /(sdr|closer)/.test(normalized)
+  ) {
     return "Sales Executive";
   }
 
@@ -808,19 +1098,26 @@ function applyRoleTitleAlias(title: string): string {
     return "Gestor de RH";
   }
 
-  if (/^(criador editor de video com i a|videomaker i a first)\b/.test(normalized)) {
+  if (
+    /^(criador editor de video com i a|videomaker i a first)\b/.test(normalized)
+  ) {
     return "Videomaker I.A First";
   }
 
   return trimmed;
 }
 
-function getDisplayRoleTitle(title: string, precomputedDisplayTitle?: string): string {
+function getDisplayRoleTitle(
+  title: string,
+  precomputedDisplayTitle?: string,
+): string {
   const sourceTitle = precomputedDisplayTitle?.trim() || title;
   return stripRoleSenioritySuffix(applyRoleTitleAlias(sourceTitle));
 }
 
-function detectSeniorityLabelInText(normalizedText: string): string | undefined {
+function detectSeniorityLabelInText(
+  normalizedText: string,
+): string | undefined {
   if (!normalizedText) return undefined;
 
   const firstMatchIndex = (patterns: RegExp[]): number => {
@@ -849,7 +1146,10 @@ function detectSeniorityLabelInText(normalizedText: string): string | undefined 
   return matches[0].label;
 }
 
-function inferRoleSeniorityLabel(title: string, slug?: string): string | undefined {
+function inferRoleSeniorityLabel(
+  title: string,
+  slug?: string,
+): string | undefined {
   const fromTitle = detectSeniorityLabelInText(normalizeSearchText(title));
   if (fromTitle) return fromTitle;
 
@@ -857,7 +1157,11 @@ function inferRoleSeniorityLabel(title: string, slug?: string): string | undefin
   return detectSeniorityLabelInText(normalizeSearchText(slugAsText));
 }
 
-function getRoleSeniorityBadge(title: string, precomputedDisplaySeniority?: string, slug?: string): string | undefined {
+function getRoleSeniorityBadge(
+  title: string,
+  precomputedDisplaySeniority?: string,
+  slug?: string,
+): string | undefined {
   const persisted = precomputedDisplaySeniority?.trim();
   if (persisted) return persisted.toUpperCase();
   return inferRoleSeniorityLabel(title, slug);
@@ -900,7 +1204,10 @@ function firstMeaningfulMarkdownLine(markdown?: string): string {
 }
 
 function getRoleCardSummary(
-  role: Pick<CareersRole, "intro" | "roleOneLiner" | "bodyMarkdown" | "about" | "cardSummary">,
+  role: Pick<
+    CareersRole,
+    "intro" | "roleOneLiner" | "bodyMarkdown" | "about" | "cardSummary"
+  >,
 ): string {
   const persistedSummary = role.cardSummary?.trim();
   if (persistedSummary) return persistedSummary;
@@ -912,13 +1219,23 @@ function getRoleCardSummary(
     toRoleIntroPreview(role.about[0] ?? ""),
   ];
   return (
-    candidates.find((candidate) => candidate && !isGenericRoleSummary(candidate)) ??
-    "Detalhes da vaga disponíveis na página completa."
+    candidates.find(
+      (candidate) => candidate && !isGenericRoleSummary(candidate),
+    ) ?? "Detalhes da vaga disponíveis na página completa."
   );
 }
 
 function getRoleCardArea(
-  role: Pick<CareersRole, "area" | "displayArea" | "title" | "intro" | "roleOneLiner" | "about" | "bodyMarkdown">,
+  role: Pick<
+    CareersRole,
+    | "area"
+    | "displayArea"
+    | "title"
+    | "intro"
+    | "roleOneLiner"
+    | "about"
+    | "bodyMarkdown"
+  >,
 ): string {
   const persistedArea = role.displayArea?.trim();
   if (persistedArea) return persistedArea;
@@ -932,7 +1249,10 @@ function getRoleCardArea(
   });
 }
 
-function getRoleDisplayCommitment(commitment: string, precomputedDisplayCommitment?: string): string {
+function getRoleDisplayCommitment(
+  commitment: string,
+  precomputedDisplayCommitment?: string,
+): string {
   const persisted = precomputedDisplayCommitment?.trim();
   if (persisted) return persisted;
 
@@ -954,9 +1274,12 @@ type SeoPayload = {
   pageSchema?: Record<string, unknown> | Array<Record<string, unknown>> | null;
 };
 
-const hiddenCareerRoleSlugs = new Set(["social-media"]);
+const hiddenCareerRoleSlugs = new Set<string>();
+const alwaysPublishedCareerRoleSlugs = new Set(["social-media"]);
 
-function filterVisibleCareersRoles<T extends { slug: string }>(roles: T[]): T[] {
+function filterVisibleCareersRoles<T extends { slug: string }>(
+  roles: T[],
+): T[] {
   return roles.filter((role) => !hiddenCareerRoleSlugs.has(role.slug));
 }
 
@@ -971,7 +1294,8 @@ function truncateWithEllipsis(value: string, maxLength = 160): string {
 
 function toAbsoluteUrl(pathname: string): string {
   const normalizedPath = pathname.startsWith("/") ? pathname : `/${pathname}`;
-  const finalPath = normalizedPath === "/" ? "/" : normalizedPath.replace(/\/+$/, "");
+  const finalPath =
+    normalizedPath === "/" ? "/" : normalizedPath.replace(/\/+$/, "");
   return `${siteUrl}${finalPath}`;
 }
 
@@ -1008,7 +1332,10 @@ function upsertLink(rel: string, href: string): void {
   element.setAttribute("href", href);
 }
 
-function upsertJsonLdScript(id: string, payload: Record<string, unknown> | Array<Record<string, unknown>> | null): void {
+function upsertJsonLdScript(
+  id: string,
+  payload: Record<string, unknown> | Array<Record<string, unknown>> | null,
+): void {
   const scriptId = `seo-jsonld-${id}`;
   const current = document.getElementById(scriptId);
   if (!payload) {
@@ -1056,11 +1383,17 @@ function buildLandingPageSchema(): Record<string, unknown> {
   };
 }
 
-function buildCareersCollectionSchema(roles: CareersRole[]): Record<string, unknown> {
+function buildCareersCollectionSchema(
+  roles: CareersRole[],
+): Record<string, unknown> {
   const sorted = [...filterVisibleCareersRoles(roles)].sort((first, second) =>
-    getDisplayRoleTitle(first.title, first.displayTitle).localeCompare(getDisplayRoleTitle(second.title, second.displayTitle), "pt-BR", {
-      sensitivity: "base",
-    }),
+    getDisplayRoleTitle(first.title, first.displayTitle).localeCompare(
+      getDisplayRoleTitle(second.title, second.displayTitle),
+      "pt-BR",
+      {
+        sensitivity: "base",
+      },
+    ),
   );
 
   return {
@@ -1087,7 +1420,9 @@ function buildJobPostingSchema(role: CareersRole): Record<string, unknown> {
   const displayRoleTitle = getDisplayRoleTitle(role.title, role.displayTitle);
   const displayArea = getRoleCardArea(role);
   const normalizedDescription = truncateWithEllipsis(
-    toRoleIntroPreview(role.bodyMarkdown ?? role.intro ?? getRoleCardSummary(role)),
+    toRoleIntroPreview(
+      role.bodyMarkdown ?? role.intro ?? getRoleCardSummary(role),
+    ),
     5000,
   );
   const isRemoteModel = /(remot|remote)/i.test(role.model);
@@ -1133,7 +1468,9 @@ function buildJobPostingSchema(role: CareersRole): Record<string, unknown> {
 }
 
 function applySeoPayload(payload: SeoPayload): void {
-  const normalizedTitle = payload.title.includes("ShiftLabs") ? payload.title : `${payload.title} | ShiftLabs`;
+  const normalizedTitle = payload.title.includes("ShiftLabs")
+    ? payload.title
+    : `${payload.title} | ShiftLabs`;
   const normalizedDescription = truncateWithEllipsis(payload.description, 160);
   const canonicalUrl = toAbsoluteUrl(payload.path);
   const imageUrl = toAbsoluteUrl(payload.imagePath ?? seoDefaultImagePath);
@@ -1142,7 +1479,12 @@ function applySeoPayload(payload: SeoPayload): void {
   document.title = normalizedTitle;
 
   upsertMetaByName("description", normalizedDescription);
-  upsertMetaByName("robots", payload.noindex ? "noindex, nofollow, noarchive" : "index, follow, max-image-preview:large");
+  upsertMetaByName(
+    "robots",
+    payload.noindex
+      ? "noindex, nofollow, noarchive"
+      : "index, follow, max-image-preview:large",
+  );
   upsertMetaByName("theme-color", "#f2f3ef");
   upsertMetaByName("author", "ShiftLabs");
 
@@ -1186,7 +1528,9 @@ function rowToCareersRole(row: CareersRoleRow): CareersRole {
     title: row.title,
     displayTitle: row.display_title?.trim() || undefined,
     displaySeniority: row.display_seniority?.trim() || undefined,
-    displayCommitment: row.display_commitment?.trim() || getRoleDisplayCommitment(row.commitment),
+    displayCommitment:
+      row.display_commitment?.trim() ||
+      getRoleDisplayCommitment(row.commitment),
     location: row.location,
     commitment: row.commitment,
     model: row.model,
@@ -1398,14 +1742,17 @@ function formatRoleSectionHeading(rawHeading: string): string {
 
 function inlineMarkdownToHtml(value: string): string {
   const links: Array<{ token: string; html: string }> = [];
-  const withTokens = value.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (_match, label: string, url: string) => {
-    const token = `@@LINKTOKEN${links.length}@@`;
-    links.push({
-      token,
-      html: `<a href="${escapeHtml(url)}" target="_blank" rel="noreferrer">${escapeHtml(label)}</a>`,
-    });
-    return token;
-  });
+  const withTokens = value.replace(
+    /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+    (_match, label: string, url: string) => {
+      const token = `@@LINKTOKEN${links.length}@@`;
+      links.push({
+        token,
+        html: `<a href="${escapeHtml(url)}" target="_blank" rel="noreferrer">${escapeHtml(label)}</a>`,
+      });
+      return token;
+    },
+  );
 
   let html = escapeHtml(withTokens)
     .replace(/`([^`]+)`/g, "<code>$1</code>")
@@ -1446,7 +1793,9 @@ function markdownToHtml(markdown: string): string {
           `<h2 class="role-section-label" style="font-family: 'Basis Grotesque Pro Mono', 'InterDisplay', sans-serif;">${escapeHtml(formatRoleSectionHeading(headingText))}</h2>`,
         );
       } else {
-        html.push(`<h${level}>${inlineMarkdownToHtml(headingText)}</h${level}>`);
+        html.push(
+          `<h${level}>${inlineMarkdownToHtml(headingText)}</h${level}>`,
+        );
       }
       index += 1;
       continue;
@@ -1458,7 +1807,9 @@ function markdownToHtml(markdown: string): string {
         items.push(lines[index].trim().replace(/^[-*]\s+/, ""));
         index += 1;
       }
-      html.push(`<ul>${items.map((item) => `<li>${inlineMarkdownToHtml(item)}</li>`).join("")}</ul>`);
+      html.push(
+        `<ul>${items.map((item) => `<li>${inlineMarkdownToHtml(item)}</li>`).join("")}</ul>`,
+      );
       continue;
     }
 
@@ -1468,7 +1819,9 @@ function markdownToHtml(markdown: string): string {
         items.push(lines[index].trim().replace(/^\d+\.\s+/, ""));
         index += 1;
       }
-      html.push(`<ol>${items.map((item) => `<li>${inlineMarkdownToHtml(item)}</li>`).join("")}</ol>`);
+      html.push(
+        `<ol>${items.map((item) => `<li>${inlineMarkdownToHtml(item)}</li>`).join("")}</ol>`,
+      );
       continue;
     }
 
@@ -1509,7 +1862,13 @@ function normalizeCareersRole(raw: unknown): CareersRole | null {
   ) {
     return null;
   }
-  const toList = (value: unknown) => (Array.isArray(value) ? value.filter((item): item is string => typeof item === "string" && item.trim().length > 0) : []);
+  const toList = (value: unknown) =>
+    Array.isArray(value)
+      ? value.filter(
+          (item): item is string =>
+            typeof item === "string" && item.trim().length > 0,
+        )
+      : [];
   const about = toList(entry.about);
   const responsibilities = toList(entry.responsibilities);
   const requirements = toList(entry.requirements);
@@ -1529,7 +1888,11 @@ function normalizeCareersRole(raw: unknown): CareersRole | null {
     slug: entry.slug.trim(),
     title: entry.title.trim(),
     displayTitle: getDisplayRoleTitle(entry.title.trim()),
-    displaySeniority: getRoleSeniorityBadge(entry.title.trim(), undefined, entry.slug.trim()),
+    displaySeniority: getRoleSeniorityBadge(
+      entry.title.trim(),
+      undefined,
+      entry.slug.trim(),
+    ),
     displayCommitment: getRoleDisplayCommitment(entry.commitment.trim()),
     location: entry.location.trim(),
     commitment: entry.commitment.trim(),
@@ -1771,7 +2134,125 @@ const defaultCareersRoles: CareersRole[] = [
       "Entrevista final e proposta.",
     ],
   },
+  {
+    slug: "social-media",
+    title: "Social Media",
+    location: "João Pessoa, PB",
+    commitment: "Tempo integral",
+    model: "Presencial",
+    area: "Growth",
+    intro:
+      "Buscamos uma pessoa de Social Media para planejar, produzir e operar calendário de conteúdo com foco em distribuição, posicionamento e geração de demanda.",
+    roleOneLiner:
+      "Em uma frase: transformar estratégia de conteúdo em rotina de publicação com impacto real em marca e demanda.",
+    whyTitle: "Sobre a vaga",
+    roleTitle: "A função",
+    doTitle: "O que você vai fazer",
+    bringTitle: "O que buscamos",
+    stackTitle: "Stack de operação",
+    processTitle: "Como será o processo",
+    about: [
+      "Você vai cuidar da estratégia editorial e da operação diária dos canais sociais da ShiftLabs, conectando conteúdo com objetivos de marca e negócio.",
+      "A posição pede execução consistente, senso criativo e disciplina analítica para transformar aprendizado em rotina de publicação.",
+    ],
+    responsibilities: [
+      "Definir calendário editorial e pautas semanais.",
+      "Produzir copy e publicar conteúdos em múltiplos canais.",
+      "Acompanhar métricas de alcance, engajamento e geração de oportunidades.",
+      "Trabalhar com design e vídeo para transformar insights em peças de conteúdo.",
+      "Refinar tom de voz, formatos e rituais de publicação continuamente.",
+    ],
+    requirements: [
+      "Experiência com operação de social media em B2B ou serviços digitais.",
+      "Boa escrita, repertório criativo e senso estético.",
+      "Capacidade analítica para aprender com métricas e ajustar estratégia.",
+      "Organização para manter constância de publicação com qualidade.",
+    ],
+    stack: ["Instagram", "LinkedIn", "CapCut", "Canva", "Notion"],
+    process: [
+      "Triagem inicial de perfil e portfólio.",
+      "Entrevista de contexto com time de growth.",
+      "Teste prático de calendário e copy.",
+      "Conversa final com liderança.",
+    ],
+    bodyMarkdown: `Missão do cargo
+
+Você será responsável por transformar estratégia de conteúdo em operação consistente de social media, conectando posicionamento de marca, distribuição e geração de demanda em cada canal.
+
+Responsabilidades no dia a dia
+
+- Definir calendário editorial e pautas semanais com foco em consistência.
+- Produzir copy e publicar conteúdos em múltiplos canais.
+- Trabalhar junto com design e vídeo para transformar ideias em peças de conteúdo.
+- Acompanhar métricas de alcance, engajamento e geração de oportunidades.
+- Refinar continuamente tom de voz, formatos e rituais de publicação.
+- Organizar aprendizados e decisões em playbooks de conteúdo.
+
+Perfil esperado
+
+- Experiência com operação de social media em B2B ou serviços digitais.
+- Boa escrita, repertório criativo e senso estético.
+- Capacidade analítica para aprender com métricas e ajustar estratégia.
+- Organização para manter constância de publicação com qualidade.
+- Vivência prática com Instagram, LinkedIn e fluxos de produção de conteúdo.
+
+O que esperamos nos primeiros 60 a 90 dias
+
+- Estruturar e executar um calendário editorial previsível.
+- Consolidar linha editorial e linguagem da marca nos canais.
+- Definir rotina de acompanhamento de métricas e ciclo de otimização.
+- Evoluir a operação com playbooks e processos replicáveis.`,
+  },
 ];
+
+function isClosedCareerRole(role: CareersRole): boolean {
+  const normalizedText = normalizeSearchText([
+    role.title,
+    role.displayTitle ?? "",
+    role.intro,
+    role.roleOneLiner ?? "",
+    role.cardSummary ?? "",
+    role.bodyMarkdown ?? "",
+  ].join(" "));
+  return (
+    normalizedText.includes("vaga encerrada") ||
+    normalizedText.includes("vaga fechada") ||
+    normalizedText.includes("position closed") ||
+    normalizedText.includes("opportunity closed")
+  );
+}
+
+function hasStyledRoleDescription(role: CareersRole): boolean {
+  const normalizedBody = normalizeSearchText(role.bodyMarkdown ?? "");
+  if (!normalizedBody) return false;
+  return (
+    /\bmissao do cargo\b/.test(normalizedBody) &&
+    /\bresponsabilidades (no|do|de) dia a dia\b/.test(normalizedBody) &&
+    /\bperfil esperado\b/.test(normalizedBody)
+  );
+}
+
+function mergeAlwaysPublishedCareersRoles(roles: CareersRole[]): CareersRole[] {
+  const mergedBySlug = new Map<string, CareersRole>();
+  for (const role of roles) {
+    mergedBySlug.set(role.slug, role);
+  }
+  for (const role of defaultCareersRoles) {
+    if (!alwaysPublishedCareerRoleSlugs.has(role.slug)) continue;
+    const existingRole = mergedBySlug.get(role.slug);
+    const shouldReplaceWithFallback =
+      !existingRole ||
+      isClosedCareerRole(existingRole) ||
+      (role.slug === "social-media" && !hasStyledRoleDescription(existingRole));
+    if (shouldReplaceWithFallback) {
+      mergedBySlug.set(role.slug, role);
+    }
+  }
+  return Array.from(mergedBySlug.values());
+}
+
+const fallbackCareersRoles =
+  mergeAlwaysPublishedCareersRoles(defaultCareersRoles);
 
 type CaseLogoKey = "menux" | "cortex";
 
@@ -1801,14 +2282,35 @@ function LandingPage() {
   const [activeCaseLogo, setActiveCaseLogo] = useState<CaseLogoKey>("menux");
   const [isHeaderCondensed, setIsHeaderCondensed] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const [heroContactForm, setHeroContactForm] = useState<HeroContactFormState>(initialHeroContactFormState);
+  const [heroContactForm, setHeroContactForm] = useState<HeroContactFormState>(
+    initialHeroContactFormState,
+  );
   const [isContactSubmitting, setIsContactSubmitting] = useState(false);
-  const [heroContactFeedback, setHeroContactFeedback] = useState<HeroContactFeedback | null>(null);
+  const [heroContactFeedback, setHeroContactFeedback] =
+    useState<HeroContactFeedback | null>(null);
   const isContactSuccess = heroContactFeedback?.type === "success";
   const isContactError = heroContactFeedback?.type === "error";
 
-  const updateHeroContactField = (field: keyof HeroContactFormState, value: string) => {
-    setHeroContactForm((current) => ({ ...current, [field]: value }));
+  const updateHeroContactField = (
+    field: keyof HeroContactFormState,
+    value: string,
+  ) => {
+    let formattedValue = value;
+    if (field === "whatsapp") {
+      if (value.startsWith("+")) {
+        const digits = value.replace(/\D/g, "");
+        formattedValue = "+" + digits.slice(0, 15);
+      } else {
+        let v = value.replace(/\D/g, "");
+        if (v.length > 11) v = v.slice(0, 11);
+        if (v.length > 2) v = `(${v.slice(0, 2)}) ` + v.slice(2);
+        if (v.length > 10) v = v.slice(0, 10) + "-" + v.slice(10);
+        formattedValue = v;
+      }
+    } else if (field === "email") {
+      formattedValue = value.replace(/\s/g, "").toLowerCase();
+    }
+    setHeroContactForm((current) => ({ ...current, [field]: formattedValue }));
   };
 
   const openContactModal = () => {
@@ -1825,7 +2327,9 @@ function LandingPage() {
     setHeroContactFeedback(null);
   };
 
-  const submitHeroContactForm = async (event: React.FormEvent<HTMLFormElement>) => {
+  const submitHeroContactForm = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
     event.preventDefault();
     if (isContactSubmitting) return;
 
@@ -1859,7 +2363,8 @@ function LandingPage() {
       email,
       company,
       subject,
-      source_page: typeof window !== "undefined" ? window.location.pathname : "/",
+      source_page:
+        typeof window !== "undefined" ? window.location.pathname : "/",
       user_agent: typeof navigator !== "undefined" ? navigator.userAgent : null,
     });
     setIsContactSubmitting(false);
@@ -1880,7 +2385,9 @@ function LandingPage() {
   };
 
   useEffect(() => {
-    const revealNodes = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+    const revealNodes = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-reveal]"),
+    );
     if (!revealNodes.length) return;
     revealNodes.forEach((node) => node.classList.add("is-visible"));
   }, []);
@@ -1890,7 +2397,9 @@ function LandingPage() {
 
     const updateHeaderMode = () => {
       const shouldCondense = window.scrollY > 28 && window.innerWidth >= 1024;
-      setIsHeaderCondensed((current) => (current === shouldCondense ? current : shouldCondense));
+      setIsHeaderCondensed((current) =>
+        current === shouldCondense ? current : shouldCondense,
+      );
     };
 
     const scheduleHeaderUpdate = () => {
@@ -1937,7 +2446,11 @@ function LandingPage() {
           isHeaderCondensed ? "pt-3" : "pt-0"
         }`}
       >
-        <div className={isHeaderCondensed ? "mx-auto w-full max-w-[1040px] px-4" : "w-full"}>
+        <div
+          className={
+            isHeaderCondensed ? "mx-auto w-full max-w-[1040px] px-4" : "w-full"
+          }
+        >
           <header
             className={`transition-all duration-300 ease-out ${
               isHeaderCondensed
@@ -1947,10 +2460,17 @@ function LandingPage() {
           >
             <div
               className={`mx-auto h-[72px] flex items-center justify-between gap-6 transition-[padding,max-width] duration-300 ease-out ${
-                isHeaderCondensed ? "max-w-none px-6" : "max-w-[1512px] px-6 xl:px-[192px]"
+                isHeaderCondensed
+                  ? "max-w-none px-6"
+                  : "max-w-[1512px] px-6 xl:px-[192px]"
               }`}
             >
-              <a href="/" aria-label="ShiftLabs" title="ShiftLabs" className="inline-flex min-h-[44px] items-center gap-2 py-1">
+              <a
+                href="/"
+                aria-label="ShiftLabs"
+                title="ShiftLabs"
+                className="inline-flex min-h-[44px] items-center gap-2 py-1"
+              >
                 <ShiftLabsIcon />
                 <ShiftLabsWordmark />
               </a>
@@ -1958,7 +2478,11 @@ function LandingPage() {
                 <a
                   href="/vagas"
                   className="inline-flex min-h-[44px] items-center px-2 text-[#5f644c] hover:text-[#101700] transition-colors text-[14px]"
-                  style={{ fontFamily: mono, fontWeight: 400, lineHeight: "normal" }}
+                  style={{
+                    fontFamily: mono,
+                    fontWeight: 400,
+                    lineHeight: "normal",
+                  }}
                 >
                   /VAGAS
                 </a>
@@ -1985,29 +2509,737 @@ function LandingPage() {
       </div>
 
       <main className="text-[#101700]">
-      {/* ===== HERO ===== */}
-      <div id="inicio" data-reveal="section" className="border-y border-[#d6dace] scroll-mt-[96px]">
-        <div className="max-w-[1512px] mx-auto flex relative">
-          <XlHelper className="border-r border-[#d6dace]" />
-          <div className="flex flex-col lg:flex-row flex-1 min-w-0">
-            <div className="flex flex-col justify-between p-6 w-full lg:w-1/2 min-h-[360px] lg:h-[462px]">
-              <div className="flex flex-col gap-12 max-w-[450px]">
-                <div className="flex flex-col gap-6">
-                  <SectionLabel>Engineering Predictable Growth</SectionLabel>
+        {/* ===== HERO ===== */}
+        <div
+          id="inicio"
+          data-reveal="section"
+          className="border-y border-[#d6dace] scroll-mt-[96px]"
+        >
+          <div className="max-w-[1512px] mx-auto flex relative">
+            <XlHelper className="border-r border-[#d6dace]" />
+            <div className="flex flex-col lg:flex-row flex-1 min-w-0">
+              <div className="flex flex-col justify-between p-6 w-full lg:w-1/2 min-h-[360px] lg:h-[462px]">
+                <div className="flex flex-col gap-12 max-w-[450px]">
+                  <div className="flex flex-col gap-6">
+                    <SectionLabel>Engineering Predictable Growth</SectionLabel>
+                    <SectionTitle className="text-[28px] md:text-[36px] lg:text-[40px]">
+                      <p className="mb-0">{`We don’t build ideas. `}</p>
+                      <p>We engineer businesses.</p>
+                    </SectionTitle>
+                  </div>
+                  <p
+                    data-reveal="text"
+                    className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[343px]"
+                    style={{ fontFamily: body, lineHeight: 1.333 }}
+                  >
+                    A Shift Labs transforma ideias, operações confusas ou
+                    produtos mal estruturados em negócios organizados,
+                    previsíveis e escaláveis.
+                  </p>
+                </div>
+                <div className="mt-8 lg:mt-0">
+                  <button
+                    type="button"
+                    onClick={openContactModal}
+                    className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase cursor-pointer"
+                    style={{ fontFamily: mono }}
+                  >
+                    conhecer mais
+                  </button>
+                </div>
+              </div>
+              <div className="flex items-center justify-center p-6 w-full lg:w-1/2 min-h-[300px] lg:h-[462px] lg:border-l border-[#d6dace]">
+                <div className="bg-white w-full max-w-[532px] aspect-[532/430] overflow-hidden">
+                  <video
+                    className="w-full h-full object-cover pointer-events-none"
+                    src="/videos/hero-header.mp4"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    preload="auto"
+                    aria-label="Video institucional da ShiftLabs"
+                  />
+                </div>
+              </div>
+            </div>
+            <XlHelper className="border-l border-[#d6dace]" />
+            <SectionBorderTicks positions={["192px", "calc(100% - 192px)"]} />
+          </div>
+        </div>
+
+        {/* ===== ECOSYSTEM ===== */}
+        <div data-reveal="section" className="border-b border-[#d6dace]">
+          <div className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-12">
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
+              <div className="flex flex-col gap-6 max-w-[405px]">
+                <SectionLabel>/Nosso Ecossistema</SectionLabel>
+                <SectionTitle className="text-[20px] md:text-[24px]">
+                  Plataformas e operações coordenadas pela mesma engenharia.
+                </SectionTitle>
+              </div>
+              <div className="flex flex-wrap items-center gap-6 md:gap-12">
+                <MenuxLogo />
+                <CortexLogo />
+                <AtomLogo />
+                <AuraLogo />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ===== PROBLEM HEADER ===== */}
+        <div
+          id="problema"
+          data-reveal="section"
+          className="border-b border-[#d6dace] scroll-mt-[96px]"
+        >
+          <div className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-12">
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
+              <div className="flex flex-col gap-6 max-w-[499px]">
+                <SectionLabel>/problema</SectionLabel>
+                <SectionTitle className="text-[28px] md:text-[36px] lg:text-[40px]">
+                  Crescer não é o problema. Crescer desorganizado é.
+                </SectionTitle>
+              </div>
+              <p
+                data-reveal="text"
+                className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[335px]"
+                style={{ fontFamily: body, lineHeight: 1.022 }}
+              >
+                A maioria das empresas cresce mais rápido do que sua própria
+                estrutura consegue sustentar.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ===== PROBLEM CARDS ===== */}
+        <div data-reveal="section" className="border-b border-[#d6dace]">
+          <div className="max-w-[1512px] mx-auto flex relative">
+            <XlHelper />
+            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 border-x border-[#d6dace]">
+              {problemCards.map((card, index) => (
+                <div
+                  key={card.id}
+                  className={`relative flex flex-col p-6 min-h-[248px] md:h-[231px] md:pr-[249px] ${
+                    index > 0 ? "border-t border-[#d6dace]" : ""
+                  } ${index % 2 === 1 ? "sm:border-l sm:border-[#d6dace]" : ""} ${
+                    index >= 2 ? "sm:border-t sm:border-[#d6dace]" : ""
+                  } ${index === 1 ? "sm:border-t-0" : ""}`}
+                >
+                  <div className="pointer-events-none mb-4 flex w-full justify-end md:hidden">
+                    <img
+                      alt=""
+                      aria-hidden
+                      src={card.illustrationSrc}
+                      className={`h-auto w-auto object-contain ${card.illustrationClassName}`}
+                    />
+                  </div>
+                  <div className="pointer-events-none absolute right-0 top-0 hidden h-[232px] w-[249px] md:block">
+                    <img
+                      alt=""
+                      aria-hidden
+                      src={card.illustrationSrc}
+                      className={`absolute h-auto object-contain ${card.illustrationDesktopClassName}`}
+                    />
+                  </div>
+                  <p
+                    data-reveal="text"
+                    className={`relative z-[1] max-w-[250px] text-[#101700] text-[14px] md:text-[16px] md:mt-auto ${card.textMaxClass}`}
+                    style={{
+                      fontFamily: display,
+                      fontWeight: 500,
+                      lineHeight: "normal",
+                    }}
+                  >
+                    {card.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <XlHelper />
+            <SectionBorderTicks
+              positions={["192px", "756px", "calc(100% - 192px)"]}
+            />
+          </div>
+        </div>
+
+        {/* ===== FRAGMENT QUOTE ===== */}
+        <div data-reveal="section" className="border-b border-[#d6dace]">
+          <div className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-12">
+            <div className="flex justify-end">
+              <p
+                data-reveal="text"
+                className="text-[#101700] text-[18px] md:text-[20px] lg:text-[24px] max-w-[472px]"
+                style={{
+                  fontFamily: display,
+                  fontWeight: 500,
+                  lineHeight: "normal",
+                }}
+              >
+                O resultado não é visível no início. É fragmentação. E
+                fragmentação não quebra no dia um. Ela corrói aos poucos
+                empresas que “estavam indo bem”.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ===== THE SHIFT APPROACH ===== */}
+        <div
+          id="abordagem"
+          data-reveal="section"
+          className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] pt-16 pb-9 scroll-mt-[96px]"
+        >
+          <div className="flex flex-col lg:flex-row lg:items-end gap-8 lg:gap-12">
+            <div className="flex flex-col gap-8 max-w-[649px]">
+              <SectionLabel>/The Shift Approach</SectionLabel>
+              <SectionTitle className="text-[36px] md:text-[48px] lg:text-[64px]">
+                From chaos to coordinated systems.
+              </SectionTitle>
+            </div>
+            <p
+              data-reveal="text"
+              className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[320px]"
+              style={{ fontFamily: body, lineHeight: 1.022 }}
+            >
+              <span>A Shift Labs não é </span>
+              <span
+                className="text-[#101700]"
+                style={{ fontFamily: display, fontWeight: 500 }}
+              >
+                agência.{" "}
+              </span>
+              <span>Não é </span>
+              <span
+                className="text-[#101700]"
+                style={{ fontFamily: display, fontWeight: 500 }}
+              >
+                consultoria tradicional.
+              </span>
+              <span> Não é </span>
+              <span
+                className="text-[#101700]"
+                style={{ fontFamily: display, fontWeight: 500 }}
+              >
+                software factory.
+              </span>
+            </p>
+          </div>
+        </div>
+
+        {/* ===== SERVICE TAGS ===== */}
+        <div data-reveal="section" className="border-y border-[#d6dace]">
+          <div className="max-w-[1512px] mx-auto flex relative">
+            <XlHelper className="border-r border-[#d6dace]" />
+            <div className="flex flex-col lg:flex-row flex-1 min-w-0">
+              <div className="flex flex-col justify-between p-6 border-b lg:border-b-0 lg:border-r border-[#d6dace] w-full lg:w-1/2 min-h-[140px] lg:h-[174px]">
+                <SectionTitle className="text-[20px] md:text-[24px] max-w-[242px]">
+                  Somos a engenharia estrutural do negócio.
+                </SectionTitle>
+                <p
+                  data-reveal="text"
+                  className="text-[#5f644c] text-[14px] md:text-[16px] uppercase mt-4"
+                  style={{ fontFamily: mono }}
+                >
+                  Trabalhamos na interseção de:
+                </p>
+              </div>
+              <div className="flex-1 grid grid-cols-2 sm:hidden">
+                {serviceTags.map((tag, index) => (
+                  <div
+                    key={`mobile-${tag}`}
+                    className={`flex items-end p-4 h-[87px] ${index % 2 === 1 ? "border-l border-[#d6dace]" : ""} ${
+                      index >= 2 ? "border-t border-[#d6dace]" : ""
+                    }`}
+                  >
+                    <p
+                      data-reveal="text"
+                      className="text-[#101700] text-[14px] md:text-[16px]"
+                      style={{
+                        fontFamily: display,
+                        fontWeight: 500,
+                        lineHeight: "normal",
+                      }}
+                    >
+                      {tag}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <div className="hidden sm:grid flex-1 grid-cols-3">
+                {serviceTags.map((tag, index) => (
+                  <div
+                    key={`desktop-${tag}`}
+                    className={`flex items-end p-4 h-[87px] ${index % 3 !== 0 ? "border-l border-[#d6dace]" : ""} ${
+                      index >= 3 ? "border-t border-[#d6dace]" : ""
+                    }`}
+                  >
+                    <p
+                      data-reveal="text"
+                      className="text-[#101700] text-[14px] md:text-[16px]"
+                      style={{
+                        fontFamily: display,
+                        fontWeight: 500,
+                        lineHeight: "normal",
+                      }}
+                    >
+                      {tag}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <XlHelper className="border-l border-[#d6dace]" />
+            <SectionBorderTicks
+              positions={[
+                "192px",
+                "756px",
+                "944px",
+                "1132px",
+                "calc(100% - 192px)",
+              ]}
+            />
+          </div>
+        </div>
+
+        {/* ===== O QUE FAZEMOS ===== */}
+        <div
+          id="servicos"
+          data-reveal="section"
+          className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] pt-16 pb-9 scroll-mt-[96px]"
+        >
+          <div className="flex flex-col gap-6 max-w-[499px]">
+            <SectionLabel>/O QUE FAZEMOS</SectionLabel>
+            <SectionTitle className="text-[28px] md:text-[36px] lg:text-[40px]">
+              <p className="mb-0">Como estruturamos</p>
+              <p>negócios.</p>
+            </SectionTitle>
+          </div>
+        </div>
+
+        {/* ===== SERVICES GRID ===== */}
+        <div
+          data-reveal="section"
+          className="max-w-[1512px] mx-auto flex relative"
+        >
+          <XlHelper className="border-t border-[#d6dace]" />
+          <div className="flex-1 grid grid-cols-1 md:grid-cols-2 border-x border-t border-[#d6dace]">
+            {services.map((svc, index) => (
+              <div
+                key={svc.title}
+                className={`relative flex flex-col p-6 min-h-[286px] md:h-[231px] md:pr-[249px] ${
+                  index > 0 ? "border-t border-[#d6dace]" : ""
+                } ${index % 2 === 1 ? "md:border-l md:border-[#d6dace]" : ""} ${
+                  index >= 2 ? "md:border-t md:border-[#d6dace]" : ""
+                } ${index === 1 ? "md:border-t-0" : ""}`}
+              >
+                <div className="pointer-events-none mb-4 flex w-full justify-end md:hidden">
+                  <img
+                    alt=""
+                    aria-hidden
+                    src={svc.illustrationSrc}
+                    className={`h-auto w-auto object-contain ${svc.illustrationClassName}`}
+                  />
+                </div>
+                <div className="pointer-events-none absolute right-0 top-0 hidden h-[232px] w-[249px] md:block">
+                  <img
+                    alt=""
+                    aria-hidden
+                    src={svc.illustrationSrc}
+                    className={`absolute h-auto object-contain ${svc.illustrationDesktopClassName}`}
+                  />
+                </div>
+                <div className="relative z-[1] flex max-w-[250px] flex-col gap-4 md:max-w-none md:mt-auto">
+                  <p
+                    data-reveal="text"
+                    className={`text-[#101700] text-[14px] md:text-[16px] ${svc.titleMaxClass}`}
+                    style={{
+                      fontFamily: display,
+                      fontWeight: 500,
+                      lineHeight: "normal",
+                    }}
+                  >
+                    {svc.title}
+                  </p>
+                  <p
+                    data-reveal="text"
+                    className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[235px]"
+                    style={{ fontFamily: body, lineHeight: 1.076 }}
+                  >
+                    {svc.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <XlHelper className="border-t border-[#d6dace]" />
+          <SectionBorderTicks
+            positions={["192px", "756px", "calc(100% - 192px)"]}
+          />
+        </div>
+
+        {/* ===== SERVICES QUOTE ===== */}
+        <div data-reveal="section" className="border-t border-[#d6dace]">
+          <div className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-12">
+            <div className="flex justify-end">
+              <p
+                data-reveal="text"
+                className="text-[#101700] text-[18px] md:text-[20px] lg:text-[24px] max-w-[221px]"
+                style={{
+                  fontFamily: display,
+                  fontWeight: 500,
+                  lineHeight: "normal",
+                }}
+              >
+                Decisão deixa de ser opinião e passa a ser engenharia.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ===== FRAMEWORK (DARK) ===== */}
+        <div data-reveal="section" className="border-y border-[#d6dace]">
+          <div className="max-w-[1512px] mx-auto flex">
+            <div className="hidden xl:block w-[192px] shrink-0 border-y border-[#d6dace]" />
+            <div className="flex-1 bg-[#101700] px-6 py-16 flex flex-col items-center gap-12">
+              <div className="flex flex-col items-center gap-6 text-center max-w-[450px]">
+                <p
+                  data-reveal="text"
+                  className="text-[#b6bea1] text-[14px] md:text-[16px] uppercase"
+                  style={{ fontFamily: mono }}
+                >
+                  Engineering Predictable Growth
+                </p>
+                <p
+                  data-reveal="title"
+                  className="text-[#f2f3ef] text-[20px] md:text-[24px]"
+                  style={{ fontFamily: heading, fontWeight: 500 }}
+                >
+                  The Business Engineering Framework™
+                </p>
+                <p
+                  data-reveal="text"
+                  className="text-[#b6bea1] text-[14px] md:text-[16px] max-w-[343px]"
+                  style={{
+                    fontFamily: heading,
+                    fontWeight: 400,
+                    lineHeight: 1.1,
+                  }}
+                >
+                  Estruturamos cada projeto em camadas:
+                </p>
+              </div>
+              <div className="flex flex-wrap items-start justify-center gap-8 md:gap-10 lg:gap-12">
+                {frameworkLayers.map((layer) => (
+                  <div
+                    key={layer.label}
+                    className={`flex flex-col items-center gap-6 ${layer.widthClass}`}
+                  >
+                    <div className="w-[85px] h-[85px] rounded-full border border-[#b6bea1] flex items-center justify-center">
+                      <layer.Icon />
+                    </div>
+                    <p
+                      data-reveal="text"
+                      className="text-[#b6bea1] text-[14px] md:text-[16px] text-center"
+                      style={{ fontFamily: body, lineHeight: 1.3 }}
+                    >
+                      {layer.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="hidden xl:block w-[192px] shrink-0 border-y border-[#d6dace]" />
+          </div>
+        </div>
+
+        {/* ===== CASES ===== */}
+        <div
+          id="cases"
+          data-reveal="section"
+          className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] pt-16 pb-9 scroll-mt-[96px]"
+        >
+          <div className="flex flex-col gap-6 max-w-[499px]">
+            <SectionLabel>/cases</SectionLabel>
+            <SectionTitle className="text-[28px] md:text-[36px] lg:text-[40px]">
+              Onde a estratégia virou sistema.
+            </SectionTitle>
+          </div>
+        </div>
+
+        <div data-reveal="section" className="border-y border-[#d6dace]">
+          <div className="max-w-[1512px] mx-auto flex relative">
+            <XlHelper />
+            <div className="flex flex-col lg:flex-row flex-1 min-w-0">
+              <div className="flex flex-col w-full lg:w-1/2 border-x border-b lg:border-b-0 border-[#d6dace]">
+                {/* Case 1 */}
+                <div
+                  className="flex flex-col justify-between p-6 min-h-[200px] lg:h-[231px]"
+                  onMouseEnter={() => setActiveCaseLogo("menux")}
+                  onClick={() => setActiveCaseLogo("menux")}
+                >
+                  <MenuxLogo />
+                  <div className="flex flex-col gap-4 mt-6">
+                    <p
+                      data-reveal="text"
+                      className="text-[#101700] text-[14px] md:text-[16px]"
+                      style={{ fontFamily: display, fontWeight: 500 }}
+                    >
+                      The AI at the table.
+                    </p>
+                    <p
+                      data-reveal="text"
+                      className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[315px]"
+                      style={{ fontFamily: body, lineHeight: 1.076 }}
+                    >
+                      IA aplicada à experiência de restaurante, conectando
+                      cliente, equipe e gestor.
+                    </p>
+                  </div>
+                </div>
+                {/* Case 2 */}
+                <div
+                  className="flex flex-col justify-between p-6 min-h-[200px] lg:h-[231px] border-t border-[#d6dace]"
+                  onMouseEnter={() => setActiveCaseLogo("cortex")}
+                  onClick={() => setActiveCaseLogo("cortex")}
+                >
+                  <CortexLogo />
+                  <div className="flex flex-col gap-4 mt-6">
+                    <p
+                      data-reveal="text"
+                      className="text-[#101700] text-[14px] md:text-[16px]"
+                      style={{ fontFamily: display, fontWeight: 500 }}
+                    >
+                      Organizational Intelligence Layer.
+                    </p>
+                    <p
+                      data-reveal="text"
+                      className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[315px]"
+                      style={{ fontFamily: body, lineHeight: 1.076 }}
+                    >
+                      Estrutura organizacional inteligente para empresas que
+                      crescem mais rápido que sua capacidade operacional.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              {/* Case image */}
+              <div className="flex items-center justify-center p-6 w-full lg:w-1/2 min-h-[300px] lg:h-[462px] border-x lg:border-l-0 border-[#d6dace]">
+                <div className="relative bg-white w-full max-w-[532px] aspect-[532/430] overflow-hidden">
+                  <img
+                    src="/case-logos/logo-menux.svg"
+                    alt="Logo menux"
+                    className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
+                      activeCaseLogo === "menux" ? "opacity-100" : "opacity-0"
+                    }`}
+                  />
+                  <img
+                    src="/case-logos/logo-cortex.svg"
+                    alt="Logo cortex"
+                    className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
+                      activeCaseLogo === "cortex" ? "opacity-100" : "opacity-0"
+                    }`}
+                  />
+                </div>
+              </div>
+            </div>
+            <XlHelper />
+            <SectionBorderTicks
+              positions={["192px", "756px", "calc(100% - 192px)"]}
+            />
+          </div>
+        </div>
+
+        {/* ===== AUDIENCE ===== */}
+        <div data-reveal="section">
+          <div className="max-w-[1512px] mx-auto flex">
+            <XlHelper />
+            <div className="relative overflow-hidden flex-1 flex flex-col items-center justify-center p-6 min-h-[300px] lg:h-[462px] border-x border-[#d6dace]">
+              <AsciiStarfield className="absolute inset-0 hidden md:block" />
+              <div className="relative z-[1] flex flex-col items-center gap-6 text-center">
+                <p
+                  data-reveal="text"
+                  className="text-[#5f644c] text-[14px] md:text-[16px] uppercase"
+                  style={{ fontFamily: mono, textShadow: audienceTextHalo }}
+                >
+                  /Para Quem é a Shift Labs
+                </p>
+                <div
+                  data-reveal="title"
+                  className="text-[#101700] leading-[normal] text-[28px] md:text-[36px] lg:text-[40px] text-center max-w-[454px]"
+                  style={{
+                    fontFamily: heading,
+                    fontWeight: 500,
+                    textShadow: audienceTextHalo,
+                  }}
+                >
+                  Estrutura que acompanha crescimento.
+                </div>
+              </div>
+            </div>
+            <XlHelper />
+          </div>
+        </div>
+
+        <div data-reveal="section" className="border-y border-[#d6dace]">
+          <div className="max-w-[1512px] mx-auto flex relative">
+            <XlHelper />
+            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 border-x border-[#d6dace]">
+              {audienceItems.map((item, index) => (
+                <div
+                  key={item.text}
+                  className={`flex items-end p-6 min-h-[100px] md:h-[118px] ${
+                    index > 0 ? "border-t border-[#d6dace]" : ""
+                  } ${index === 1 ? "sm:border-t-0" : ""} ${
+                    index > 1 ? "sm:border-t sm:border-[#d6dace]" : ""
+                  } ${index % 2 === 1 ? "sm:border-l sm:border-[#d6dace]" : ""}`}
+                >
+                  <p
+                    data-reveal="text"
+                    className={`text-[#101700] text-[14px] md:text-[16px] ${item.textMaxClass}`}
+                    style={{
+                      fontFamily: display,
+                      fontWeight: 500,
+                      lineHeight: "normal",
+                    }}
+                  >
+                    {item.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <XlHelper />
+            <SectionBorderTicks
+              positions={["192px", "756px", "calc(100% - 192px)"]}
+            />
+          </div>
+        </div>
+
+        {/* ===== WHAT MAKES US DIFFERENT ===== */}
+        <div
+          data-reveal="section"
+          className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-9 flex flex-col items-center text-center gap-8"
+        >
+          <div className="flex flex-col items-center gap-8 max-w-[430px]">
+            <p
+              data-reveal="text"
+              className="text-[#5f644c] text-[12px] md:text-[14px] uppercase"
+              style={{ fontFamily: mono }}
+            >
+              Não somos para quem quer apenas “uma landing page”.
+            </p>
+            <SectionTitle className="text-[20px] md:text-[24px] text-center">
+              What makes us different
+            </SectionTitle>
+          </div>
+        </div>
+
+        {/* Marquee text */}
+        <div
+          data-reveal="section"
+          className="overflow-x-hidden overflow-y-visible py-4"
+        >
+          <div className="w-full overflow-x-hidden overflow-y-visible">
+            <div className="marquee-track flex w-max whitespace-nowrap ">
+              <p
+                className="text-[#101700] text-[48px] sm:text-[72px] md:text-[96px] lg:text-[128px] text-left pr-10 lg:pr-14"
+                style={{
+                  fontFamily: heading,
+                  fontWeight: 500,
+                  lineHeight: "normal",
+                }}
+              >
+                {marqueeText}
+              </p>
+              <p
+                aria-hidden
+                className="text-[#101700] text-[48px] sm:text-[72px] md:text-[96px] lg:text-[128px] text-left pr-10 lg:pr-14"
+                style={{
+                  fontFamily: heading,
+                  fontWeight: 500,
+                  lineHeight: "normal",
+                }}
+              >
+                {marqueeText}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Feature tags */}
+        <div data-reveal="section" className="border-y border-[#d6dace]">
+          <div className="max-w-[1512px] mx-auto flex relative">
+            <XlHelper />
+            <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 border-x border-[#d6dace]">
+              {featureItems.map((item, index) => (
+                <div
+                  key={item}
+                  className={`flex items-end p-6 min-h-[100px] md:h-[118px] ${
+                    index > 0 ? "border-t border-[#d6dace]" : ""
+                  } ${index > 0 ? "sm:border-t-0 sm:border-l sm:border-[#d6dace]" : ""}`}
+                >
+                  <p
+                    data-reveal="text"
+                    className="text-[#101700] text-[14px] md:text-[16px]"
+                    style={{
+                      fontFamily: heading,
+                      fontWeight: 500,
+                      lineHeight: "normal",
+                    }}
+                  >
+                    {item}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <XlHelper />
+            <SectionBorderTicks
+              positions={["192px", "568px", "944px", "calc(100% - 192px)"]}
+            />
+          </div>
+        </div>
+
+        {/* Coordination message */}
+        <div
+          data-reveal="section"
+          className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-9 flex justify-center"
+        >
+          <SectionTitle className="text-[20px] md:text-[24px] text-center ">
+            A ShiftLabs entrega coordenação.
+          </SectionTitle>
+        </div>
+
+        {/* ===== CTA ===== */}
+        <div data-reveal="section" className="border-y border-[#d6dace]">
+          <div className="max-w-[1512px] mx-auto flex relative">
+            <XlHelper className="border-r border-[#d6dace]" />
+            <div className="flex flex-col lg:flex-row flex-1 min-w-0 bg-[#b4eb38]">
+              <div className="flex flex-col justify-between p-6 w-full lg:w-1/2 min-h-[360px] lg:h-[462px]">
+                <div className="flex flex-col gap-6 max-w-[450px]">
+                  <p
+                    data-reveal="text"
+                    className="text-[#456300] text-[14px] md:text-[16px] uppercase"
+                    style={{ fontFamily: mono }}
+                  >
+                    /Call to Action
+                  </p>
                   <SectionTitle className="text-[28px] md:text-[36px] lg:text-[40px]">
-                    <p className="mb-0">{`We don’t build ideas. `}</p>
-                    <p>We engineer businesses.</p>
+                    Ready to structure what you’re building?
                   </SectionTitle>
                 </div>
                 <p
                   data-reveal="text"
-                  className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[343px]"
-                  style={{ fontFamily: body, lineHeight: 1.333 }}
+                  className="text-[#456300] text-[14px] md:text-[16px] max-w-[360px] mt-8"
+                  style={{ fontFamily: body, lineHeight: 1.076 }}
                 >
-                  A Shift Labs transforma ideias, operações confusas ou produtos mal estruturados em negócios organizados, previsíveis e escaláveis.
+                  Se você sente que sua empresa poderia estar melhor organizada,
+                  mais previsível e mais eficiente, o problema provavelmente não
+                  é esforço.
                 </p>
               </div>
-              <div className="mt-8 lg:mt-0">
+              <div className="flex items-end justify-end p-6 w-full lg:w-1/2 min-h-[120px] lg:h-[462px]">
                 <button
                   type="button"
                   onClick={openContactModal}
@@ -2018,582 +3250,83 @@ function LandingPage() {
                 </button>
               </div>
             </div>
-            <div className="flex items-center justify-center p-6 w-full lg:w-1/2 min-h-[300px] lg:h-[462px] lg:border-l border-[#d6dace]">
-              <div className="bg-white w-full max-w-[532px] aspect-[532/430] overflow-hidden">
-                <video
-                  className="w-full h-full object-cover pointer-events-none"
-                  src="/videos/hero-header.mp4"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  preload="auto"
-                  aria-label="Video institucional da ShiftLabs"
-                />
-              </div>
-            </div>
-          </div>
-          <XlHelper className="border-l border-[#d6dace]" />
-          <SectionBorderTicks positions={["192px", "calc(100% - 192px)"]} />
-        </div>
-      </div>
-
-      {/* ===== ECOSYSTEM ===== */}
-      <div data-reveal="section" className="border-b border-[#d6dace]">
-        <div className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-12">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
-            <div className="flex flex-col gap-6 max-w-[405px]">
-              <SectionLabel>/Nosso Ecossistema</SectionLabel>
-              <SectionTitle className="text-[20px] md:text-[24px]">
-                Plataformas e operações coordenadas pela mesma engenharia.
-              </SectionTitle>
-            </div>
-            <div className="flex flex-wrap items-center gap-6 md:gap-12">
-              <MenuxLogo /><CortexLogo /><AtomLogo /><AuraLogo />
-            </div>
+            <XlHelper className="border-l border-[#d6dace]" />
+            <SectionBorderTicks positions={["192px", "calc(100% - 192px)"]} />
           </div>
         </div>
-      </div>
 
-      {/* ===== PROBLEM HEADER ===== */}
-      <div id="problema" data-reveal="section" className="border-b border-[#d6dace] scroll-mt-[96px]">
-        <div className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-12">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
-            <div className="flex flex-col gap-6 max-w-[499px]">
-              <SectionLabel>/problema</SectionLabel>
-              <SectionTitle className="text-[28px] md:text-[36px] lg:text-[40px]">
-                Crescer não é o problema. Crescer desorganizado é.
-              </SectionTitle>
-            </div>
-            <p
-              data-reveal="text"
-              className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[335px]"
-              style={{ fontFamily: body, lineHeight: 1.022 }}
-            >
-              A maioria das empresas cresce mais rápido do que sua própria estrutura consegue sustentar.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* ===== PROBLEM CARDS ===== */}
-      <div data-reveal="section" className="border-b border-[#d6dace]">
-        <div className="max-w-[1512px] mx-auto flex relative">
-          <XlHelper />
-          <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 border-x border-[#d6dace]">
-            {problemCards.map((card, index) => (
-              <div
-                key={card.id}
-                className={`relative flex flex-col p-6 min-h-[248px] md:h-[231px] md:pr-[249px] ${
-                  index > 0 ? "border-t border-[#d6dace]" : ""
-                } ${index % 2 === 1 ? "sm:border-l sm:border-[#d6dace]" : ""} ${
-                  index >= 2 ? "sm:border-t sm:border-[#d6dace]" : ""
-                } ${index === 1 ? "sm:border-t-0" : ""}`}
-              >
-                <div className="pointer-events-none mb-4 flex w-full justify-end md:hidden">
-                  <img
-                    alt=""
-                    aria-hidden
-                    src={card.illustrationSrc}
-                    className={`h-auto w-auto object-contain ${card.illustrationClassName}`}
-                  />
-                </div>
-                <div className="pointer-events-none absolute right-0 top-0 hidden h-[232px] w-[249px] md:block">
-                  <img
-                    alt=""
-                    aria-hidden
-                    src={card.illustrationSrc}
-                    className={`absolute h-auto object-contain ${card.illustrationDesktopClassName}`}
-                  />
-                </div>
-                <p data-reveal="text" className={`relative z-[1] max-w-[250px] text-[#101700] text-[14px] md:text-[16px] md:mt-auto ${card.textMaxClass}`} style={{ fontFamily: display, fontWeight: 500, lineHeight: "normal" }}>
-                  {card.text}
-                </p>
-              </div>
-            ))}
-          </div>
-          <XlHelper />
-          <SectionBorderTicks positions={["192px", "756px", "calc(100% - 192px)"]} />
-        </div>
-      </div>
-
-      {/* ===== FRAGMENT QUOTE ===== */}
-      <div data-reveal="section" className="border-b border-[#d6dace]">
-        <div className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-12">
-          <div className="flex justify-end">
-            <p
-              data-reveal="text"
-              className="text-[#101700] text-[18px] md:text-[20px] lg:text-[24px] max-w-[472px]"
-              style={{ fontFamily: display, fontWeight: 500, lineHeight: "normal" }}
-            >
-              O resultado não é visível no início. É fragmentação. E fragmentação não quebra no dia um. Ela corrói aos poucos empresas que “estavam indo bem”.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* ===== THE SHIFT APPROACH ===== */}
-      <div id="abordagem" data-reveal="section" className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] pt-16 pb-9 scroll-mt-[96px]">
-        <div className="flex flex-col lg:flex-row lg:items-end gap-8 lg:gap-12">
-          <div className="flex flex-col gap-8 max-w-[649px]">
-            <SectionLabel>/The Shift Approach</SectionLabel>
-            <SectionTitle className="text-[36px] md:text-[48px] lg:text-[64px]">
-              From chaos to coordinated systems.
-            </SectionTitle>
-          </div>
-          <p
-            data-reveal="text"
-            className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[320px]"
-            style={{ fontFamily: body, lineHeight: 1.022 }}
-          >
-            <span>A Shift Labs não é </span>
-            <span className="text-[#101700]" style={{ fontFamily: display, fontWeight: 500 }}>agência. </span>
-            <span>Não é </span>
-            <span className="text-[#101700]" style={{ fontFamily: display, fontWeight: 500 }}>consultoria tradicional.</span>
-            <span> Não é </span>
-            <span className="text-[#101700]" style={{ fontFamily: display, fontWeight: 500 }}>software factory.</span>
-          </p>
-        </div>
-      </div>
-
-      {/* ===== SERVICE TAGS ===== */}
-      <div data-reveal="section" className="border-y border-[#d6dace]">
-        <div className="max-w-[1512px] mx-auto flex relative">
-          <XlHelper className="border-r border-[#d6dace]" />
-          <div className="flex flex-col lg:flex-row flex-1 min-w-0">
-            <div className="flex flex-col justify-between p-6 border-b lg:border-b-0 lg:border-r border-[#d6dace] w-full lg:w-1/2 min-h-[140px] lg:h-[174px]">
-              <SectionTitle className="text-[20px] md:text-[24px] max-w-[242px]">
-                Somos a engenharia estrutural do negócio.
-              </SectionTitle>
+        {/* ===== FOOTER ===== */}
+        <div
+          id="contato"
+          data-reveal="section"
+          className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-9 scroll-mt-[96px]"
+        >
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 pb-9">
+            <div className="flex flex-col gap-8 max-w-[356px]">
+              <ShiftLabsIcon />
               <p
                 data-reveal="text"
-                className="text-[#5f644c] text-[14px] md:text-[16px] uppercase mt-4"
-                style={{ fontFamily: mono }}
+                className="text-[#5f644c] text-[14px] md:text-[16px]"
+                style={{ fontFamily: body, lineHeight: 1.3 }}
               >
-                Trabalhamos na interseção de:
-              </p>
-            </div>
-            <div className="flex-1 grid grid-cols-2 sm:hidden">
-              {serviceTags.map((tag, index) => (
-                <div
-                  key={`mobile-${tag}`}
-                  className={`flex items-end p-4 h-[87px] ${index % 2 === 1 ? "border-l border-[#d6dace]" : ""} ${
-                    index >= 2 ? "border-t border-[#d6dace]" : ""
-                  }`}
-                >
-                  <p data-reveal="text" className="text-[#101700] text-[14px] md:text-[16px]" style={{ fontFamily: display, fontWeight: 500, lineHeight: "normal" }}>
-                    {tag}
-                  </p>
-                </div>
-              ))}
-            </div>
-            <div className="hidden sm:grid flex-1 grid-cols-3">
-              {serviceTags.map((tag, index) => (
-                <div
-                  key={`desktop-${tag}`}
-                  className={`flex items-end p-4 h-[87px] ${index % 3 !== 0 ? "border-l border-[#d6dace]" : ""} ${
-                    index >= 3 ? "border-t border-[#d6dace]" : ""
-                  }`}
-                >
-                  <p data-reveal="text" className="text-[#101700] text-[14px] md:text-[16px]" style={{ fontFamily: display, fontWeight: 500, lineHeight: "normal" }}>
-                    {tag}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-          <XlHelper className="border-l border-[#d6dace]" />
-          <SectionBorderTicks positions={["192px", "756px", "944px", "1132px", "calc(100% - 192px)"]} />
-        </div>
-      </div>
-
-      {/* ===== O QUE FAZEMOS ===== */}
-      <div id="servicos" data-reveal="section" className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] pt-16 pb-9 scroll-mt-[96px]">
-        <div className="flex flex-col gap-6 max-w-[499px]">
-          <SectionLabel>/O QUE FAZEMOS</SectionLabel>
-          <SectionTitle className="text-[28px] md:text-[36px] lg:text-[40px]">
-            <p className="mb-0">Como estruturamos</p>
-            <p>negócios.</p>
-          </SectionTitle>
-        </div>
-      </div>
-
-      {/* ===== SERVICES GRID ===== */}
-      <div data-reveal="section" className="max-w-[1512px] mx-auto flex relative">
-        <XlHelper className="border-t border-[#d6dace]" />
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 border-x border-t border-[#d6dace]">
-          {services.map((svc, index) => (
-            <div
-              key={svc.title}
-              className={`relative flex flex-col p-6 min-h-[286px] md:h-[231px] md:pr-[249px] ${
-                index > 0 ? "border-t border-[#d6dace]" : ""
-              } ${index % 2 === 1 ? "md:border-l md:border-[#d6dace]" : ""} ${
-                index >= 2 ? "md:border-t md:border-[#d6dace]" : ""
-              } ${index === 1 ? "md:border-t-0" : ""}`}
-            >
-              <div className="pointer-events-none mb-4 flex w-full justify-end md:hidden">
-                <img
-                  alt=""
-                  aria-hidden
-                  src={svc.illustrationSrc}
-                  className={`h-auto w-auto object-contain ${svc.illustrationClassName}`}
-                />
-              </div>
-              <div className="pointer-events-none absolute right-0 top-0 hidden h-[232px] w-[249px] md:block">
-                <img
-                  alt=""
-                  aria-hidden
-                  src={svc.illustrationSrc}
-                  className={`absolute h-auto object-contain ${svc.illustrationDesktopClassName}`}
-                />
-              </div>
-              <div className="relative z-[1] flex max-w-[250px] flex-col gap-4 md:max-w-none md:mt-auto">
-                <p data-reveal="text" className={`text-[#101700] text-[14px] md:text-[16px] ${svc.titleMaxClass}`} style={{ fontFamily: display, fontWeight: 500, lineHeight: "normal" }}>
-                  {svc.title}
-                </p>
-                <p data-reveal="text" className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[235px]" style={{ fontFamily: body, lineHeight: 1.076 }}>
-                  {svc.desc}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <XlHelper className="border-t border-[#d6dace]" />
-        <SectionBorderTicks positions={["192px", "756px", "calc(100% - 192px)"]} />
-      </div>
-
-      {/* ===== SERVICES QUOTE ===== */}
-      <div data-reveal="section" className="border-t border-[#d6dace]">
-        <div className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-12">
-          <div className="flex justify-end">
-            <p
-              data-reveal="text"
-              className="text-[#101700] text-[18px] md:text-[20px] lg:text-[24px] max-w-[221px]"
-              style={{ fontFamily: display, fontWeight: 500, lineHeight: "normal" }}
-            >
-              Decisão deixa de ser opinião e passa a ser engenharia.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* ===== FRAMEWORK (DARK) ===== */}
-      <div data-reveal="section" className="border-y border-[#d6dace]">
-        <div className="max-w-[1512px] mx-auto flex">
-          <div className="hidden xl:block w-[192px] shrink-0 border-y border-[#d6dace]" />
-          <div className="flex-1 bg-[#101700] px-6 py-16 flex flex-col items-center gap-12">
-            <div className="flex flex-col items-center gap-6 text-center max-w-[450px]">
-              <p data-reveal="text" className="text-[#b6bea1] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
-                Engineering Predictable Growth
-              </p>
-              <p data-reveal="title" className="text-[#f2f3ef] text-[20px] md:text-[24px]" style={{ fontFamily: heading, fontWeight: 500 }}>
-                The Business Engineering Framework™
+                Arquitetamos produto, tecnologia, comercial e operação em fluxos
+                coordenados, com inteligência aplicada de ponta a ponta.
               </p>
               <p
                 data-reveal="text"
-                className="text-[#b6bea1] text-[14px] md:text-[16px] max-w-[343px]"
-                style={{ fontFamily: heading, fontWeight: 400, lineHeight: 1.1 }}
+                className="text-[#5f644c] text-[14px] md:text-[16px]"
+                style={{ fontFamily: body, lineHeight: 1.3 }}
               >
-                Estruturamos cada projeto em camadas:
+                <span
+                  className="text-[#101700]"
+                  style={{ fontFamily: display, fontWeight: 500 }}
+                >
+                  © 2026 ShiftLabs.
+                </span>
+                <span> Todos os direitos reservados.</span>
               </p>
             </div>
-            <div className="flex flex-wrap items-start justify-center gap-8 md:gap-10 lg:gap-12">
-              {frameworkLayers.map((layer) => (
-                <div
-                  key={layer.label}
-                  className={`flex flex-col items-center gap-6 ${layer.widthClass}`}
-                >
-                  <div className="w-[85px] h-[85px] rounded-full border border-[#b6bea1] flex items-center justify-center">
-                    <layer.Icon />
-                  </div>
-                  <p data-reveal="text" className="text-[#b6bea1] text-[14px] md:text-[16px] text-center" style={{ fontFamily: body, lineHeight: 1.3 }}>
-                    {layer.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="hidden xl:block w-[192px] shrink-0 border-y border-[#d6dace]" />
-        </div>
-      </div>
-
-      {/* ===== CASES ===== */}
-      <div id="cases" data-reveal="section" className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] pt-16 pb-9 scroll-mt-[96px]">
-        <div className="flex flex-col gap-6 max-w-[499px]">
-          <SectionLabel>/cases</SectionLabel>
-          <SectionTitle className="text-[28px] md:text-[36px] lg:text-[40px]">
-            Onde a estratégia virou sistema.
-          </SectionTitle>
-        </div>
-      </div>
-
-      <div data-reveal="section" className="border-y border-[#d6dace]">
-        <div className="max-w-[1512px] mx-auto flex relative">
-          <XlHelper />
-          <div className="flex flex-col lg:flex-row flex-1 min-w-0">
-            <div className="flex flex-col w-full lg:w-1/2 border-x border-b lg:border-b-0 border-[#d6dace]">
-              {/* Case 1 */}
-              <div
-                className="flex flex-col justify-between p-6 min-h-[200px] lg:h-[231px]"
-                onMouseEnter={() => setActiveCaseLogo("menux")}
-                onClick={() => setActiveCaseLogo("menux")}
-              >
-                <MenuxLogo />
-                <div className="flex flex-col gap-4 mt-6">
-                  <p data-reveal="text" className="text-[#101700] text-[14px] md:text-[16px]" style={{ fontFamily: display, fontWeight: 500 }}>The AI at the table.</p>
-                  <p data-reveal="text" className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[315px]" style={{ fontFamily: body, lineHeight: 1.076 }}>
-                    IA aplicada à experiência de restaurante, conectando cliente, equipe e gestor.
-                  </p>
-                </div>
-              </div>
-              {/* Case 2 */}
-              <div
-                className="flex flex-col justify-between p-6 min-h-[200px] lg:h-[231px] border-t border-[#d6dace]"
-                onMouseEnter={() => setActiveCaseLogo("cortex")}
-                onClick={() => setActiveCaseLogo("cortex")}
-              >
-                <CortexLogo />
-                <div className="flex flex-col gap-4 mt-6">
-                  <p data-reveal="text" className="text-[#101700] text-[14px] md:text-[16px]" style={{ fontFamily: display, fontWeight: 500 }}>Organizational Intelligence Layer.</p>
-                  <p data-reveal="text" className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[315px]" style={{ fontFamily: body, lineHeight: 1.076 }}>
-                    Estrutura organizacional inteligente para empresas que crescem mais rápido que sua capacidade operacional.
-                  </p>
-                </div>
-              </div>
-            </div>
-            {/* Case image */}
-            <div className="flex items-center justify-center p-6 w-full lg:w-1/2 min-h-[300px] lg:h-[462px] border-x lg:border-l-0 border-[#d6dace]">
-              <div className="relative bg-white w-full max-w-[532px] aspect-[532/430] overflow-hidden">
-                <img
-                  src="/case-logos/logo-menux.svg"
-                  alt="Logo menux"
-                  className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
-                    activeCaseLogo === "menux" ? "opacity-100" : "opacity-0"
-                  }`}
-                />
-                <img
-                  src="/case-logos/logo-cortex.svg"
-                  alt="Logo cortex"
-                  className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
-                    activeCaseLogo === "cortex" ? "opacity-100" : "opacity-0"
-                  }`}
-                />
-              </div>
-            </div>
-          </div>
-          <XlHelper />
-          <SectionBorderTicks positions={["192px", "756px", "calc(100% - 192px)"]} />
-        </div>
-      </div>
-
-      {/* ===== AUDIENCE ===== */}
-      <div data-reveal="section">
-        <div className="max-w-[1512px] mx-auto flex">
-          <XlHelper />
-          <div className="relative overflow-hidden flex-1 flex flex-col items-center justify-center p-6 min-h-[300px] lg:h-[462px] border-x border-[#d6dace]">
-            <AsciiStarfield className="absolute inset-0 hidden md:block" />
-            <div className="relative z-[1] flex flex-col items-center gap-6 text-center">
+            <div className="flex flex-col gap-6">
               <p
                 data-reveal="text"
                 className="text-[#5f644c] text-[14px] md:text-[16px] uppercase"
-                style={{ fontFamily: mono, textShadow: audienceTextHalo }}
-              >
-                /Para Quem é a Shift Labs
-              </p>
-              <div
-                data-reveal="title"
-                className="text-[#101700] leading-[normal] text-[28px] md:text-[36px] lg:text-[40px] text-center max-w-[454px]"
-                style={{ fontFamily: heading, fontWeight: 500, textShadow: audienceTextHalo }}
-              >
-                Estrutura que acompanha crescimento.
-              </div>
-            </div>
-          </div>
-          <XlHelper />
-        </div>
-      </div>
-
-      <div data-reveal="section" className="border-y border-[#d6dace]">
-        <div className="max-w-[1512px] mx-auto flex relative">
-          <XlHelper />
-          <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 border-x border-[#d6dace]">
-            {audienceItems.map((item, index) => (
-              <div
-                key={item.text}
-                className={`flex items-end p-6 min-h-[100px] md:h-[118px] ${
-                  index > 0 ? "border-t border-[#d6dace]" : ""
-                } ${index === 1 ? "sm:border-t-0" : ""} ${
-                  index > 1 ? "sm:border-t sm:border-[#d6dace]" : ""
-                } ${index % 2 === 1 ? "sm:border-l sm:border-[#d6dace]" : ""}`}
-              >
-                <p data-reveal="text" className={`text-[#101700] text-[14px] md:text-[16px] ${item.textMaxClass}`} style={{ fontFamily: display, fontWeight: 500, lineHeight: "normal" }}>
-                  {item.text}
-                </p>
-              </div>
-            ))}
-          </div>
-          <XlHelper />
-          <SectionBorderTicks positions={["192px", "756px", "calc(100% - 192px)"]} />
-        </div>
-      </div>
-
-      {/* ===== WHAT MAKES US DIFFERENT ===== */}
-      <div data-reveal="section" className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-9 flex flex-col items-center text-center gap-8">
-        <div className="flex flex-col items-center gap-8 max-w-[430px]">
-          <p
-            data-reveal="text"
-            className="text-[#5f644c] text-[12px] md:text-[14px] uppercase"
-            style={{ fontFamily: mono }}
-          >
-            Não somos para quem quer apenas “uma landing page”.
-          </p>
-          <SectionTitle className="text-[20px] md:text-[24px] text-center">
-            What makes us different
-          </SectionTitle>
-        </div>
-      </div>
-
-      {/* Marquee text */}
-      <div data-reveal="section" className="overflow-x-hidden overflow-y-visible py-4">
-        <div className="w-full overflow-x-hidden overflow-y-visible">
-          <div className="marquee-track flex w-max whitespace-nowrap ">
-            <p
-              className="text-[#101700] text-[48px] sm:text-[72px] md:text-[96px] lg:text-[128px] text-left pr-10 lg:pr-14"
-              style={{ fontFamily: heading, fontWeight: 500, lineHeight: "normal" }}
-            >
-              {marqueeText}
-            </p>
-            <p
-              aria-hidden
-              className="text-[#101700] text-[48px] sm:text-[72px] md:text-[96px] lg:text-[128px] text-left pr-10 lg:pr-14"
-              style={{ fontFamily: heading, fontWeight: 500, lineHeight: "normal" }}
-            >
-              {marqueeText}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Feature tags */}
-      <div data-reveal="section" className="border-y border-[#d6dace]">
-        <div className="max-w-[1512px] mx-auto flex relative">
-          <XlHelper />
-          <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 border-x border-[#d6dace]">
-            {featureItems.map((item, index) => (
-              <div
-                key={item}
-                className={`flex items-end p-6 min-h-[100px] md:h-[118px] ${
-                  index > 0 ? "border-t border-[#d6dace]" : ""
-                } ${index > 0 ? "sm:border-t-0 sm:border-l sm:border-[#d6dace]" : ""}`}
-              >
-                <p data-reveal="text" className="text-[#101700] text-[14px] md:text-[16px]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: "normal" }}>
-                  {item}
-                </p>
-              </div>
-            ))}
-          </div>
-          <XlHelper />
-          <SectionBorderTicks positions={["192px", "568px", "944px", "calc(100% - 192px)"]} />
-        </div>
-      </div>
-
-      {/* Coordination message */}
-      <div data-reveal="section" className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-9 flex justify-center">
-        <SectionTitle className="text-[20px] md:text-[24px] text-center ">
-          A ShiftLabs entrega coordenação.
-        </SectionTitle>
-      </div>
-
-      {/* ===== CTA ===== */}
-      <div data-reveal="section" className="border-y border-[#d6dace]">
-        <div className="max-w-[1512px] mx-auto flex relative">
-          <XlHelper className="border-r border-[#d6dace]" />
-          <div className="flex flex-col lg:flex-row flex-1 min-w-0 bg-[#b4eb38]">
-            <div className="flex flex-col justify-between p-6 w-full lg:w-1/2 min-h-[360px] lg:h-[462px]">
-              <div className="flex flex-col gap-6 max-w-[450px]">
-                <p data-reveal="text" className="text-[#456300] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
-                  /Call to Action
-                </p>
-                <SectionTitle className="text-[28px] md:text-[36px] lg:text-[40px]">
-                  Ready to structure what you’re building?
-                </SectionTitle>
-              </div>
-              <p
-                data-reveal="text"
-                className="text-[#456300] text-[14px] md:text-[16px] max-w-[360px] mt-8"
-                style={{ fontFamily: body, lineHeight: 1.076 }}
-              >
-                Se você sente que sua empresa poderia estar melhor organizada, mais previsível e mais eficiente, o problema provavelmente não é esforço.
-              </p>
-            </div>
-            <div className="flex items-end justify-end p-6 w-full lg:w-1/2 min-h-[120px] lg:h-[462px]">
-              <button
-                type="button"
-                onClick={openContactModal}
-                className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase cursor-pointer"
                 style={{ fontFamily: mono }}
               >
-                conhecer mais
-              </button>
-            </div>
-          </div>
-          <XlHelper className="border-l border-[#d6dace]" />
-          <SectionBorderTicks positions={["192px", "calc(100% - 192px)"]} />
-        </div>
-      </div>
-
-      {/* ===== FOOTER ===== */}
-      <div id="contato" data-reveal="section" className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-9 scroll-mt-[96px]">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 pb-9">
-          <div className="flex flex-col gap-8 max-w-[356px]">
-            <ShiftLabsIcon />
-            <p
-              data-reveal="text"
-              className="text-[#5f644c] text-[14px] md:text-[16px]"
-              style={{ fontFamily: body, lineHeight: 1.3 }}
-            >
-              Arquitetamos produto, tecnologia, comercial e operação em fluxos coordenados, com inteligência aplicada de ponta a ponta.
-            </p>
-            <p
-              data-reveal="text"
-              className="text-[#5f644c] text-[14px] md:text-[16px]"
-              style={{ fontFamily: body, lineHeight: 1.3 }}
-            >
-              <span className="text-[#101700]" style={{ fontFamily: display, fontWeight: 500 }}>© 2026 ShiftLabs.</span>
-              <span> Todos os direitos reservados.</span>
-            </p>
-          </div>
-            <div className="flex flex-col gap-6">
-              <p data-reveal="text" className="text-[#5f644c] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
                 /Call to Action
               </p>
               <div className="flex items-center gap-5">
-              {socialLinks.map(({ name, href, Icon }) => (
-                <a
-                  key={name}
-                  href={href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex min-h-[44px] items-center gap-2 py-1"
-                >
-                  <Icon />
-                  <span className="text-[#5f644c] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
-                    {name}
-                  </span>
-                </a>
-              ))}
+                {socialLinks.map(({ name, href, Icon }) => (
+                  <a
+                    key={name}
+                    href={href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex min-h-[44px] items-center gap-2 py-1"
+                  >
+                    <Icon />
+                    <span
+                      className="text-[#5f644c] text-[14px] md:text-[16px]"
+                      style={{ fontFamily: body, lineHeight: 1.3 }}
+                    >
+                      {name}
+                    </span>
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
+          {/* Big wordmark */}
+          <div className="pt-9">
+            <BigWordmark />
+          </div>
         </div>
-        {/* Big wordmark */}
-        <div className="pt-9">
-          <BigWordmark />
-        </div>
-      </div>
       </main>
 
       {isContactModalOpen ? (
-        <div className="fixed inset-0 z-[140] flex items-center justify-center px-4 py-6" onClick={closeContactModal}>
+        <div
+          className="fixed inset-0 z-[140] flex items-center justify-center px-4 py-6"
+          onClick={closeContactModal}
+        >
           <div className="absolute inset-0 bg-[#101700]/45 backdrop-blur-[1px]" />
           <div
             role="dialog"
@@ -2604,7 +3337,10 @@ function LandingPage() {
           >
             <div className="border-b border-[#d6dace] px-5 py-4 md:px-6">
               <div className="flex items-center justify-between gap-4">
-                <p className="text-[#5f644c] text-[13px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
+                <p
+                  className="text-[#5f644c] text-[13px] md:text-[14px] uppercase"
+                  style={{ fontFamily: mono }}
+                >
                   {isContactSuccess ? "/contato enviado" : "/contato"}
                 </p>
                 <button
@@ -2617,8 +3353,17 @@ function LandingPage() {
                   fechar
                 </button>
               </div>
-              <p className="mt-3 text-[#101700] text-[24px] md:text-[30px]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: "normal" }}>
-                {isContactSuccess ? "Contato confirmado" : "Fale com a ShiftLabs"}
+              <p
+                className="mt-3 text-[#101700] text-[24px] md:text-[30px]"
+                style={{
+                  fontFamily: heading,
+                  fontWeight: 500,
+                  lineHeight: "normal",
+                }}
+              >
+                {isContactSuccess
+                  ? "Contato confirmado"
+                  : "Fale com a ShiftLabs"}
               </p>
             </div>
 
@@ -2632,39 +3377,79 @@ function LandingPage() {
                           <span className="shiftlabs-success-check">✓</span>
                         </span>
                         <div className="flex flex-col gap-1">
-                          <p className="text-[12px] uppercase text-[#5f644c]" style={{ fontFamily: mono }}>
+                          <p
+                            className="text-[12px] uppercase text-[#5f644c]"
+                            style={{ fontFamily: mono }}
+                          >
                             /envio concluído
                           </p>
-                          <p className="text-[25px] md:text-[36px] text-[#101700]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: 1.03 }}>
+                          <p
+                            className="text-[25px] md:text-[36px] text-[#101700]"
+                            style={{
+                              fontFamily: heading,
+                              fontWeight: 500,
+                              lineHeight: 1.03,
+                            }}
+                          >
                             Obrigado. Sua mensagem chegou.
                           </p>
                         </div>
                       </div>
-                      <span className="shiftlabs-success-chip" style={{ fontFamily: mono }}>
+                      <span
+                        className="shiftlabs-success-chip"
+                        style={{ fontFamily: mono }}
+                      >
                         STATUS: RECEBIDO
                       </span>
                     </div>
 
-                    <p className="text-[#50543f] text-[15px] md:text-[18px] max-w-[560px]" style={{ fontFamily: body, lineHeight: 1.35 }}>
+                    <p
+                      className="text-[#50543f] text-[15px] md:text-[18px] max-w-[560px]"
+                      style={{ fontFamily: body, lineHeight: 1.35 }}
+                    >
                       {heroContactFeedback?.message}
                     </p>
 
                     <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                       <div className="shiftlabs-success-step border border-[#d6dace] p-3">
-                        <p className="text-[11px] uppercase text-[#5f644c]" style={{ fontFamily: mono }}>/passo 01</p>
-                        <p className="mt-1 text-[14px] text-[#101700]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+                        <p
+                          className="text-[11px] uppercase text-[#5f644c]"
+                          style={{ fontFamily: mono }}
+                        >
+                          /passo 01
+                        </p>
+                        <p
+                          className="mt-1 text-[14px] text-[#101700]"
+                          style={{ fontFamily: body, lineHeight: 1.3 }}
+                        >
                           Lead registrado no nosso pipeline.
                         </p>
                       </div>
                       <div className="shiftlabs-success-step border border-[#d6dace] p-3">
-                        <p className="text-[11px] uppercase text-[#5f644c]" style={{ fontFamily: mono }}>/passo 02</p>
-                        <p className="mt-1 text-[14px] text-[#101700]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+                        <p
+                          className="text-[11px] uppercase text-[#5f644c]"
+                          style={{ fontFamily: mono }}
+                        >
+                          /passo 02
+                        </p>
+                        <p
+                          className="mt-1 text-[14px] text-[#101700]"
+                          style={{ fontFamily: body, lineHeight: 1.3 }}
+                        >
                           Time de estratégia valida contexto e objetivo.
                         </p>
                       </div>
                       <div className="shiftlabs-success-step border border-[#d6dace] p-3">
-                        <p className="text-[11px] uppercase text-[#5f644c]" style={{ fontFamily: mono }}>/passo 03</p>
-                        <p className="mt-1 text-[14px] text-[#101700]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+                        <p
+                          className="text-[11px] uppercase text-[#5f644c]"
+                          style={{ fontFamily: mono }}
+                        >
+                          /passo 03
+                        </p>
+                        <p
+                          className="mt-1 text-[14px] text-[#101700]"
+                          style={{ fontFamily: body, lineHeight: 1.3 }}
+                        >
                           Retorno em breve para alinhar próximos passos.
                         </p>
                       </div>
@@ -2689,61 +3474,96 @@ function LandingPage() {
               <form onSubmit={submitHeroContactForm} className="p-5 md:p-6">
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Nome</span>
+                    <span
+                      className="text-[13px] text-[#5f644c]"
+                      style={{ fontFamily: body }}
+                    >
+                      Nome
+                    </span>
                     <input
                       type="text"
                       required
                       autoFocus
                       value={heroContactForm.name}
-                      onChange={(event) => updateHeroContactField("name", event.target.value)}
+                      onChange={(event) =>
+                        updateHeroContactField("name", event.target.value)
+                      }
                       className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body }}
                     />
                   </label>
 
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Whatsapp</span>
+                    <span
+                      className="text-[13px] text-[#5f644c]"
+                      style={{ fontFamily: body }}
+                    >
+                      Whatsapp
+                    </span>
                     <input
                       type="tel"
                       required
                       value={heroContactForm.whatsapp}
-                      onChange={(event) => updateHeroContactField("whatsapp", event.target.value)}
+                      onChange={(event) =>
+                        updateHeroContactField("whatsapp", event.target.value)
+                      }
                       className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body }}
                     />
                   </label>
 
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Email</span>
+                    <span
+                      className="text-[13px] text-[#5f644c]"
+                      style={{ fontFamily: body }}
+                    >
+                      Email
+                    </span>
                     <input
                       type="email"
                       required
                       value={heroContactForm.email}
-                      onChange={(event) => updateHeroContactField("email", event.target.value)}
+                      onChange={(event) =>
+                        updateHeroContactField("email", event.target.value)
+                      }
                       className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body }}
                     />
                   </label>
 
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Empresa</span>
+                    <span
+                      className="text-[13px] text-[#5f644c]"
+                      style={{ fontFamily: body }}
+                    >
+                      Empresa
+                    </span>
                     <input
                       type="text"
                       required
                       value={heroContactForm.company}
-                      onChange={(event) => updateHeroContactField("company", event.target.value)}
+                      onChange={(event) =>
+                        updateHeroContactField("company", event.target.value)
+                      }
                       className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body }}
                     />
                   </label>
 
                   <label className="flex flex-col gap-1.5 md:col-span-2">
-                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Assunto</span>
+                    <span
+                      className="text-[13px] text-[#5f644c]"
+                      style={{ fontFamily: body }}
+                    >
+                      Assunto
+                    </span>
                     <input
                       type="text"
                       required
                       value={heroContactForm.subject}
-                      onChange={(event) => updateHeroContactField("subject", event.target.value)}
+                      onChange={(event) =>
+                        updateHeroContactField("subject", event.target.value)
+                      }
                       className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body }}
                     />
@@ -2771,7 +3591,10 @@ function LandingPage() {
                 </div>
                 {isContactError ? (
                   <div className="mt-3 border border-[#d8bbb9] bg-[#f8eceb] px-3 py-2">
-                    <p className="text-[13px] text-[#9f2b2b]" style={{ fontFamily: body }}>
+                    <p
+                      className="text-[13px] text-[#9f2b2b]"
+                      style={{ fontFamily: body }}
+                    >
                       {heroContactFeedback?.message}
                     </p>
                   </div>
@@ -2789,7 +3612,12 @@ function CareersHeader() {
   return (
     <header className="fixed left-0 top-0 z-[120] w-full border-b border-[#d6dace] bg-[#f2f3ef]">
       <div className="mx-auto flex h-[66px] w-full max-w-[1512px] items-center justify-between px-6 py-4 md:px-8">
-        <a href="/" aria-label="ShiftLabs" title="ShiftLabs" className="inline-flex min-h-[44px] items-center py-1">
+        <a
+          href="/"
+          aria-label="ShiftLabs"
+          title="ShiftLabs"
+          className="inline-flex min-h-[44px] items-center py-1"
+        >
           <ShiftLabsIcon />
         </a>
         <div className="flex items-center gap-2.5">
@@ -2845,12 +3673,18 @@ function RoleContentSection({
   children: React.ReactNode;
 }) {
   const usesLabelStyle = isStyledRoleSectionHeading(title);
-  const renderedTitle = usesLabelStyle ? formatRoleSectionHeading(title) : title;
+  const renderedTitle = usesLabelStyle
+    ? formatRoleSectionHeading(title)
+    : title;
 
   return (
     <section className="pt-6 md:pt-7">
       <h2
-        className={usesLabelStyle ? "text-[16px] text-[#5f644c] uppercase tracking-[0.02em]" : "text-[24px] text-[#101700]"}
+        className={
+          usesLabelStyle
+            ? "text-[16px] text-[#5f644c] uppercase tracking-[0.02em]"
+            : "text-[24px] text-[#101700]"
+        }
         style={{
           fontFamily: usesLabelStyle ? mono : heading,
           fontWeight: usesLabelStyle ? 400 : 500,
@@ -2877,21 +3711,51 @@ function MarkdownBody({ markdown }: { markdown: string }) {
   );
 }
 
+type RoleApplicationFormState = {
+  name: string;
+  email: string;
+  whatsapp: string;
+  portfolio: string;
+  message: string;
+};
+
+type RoleApplicationFeedback = {
+  type: "success" | "error";
+  message: string;
+};
+
+const initialRoleApplicationFormState: RoleApplicationFormState = {
+  name: "",
+  email: "",
+  whatsapp: "",
+  portfolio: "",
+  message: "",
+};
+
 function CareerRolePage({ role }: { role: CareersRole }) {
   const [isHeaderCondensed, setIsHeaderCondensed] = useState(false);
   const displayRoleTitle = getDisplayRoleTitle(role.title, role.displayTitle);
-  const seniorityBadge = getRoleSeniorityBadge(role.title, role.displaySeniority, role.slug);
-  const displayCommitment = getRoleDisplayCommitment(role.commitment, role.displayCommitment);
+  const seniorityBadge = getRoleSeniorityBadge(
+    role.title,
+    role.displaySeniority,
+    role.slug,
+  );
+  const displayCommitment = getRoleDisplayCommitment(
+    role.commitment,
+    role.displayCommitment,
+  );
   const displayArea = getRoleCardArea(role);
   const roleSummary = getRoleCardSummary(role);
-  const applyHref = `mailto:careers@shiftlabs.digital?subject=${encodeURIComponent(`Candidatura - ${displayRoleTitle}`)}`;
+  const applyPageHref = `/vagas/${role.slug}/candidatar`;
 
   useEffect(() => {
     let rafId = 0;
 
     const updateHeaderMode = () => {
       const shouldCondense = window.scrollY > 28 && window.innerWidth >= 1024;
-      setIsHeaderCondensed((current) => (current === shouldCondense ? current : shouldCondense));
+      setIsHeaderCondensed((current) =>
+        current === shouldCondense ? current : shouldCondense,
+      );
     };
 
     const scheduleHeaderUpdate = () => {
@@ -2921,7 +3785,11 @@ function CareerRolePage({ role }: { role: CareersRole }) {
           isHeaderCondensed ? "pt-3" : "pt-0"
         }`}
       >
-        <div className={isHeaderCondensed ? "mx-auto w-full max-w-[1040px] px-4" : "w-full"}>
+        <div
+          className={
+            isHeaderCondensed ? "mx-auto w-full max-w-[1040px] px-4" : "w-full"
+          }
+        >
           <header
             className={`transition-all duration-300 ease-out ${
               isHeaderCondensed
@@ -2931,10 +3799,17 @@ function CareerRolePage({ role }: { role: CareersRole }) {
           >
             <div
               className={`mx-auto h-[72px] flex items-center justify-between gap-6 transition-[padding,max-width] duration-300 ease-out ${
-                isHeaderCondensed ? "max-w-none px-6" : "max-w-[1512px] px-6 xl:px-[192px]"
+                isHeaderCondensed
+                  ? "max-w-none px-6"
+                  : "max-w-[1512px] px-6 xl:px-[192px]"
               }`}
             >
-              <a href="/" aria-label="ShiftLabs" title="ShiftLabs" className="inline-flex min-h-[44px] items-center gap-2 py-1">
+              <a
+                href="/"
+                aria-label="ShiftLabs"
+                title="ShiftLabs"
+                className="inline-flex min-h-[44px] items-center gap-2 py-1"
+              >
                 <ShiftLabsIcon />
                 <ShiftLabsWordmark />
               </a>
@@ -2942,7 +3817,11 @@ function CareerRolePage({ role }: { role: CareersRole }) {
                 <a
                   href="/vagas"
                   className="inline-flex min-h-[44px] items-center px-2 text-[#101700] transition-colors text-[14px]"
-                  style={{ fontFamily: mono, fontWeight: 400, lineHeight: "normal" }}
+                  style={{
+                    fontFamily: mono,
+                    fontWeight: 400,
+                    lineHeight: "normal",
+                  }}
                 >
                   /VAGAS
                 </a>
@@ -2972,78 +3851,83 @@ function CareerRolePage({ role }: { role: CareersRole }) {
           <div className="max-w-[1512px] mx-auto flex relative">
             <XlHelper className="border-r border-[#d6dace]" />
             <div className="flex-1 border-x border-[#d6dace]">
-            <article className="flex min-h-[360px] flex-col justify-between gap-8 p-6 md:p-8 xl:p-10">
-              <div className="flex flex-col gap-4 max-w-[880px]">
-                <a
-                  href="/vagas"
-                  aria-label="Voltar para vagas"
-                  title="Voltar para vagas"
-                  className="inline-flex h-11 w-11 items-center justify-center border border-[#d6dace] text-[#5f644c] hover:text-[#101700] transition-colors"
-                >
-                  <CareersBackIcon />
-                </a>
-                <p className="text-[#5f644c] text-[13px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
-                  /{displayArea}
-                </p>
-                <div className="flex flex-wrap items-center gap-3 md:gap-4">
-                  <h1
-                    className="text-[#101700] text-[32px] md:text-[44px] lg:text-[56px] leading-[1.03]"
-                    style={{ fontFamily: display, fontWeight: 500 }}
-                  >
-                    {displayRoleTitle}
-                  </h1>
-                  {seniorityBadge ? <RoleSeniorityBadge label={seniorityBadge} /> : null}
-                </div>
-                <p
-                  className="text-[#5f644c] text-[18px] md:text-[24px] max-w-[980px]"
-                  style={{ fontFamily: body, lineHeight: 1.3 }}
-                >
-                  {roleSummary}
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-4">
-                <div className="flex flex-wrap gap-2">
-                  <span
-                    className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#5f644c]"
-                    style={{ fontFamily: body, lineHeight: "normal" }}
-                  >
-                    <CareersLocationIcon />
-                    {role.location}
-                  </span>
-                  <span
-                    className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#5f644c]"
-                    style={{ fontFamily: body, lineHeight: "normal" }}
-                  >
-                    <CareersClockIcon />
-                    {displayCommitment}
-                  </span>
-                  <span
-                    className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#5f644c]"
-                    style={{ fontFamily: body, lineHeight: "normal" }}
-                  >
-                    <CareersWorkModeIcon />
-                    {role.model}
-                  </span>
-                </div>
-                <div className="flex flex-wrap gap-3">
+              <article className="flex min-h-[360px] flex-col justify-between gap-8 p-6 md:p-8 xl:p-10">
+                <div className="flex flex-col gap-4 max-w-[880px]">
                   <a
                     href="/vagas"
-                    className="inline-flex min-h-[44px] items-center border border-[#101700] text-[#101700] px-4 py-3 text-[14px] uppercase"
-                    style={{ fontFamily: mono, lineHeight: "normal" }}
+                    aria-label="Voltar para vagas"
+                    title="Voltar para vagas"
+                    className="inline-flex h-11 w-11 items-center justify-center border border-[#d6dace] text-[#5f644c] hover:text-[#101700] transition-colors"
                   >
-                    ver outras vagas
+                    <CareersBackIcon />
                   </a>
-                  <a
-                    href={applyHref}
-                    className="inline-flex min-h-[44px] items-center bg-[#101700] text-[#f2f3ef] px-4 py-3 text-[14px] uppercase"
-                    style={{ fontFamily: mono, lineHeight: "normal" }}
+                  <p
+                    className="text-[#5f644c] text-[13px] md:text-[14px] uppercase"
+                    style={{ fontFamily: mono }}
                   >
-                    candidatar-se
-                  </a>
+                    /{displayArea}
+                  </p>
+                  <div className="flex flex-wrap items-center gap-3 md:gap-4">
+                    <h1
+                      className="text-[#101700] text-[32px] md:text-[44px] lg:text-[56px] leading-[1.03]"
+                      style={{ fontFamily: display, fontWeight: 500 }}
+                    >
+                      {displayRoleTitle}
+                    </h1>
+                    {seniorityBadge ? (
+                      <RoleSeniorityBadge label={seniorityBadge} />
+                    ) : null}
+                  </div>
+                  <p
+                    className="text-[#5f644c] text-[18px] md:text-[24px] max-w-[980px]"
+                    style={{ fontFamily: body, lineHeight: 1.3 }}
+                  >
+                    {roleSummary}
+                  </p>
                 </div>
-              </div>
-            </article>
+
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-wrap gap-2">
+                    <span
+                      className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#5f644c]"
+                      style={{ fontFamily: body, lineHeight: "normal" }}
+                    >
+                      <CareersLocationIcon />
+                      {role.location}
+                    </span>
+                    <span
+                      className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#5f644c]"
+                      style={{ fontFamily: body, lineHeight: "normal" }}
+                    >
+                      <CareersClockIcon />
+                      {displayCommitment}
+                    </span>
+                    <span
+                      className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#5f644c]"
+                      style={{ fontFamily: body, lineHeight: "normal" }}
+                    >
+                      <CareersWorkModeIcon />
+                      {role.model}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-3">
+                    <a
+                      href="/vagas"
+                      className="inline-flex min-h-[44px] items-center border border-[#101700] text-[#101700] px-4 py-3 text-[14px] uppercase"
+                      style={{ fontFamily: mono, lineHeight: "normal" }}
+                    >
+                      ver outras vagas
+                    </a>
+                    <a
+                      href={applyPageHref}
+                      className="inline-flex min-h-[44px] items-center bg-[#101700] text-[#f2f3ef] px-4 py-3 text-[14px] uppercase"
+                      style={{ fontFamily: mono, lineHeight: "normal" }}
+                    >
+                      candidatar-se
+                    </a>
+                  </div>
+                </div>
+              </article>
             </div>
             <XlHelper className="border-l border-[#d6dace]" />
             <SectionBorderTicks positions={["192px", "calc(100% - 192px)"]} />
@@ -3059,13 +3943,19 @@ function CareerRolePage({ role }: { role: CareersRole }) {
                   <MarkdownBody markdown={role.bodyMarkdown} />
                 ) : (
                   <>
-                    <RoleContentSection title={role.whyTitle ?? "Why ShiftLabs?"}>
+                    <RoleContentSection
+                      title={role.whyTitle ?? "Why ShiftLabs?"}
+                    >
                       <div className="flex flex-col gap-3">
                         {role.about.map((paragraph) => (
                           <p
                             key={paragraph}
                             className="text-[16px] text-[#101700]"
-                            style={{ fontFamily: body, fontWeight: 400, lineHeight: 1.42 }}
+                            style={{
+                              fontFamily: body,
+                              fontWeight: 400,
+                              lineHeight: 1.42,
+                            }}
                           >
                             {paragraph}
                           </p>
@@ -3077,26 +3967,41 @@ function CareerRolePage({ role }: { role: CareersRole }) {
                       <div className="flex flex-col gap-3">
                         <p
                           className="text-[16px] text-[#101700]"
-                          style={{ fontFamily: body, fontWeight: 400, lineHeight: 1.42 }}
+                          style={{
+                            fontFamily: body,
+                            fontWeight: 400,
+                            lineHeight: 1.42,
+                          }}
                         >
                           {role.intro}
                         </p>
                         <p
                           className="text-[16px] text-[#101700]"
-                          style={{ fontFamily: body, fontWeight: 400, lineHeight: 1.42 }}
+                          style={{
+                            fontFamily: body,
+                            fontWeight: 400,
+                            lineHeight: 1.42,
+                          }}
                         >
-                          {role.roleOneLiner ?? `Área de atuação: ${role.area}.`}
+                          {role.roleOneLiner ??
+                            `Área de atuação: ${role.area}.`}
                         </p>
                       </div>
                     </RoleContentSection>
 
-                    <RoleContentSection title={role.doTitle ?? "What you'll do"}>
+                    <RoleContentSection
+                      title={role.doTitle ?? "What you'll do"}
+                    >
                       <ul className="m-0 list-disc pl-6">
                         {role.responsibilities.map((item) => (
                           <li
                             key={item}
                             className="mb-2 text-[16px] text-[#101700] last:mb-0"
-                            style={{ fontFamily: body, fontWeight: 400, lineHeight: 1.42 }}
+                            style={{
+                              fontFamily: body,
+                              fontWeight: 400,
+                              lineHeight: 1.42,
+                            }}
                           >
                             {item}
                           </li>
@@ -3104,13 +4009,19 @@ function CareerRolePage({ role }: { role: CareersRole }) {
                       </ul>
                     </RoleContentSection>
 
-                    <RoleContentSection title={role.bringTitle ?? "What you'll bring"}>
+                    <RoleContentSection
+                      title={role.bringTitle ?? "What you'll bring"}
+                    >
                       <ul className="m-0 list-disc pl-6">
                         {role.requirements.map((item) => (
                           <li
                             key={item}
                             className="mb-2 text-[16px] text-[#101700] last:mb-0"
-                            style={{ fontFamily: body, fontWeight: 400, lineHeight: 1.42 }}
+                            style={{
+                              fontFamily: body,
+                              fontWeight: 400,
+                              lineHeight: 1.42,
+                            }}
                           >
                             {item}
                           </li>
@@ -3126,13 +4037,19 @@ function CareerRolePage({ role }: { role: CareersRole }) {
                       </div>
                     </RoleContentSection>
 
-                    <RoleContentSection title={role.processTitle ?? "Hiring process"}>
+                    <RoleContentSection
+                      title={role.processTitle ?? "Hiring process"}
+                    >
                       <ol className="m-0 list-decimal pl-6">
                         {role.process.map((step) => (
                           <li
                             key={step}
                             className="mb-2 text-[16px] text-[#101700] last:mb-0"
-                            style={{ fontFamily: body, fontWeight: 400, lineHeight: 1.42 }}
+                            style={{
+                              fontFamily: body,
+                              fontWeight: 400,
+                              lineHeight: 1.42,
+                            }}
                           >
                             {step}
                           </li>
@@ -3147,7 +4064,11 @@ function CareerRolePage({ role }: { role: CareersRole }) {
                             <p
                               key={paragraph}
                               className="text-[16px] text-[#101700]"
-                              style={{ fontFamily: body, fontWeight: 400, lineHeight: 1.42 }}
+                              style={{
+                                fontFamily: body,
+                                fontWeight: 400,
+                                lineHeight: 1.42,
+                              }}
                             >
                               {paragraph}
                             </p>
@@ -3170,10 +4091,20 @@ function CareerRolePage({ role }: { role: CareersRole }) {
             <div className="flex flex-col lg:flex-row flex-1 min-w-0 bg-[#b4eb38]">
               <div className="flex flex-col justify-between p-6 w-full lg:w-1/2 min-h-[300px] lg:h-[360px]">
                 <div className="flex flex-col gap-6 max-w-[450px]">
-                  <p className="text-[#456300] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
+                  <p
+                    className="text-[#456300] text-[14px] md:text-[16px] uppercase"
+                    style={{ fontFamily: mono }}
+                  >
                     /call to action
                   </p>
-                  <div className="text-[#101700] text-[28px] md:text-[36px] lg:text-[40px]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: "normal" }}>
+                  <div
+                    className="text-[#101700] text-[28px] md:text-[36px] lg:text-[40px]"
+                    style={{
+                      fontFamily: heading,
+                      fontWeight: 500,
+                      lineHeight: "normal",
+                    }}
+                  >
                     Curtiu essa vaga?
                   </div>
                 </div>
@@ -3181,7 +4112,8 @@ function CareerRolePage({ role }: { role: CareersRole }) {
                   className="text-[#456300] text-[14px] md:text-[16px] max-w-[390px] mt-8"
                   style={{ fontFamily: body, lineHeight: 1.3 }}
                 >
-                  Candidate-se agora ou explore outras oportunidades abertas no time.
+                  Candidate-se agora ou explore outras oportunidades abertas no
+                  time.
                 </p>
               </div>
               <div className="flex items-end justify-end p-6 w-full lg:w-1/2 min-h-[120px] lg:h-[360px] gap-3">
@@ -3193,7 +4125,7 @@ function CareerRolePage({ role }: { role: CareersRole }) {
                   ver outras vagas
                 </a>
                 <a
-                  href={applyHref}
+                  href={applyPageHref}
                   className="inline-flex min-h-[44px] items-center bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase"
                   style={{ fontFamily: mono, lineHeight: "normal" }}
                 >
@@ -3210,23 +4142,47 @@ function CareerRolePage({ role }: { role: CareersRole }) {
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 pb-9">
             <div className="flex flex-col gap-8 max-w-[356px]">
               <ShiftLabsIcon />
-              <p className="text-[#5f644c] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
-                Construímos estruturas para produto, tecnologia, comercial e operação evoluírem no mesmo ritmo.
+              <p
+                className="text-[#5f644c] text-[14px] md:text-[16px]"
+                style={{ fontFamily: body, lineHeight: 1.3 }}
+              >
+                Construímos estruturas para produto, tecnologia, comercial e
+                operação evoluírem no mesmo ritmo.
               </p>
-              <p className="text-[#5f644c] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
-                <span className="text-[#101700]" style={{ fontFamily: display, fontWeight: 500 }}>© 2026 ShiftLabs.</span>
+              <p
+                className="text-[#5f644c] text-[14px] md:text-[16px]"
+                style={{ fontFamily: body, lineHeight: 1.3 }}
+              >
+                <span
+                  className="text-[#101700]"
+                  style={{ fontFamily: display, fontWeight: 500 }}
+                >
+                  © 2026 ShiftLabs.
+                </span>
                 <span> Todos os direitos reservados.</span>
               </p>
             </div>
             <div className="flex flex-col gap-6">
-              <p className="text-[#5f644c] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
+              <p
+                className="text-[#5f644c] text-[14px] md:text-[16px] uppercase"
+                style={{ fontFamily: mono }}
+              >
                 /social
               </p>
               <div className="flex items-center gap-5">
                 {careersSocialLinks.map(({ name, href, Icon }) => (
-                  <a key={`careers-role-footer-${name}`} href={href} target="_blank" rel="noreferrer" className="inline-flex min-h-[44px] items-center gap-2 py-1">
+                  <a
+                    key={`careers-role-footer-${name}`}
+                    href={href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex min-h-[44px] items-center gap-2 py-1"
+                  >
                     <Icon />
-                    <span className="text-[#5f644c] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+                    <span
+                      className="text-[#5f644c] text-[14px] md:text-[16px]"
+                      style={{ fontFamily: body, lineHeight: 1.3 }}
+                    >
                       {name}
                     </span>
                   </a>
@@ -3236,6 +4192,375 @@ function CareerRolePage({ role }: { role: CareersRole }) {
           </div>
           <div className="pt-9">
             <BigWordmark />
+          </div>
+        </div>
+      </main>
+
+    </div>
+  );
+}
+
+function CareerRoleApplyPage({ role }: { role: CareersRole }) {
+  const [isHeaderCondensed, setIsHeaderCondensed] = useState(false);
+  const [formState, setFormState] = useState<RoleApplicationFormState>(
+    initialRoleApplicationFormState,
+  );
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedback, setFeedback] = useState<RoleApplicationFeedback | null>(null);
+  const displayRoleTitle = getDisplayRoleTitle(role.title, role.displayTitle);
+  const roleHref = `/vagas/${role.slug}`;
+  const applyHref = `mailto:careers@shiftlabs.digital?subject=${encodeURIComponent(`Candidatura - ${displayRoleTitle}`)}`;
+  const isFeedbackSuccess = feedback?.type === "success";
+
+  const updateField = (field: keyof RoleApplicationFormState, value: string) => {
+    let formattedValue = value;
+    if (field === "whatsapp") {
+      if (value.startsWith("+")) {
+        const digits = value.replace(/\D/g, "");
+        formattedValue = "+" + digits.slice(0, 15);
+      } else {
+        let digits = value.replace(/\D/g, "");
+        if (digits.length > 11) digits = digits.slice(0, 11);
+        if (digits.length > 2) digits = `(${digits.slice(0, 2)}) ` + digits.slice(2);
+        if (digits.length > 10) digits = digits.slice(0, 10) + "-" + digits.slice(10);
+        formattedValue = digits;
+      }
+    } else if (field === "email") {
+      formattedValue = value.replace(/\s/g, "").toLowerCase();
+    }
+    setFormState((current) => ({ ...current, [field]: formattedValue }));
+  };
+
+  const submitApplication = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (isSubmitting) return;
+
+    const name = formState.name.trim();
+    const email = formState.email.trim();
+    const whatsapp = formState.whatsapp.trim();
+    const portfolio = formState.portfolio.trim();
+    const message = formState.message.trim();
+
+    if (!name || !email || !whatsapp) {
+      setFeedback({
+        type: "error",
+        message: "Preencha nome, e-mail e WhatsApp para enviar.",
+      });
+      return;
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      setFeedback({ type: "error", message: "Informe um e-mail válido." });
+      return;
+    }
+
+    const fallbackMailtoBody = [
+      `Vaga: ${displayRoleTitle}`,
+      `Nome: ${name}`,
+      `E-mail: ${email}`,
+      `WhatsApp: ${whatsapp}`,
+      `LinkedIn/Portfólio: ${portfolio || "Não informado"}`,
+      "",
+      "Mensagem:",
+      message || "Sem mensagem adicional.",
+    ].join("\n");
+
+    if (!supabase) {
+      if (typeof window !== "undefined") {
+        window.location.href = `${applyHref}&body=${encodeURIComponent(fallbackMailtoBody)}`;
+      }
+      setFeedback({
+        type: "success",
+        message: "Abrimos seu cliente de e-mail para concluir a candidatura.",
+      });
+      return;
+    }
+
+    const subjectParts = [`Candidatura - ${displayRoleTitle}`];
+    if (portfolio) subjectParts.push(`Portfolio: ${portfolio}`);
+    if (message) subjectParts.push(`Mensagem: ${message}`);
+    const subject = subjectParts.join(" | ").slice(0, 1000);
+
+    setIsSubmitting(true);
+    setFeedback(null);
+    const { error } = await supabase.from("contact_leads").insert({
+      name,
+      whatsapp,
+      email,
+      company: `Candidato - ${displayRoleTitle}`,
+      subject,
+      source_page:
+        typeof window !== "undefined"
+          ? `${window.location.pathname}#candidatura`
+          : `/vagas/${role.slug}/candidatar`,
+      user_agent: typeof navigator !== "undefined" ? navigator.userAgent : null,
+    });
+    setIsSubmitting(false);
+
+    if (error) {
+      setFeedback({
+        type: "error",
+        message: "Não foi possível enviar agora. Tente novamente.",
+      });
+      return;
+    }
+
+    setFormState(initialRoleApplicationFormState);
+    setFeedback({
+      type: "success",
+      message: "Candidatura enviada com sucesso. Retornaremos em breve.",
+    });
+  };
+
+  useEffect(() => {
+    let rafId = 0;
+
+    const updateHeaderMode = () => {
+      const shouldCondense = window.scrollY > 28 && window.innerWidth >= 1024;
+      setIsHeaderCondensed((current) =>
+        current === shouldCondense ? current : shouldCondense,
+      );
+    };
+
+    const scheduleHeaderUpdate = () => {
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = 0;
+        updateHeaderMode();
+      });
+    };
+
+    updateHeaderMode();
+    window.addEventListener("scroll", scheduleHeaderUpdate, { passive: true });
+    window.addEventListener("resize", scheduleHeaderUpdate);
+    return () => {
+      window.removeEventListener("scroll", scheduleHeaderUpdate);
+      window.removeEventListener("resize", scheduleHeaderUpdate);
+      if (rafId) window.cancelAnimationFrame(rafId);
+    };
+  }, []);
+
+  return (
+    <div className="bg-[#f2f3ef] min-h-screen w-full overflow-x-hidden pt-[72px]">
+      <div
+        className={`fixed inset-x-0 top-0 z-50 transition-[padding] duration-300 ease-out ${
+          isHeaderCondensed ? "pt-3" : "pt-0"
+        }`}
+      >
+        <div
+          className={
+            isHeaderCondensed ? "mx-auto w-full max-w-[1040px] px-4" : "w-full"
+          }
+        >
+          <header
+            className={`transition-all duration-300 ease-out ${
+              isHeaderCondensed
+                ? "rounded-[16px] border border-[#d6dace] bg-[#f2f3ef]"
+                : "border-b border-[#d6dace] bg-[#f2f3ef]"
+            }`}
+          >
+            <div
+              className={`mx-auto h-[72px] flex items-center justify-between gap-6 transition-[padding,max-width] duration-300 ease-out ${
+                isHeaderCondensed
+                  ? "max-w-none px-6"
+                  : "max-w-[1512px] px-6 xl:px-[192px]"
+              }`}
+            >
+              <a
+                href="/"
+                aria-label="ShiftLabs"
+                title="ShiftLabs"
+                className="inline-flex min-h-[44px] items-center gap-2 py-1"
+              >
+                <ShiftLabsIcon />
+                <ShiftLabsWordmark />
+              </a>
+              <div className="flex items-center gap-4 md:gap-6">
+                <a
+                  href="/vagas"
+                  className="inline-flex min-h-[44px] items-center px-2 text-[#101700] transition-colors text-[14px]"
+                  style={{ fontFamily: mono, fontWeight: 400, lineHeight: "normal" }}
+                >
+                  /VAGAS
+                </a>
+                <span aria-hidden className="h-4 w-px bg-[#d6dace]" />
+                <div className="flex items-center gap-3 md:gap-4">
+                  {careersSocialLinks.map(({ name, href, Icon }) => (
+                    <a
+                      key={`careers-apply-header-${name}`}
+                      href={href}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={name}
+                      className="inline-flex h-11 w-11 items-center justify-center opacity-70 hover:opacity-100 transition-opacity"
+                    >
+                      <Icon />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </header>
+        </div>
+      </div>
+
+      <main className="text-[#101700]">
+        <div className="border-y border-[#d6dace]">
+          <div className="max-w-[1512px] mx-auto flex relative">
+            <XlHelper className="border-r border-[#d6dace]" />
+            <article className="flex-1 border-x border-[#d6dace] px-6 py-10 md:px-8 xl:px-10 md:py-12">
+              <div className="mx-auto w-full max-w-[760px]">
+                <a
+                  href={roleHref}
+                  aria-label="Voltar para vaga"
+                  title="Voltar para vaga"
+                  className="inline-flex h-11 w-11 items-center justify-center border border-[#d6dace] text-[#5f644c] hover:text-[#101700] transition-colors"
+                >
+                  <CareersBackIcon />
+                </a>
+                <p
+                  className="mt-6 text-[13px] uppercase text-[#5f644c] md:text-[14px]"
+                  style={{ fontFamily: mono }}
+                >
+                  /candidatura
+                </p>
+                <h1
+                  className="mt-3 text-[32px] leading-[1.03] md:text-[44px]"
+                  style={{ fontFamily: display, fontWeight: 500 }}
+                >
+                  {displayRoleTitle}
+                </h1>
+                <p
+                  className="mt-4 max-w-[680px] text-[16px] text-[#5f644c] md:text-[18px]"
+                  style={{ fontFamily: body, lineHeight: 1.35 }}
+                >
+                  Preencha o formulário abaixo para se candidatar. Respondemos em
+                  até alguns dias úteis.
+                </p>
+
+                <div className="mt-5 flex flex-wrap gap-2">
+                  <span
+                    className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#5f644c]"
+                    style={{ fontFamily: body, lineHeight: "normal" }}
+                  >
+                    <CareersLocationIcon />
+                    {role.location}
+                  </span>
+                  <span
+                    className="inline-flex items-center gap-2 border border-[#d6dace] px-3 py-2 text-[13px] md:text-[14px] text-[#5f644c]"
+                    style={{ fontFamily: body, lineHeight: "normal" }}
+                  >
+                    <CareersWorkModeIcon />
+                    {role.model}
+                  </span>
+                </div>
+
+                <form
+                  onSubmit={(event) => {
+                    void submitApplication(event);
+                  }}
+                  className="mt-8 grid grid-cols-1 gap-4"
+                >
+                  <label className="flex flex-col gap-1.5">
+                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>
+                      Nome completo *
+                    </span>
+                    <input
+                      type="text"
+                      autoComplete="name"
+                      value={formState.name}
+                      onChange={(event) => updateField("name", event.target.value)}
+                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
+                      style={{ fontFamily: body }}
+                    />
+                  </label>
+
+                  <label className="flex flex-col gap-1.5">
+                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>
+                      E-mail *
+                    </span>
+                    <input
+                      type="email"
+                      autoComplete="email"
+                      value={formState.email}
+                      onChange={(event) => updateField("email", event.target.value)}
+                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
+                      style={{ fontFamily: body }}
+                    />
+                  </label>
+
+                  <label className="flex flex-col gap-1.5">
+                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>
+                      WhatsApp *
+                    </span>
+                    <input
+                      type="tel"
+                      autoComplete="tel"
+                      value={formState.whatsapp}
+                      onChange={(event) => updateField("whatsapp", event.target.value)}
+                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
+                      style={{ fontFamily: body }}
+                    />
+                  </label>
+
+                  <label className="flex flex-col gap-1.5">
+                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>
+                      LinkedIn ou portfólio
+                    </span>
+                    <input
+                      type="text"
+                      value={formState.portfolio}
+                      onChange={(event) => updateField("portfolio", event.target.value)}
+                      className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
+                      style={{ fontFamily: body }}
+                    />
+                  </label>
+
+                  <label className="flex flex-col gap-1.5">
+                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>
+                      Mensagem (opcional)
+                    </span>
+                    <textarea
+                      rows={4}
+                      value={formState.message}
+                      onChange={(event) => updateField("message", event.target.value)}
+                      className="min-h-[110px] border border-[#d6dace] bg-[#f2f3ef] px-3 py-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
+                      style={{ fontFamily: body, lineHeight: 1.4 }}
+                    />
+                  </label>
+
+                  <div className="mt-2 flex flex-wrap items-center gap-3">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="inline-flex min-h-[44px] items-center bg-[#101700] px-4 py-3 text-[14px] uppercase text-[#f2f3ef] disabled:cursor-not-allowed disabled:opacity-70"
+                      style={{ fontFamily: mono, lineHeight: "normal" }}
+                    >
+                      {isSubmitting ? "enviando..." : "enviar candidatura"}
+                    </button>
+                    <a
+                      href={roleHref}
+                      className="inline-flex min-h-[44px] items-center border border-[#101700] px-4 py-3 text-[14px] uppercase text-[#101700]"
+                      style={{ fontFamily: mono, lineHeight: "normal" }}
+                    >
+                      voltar para vaga
+                    </a>
+                  </div>
+
+                  {feedback ? (
+                    <p
+                      className={`text-[13px] ${isFeedbackSuccess ? "text-[#456300]" : "text-[#9f2b2b]"}`}
+                      style={{ fontFamily: body, lineHeight: 1.3 }}
+                    >
+                      {feedback.message}
+                    </p>
+                  ) : null}
+                </form>
+              </div>
+            </article>
+            <XlHelper className="border-l border-[#d6dace]" />
+            <SectionBorderTicks positions={["192px", "calc(100% - 192px)"]} />
           </div>
         </div>
       </main>
@@ -3258,29 +4583,46 @@ function CareersEditorPage({
   isLoadingRoles: boolean;
   isAuthenticated: boolean;
   authLoading: boolean;
-  onSignIn: (email: string, password: string) => Promise<{ ok: boolean; message?: string }>;
+  onSignIn: (
+    email: string,
+    password: string,
+  ) => Promise<{ ok: boolean; message?: string }>;
   onSignOut: () => Promise<void>;
-  onSaveRole: (role: CareersRole, previousSlug?: string) => Promise<{ ok: boolean; message?: string }>;
+  onSaveRole: (
+    role: CareersRole,
+    previousSlug?: string,
+  ) => Promise<{ ok: boolean; message?: string }>;
   onDeleteRole: (slug: string) => Promise<{ ok: boolean; message?: string }>;
   onRefreshRoles: () => Promise<void>;
 }) {
   const careersBorder = "border-[#d6dace]";
-  const [formState, setFormState] = useState<CareersEditorFormState>(() => createEditorFormState());
+  const [formState, setFormState] = useState<CareersEditorFormState>(() =>
+    createEditorFormState(),
+  );
   const [authState, setAuthState] = useState({ email: "", password: "" });
   const [editingSlug, setEditingSlug] = useState<string | null>(null);
-  const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const [feedback, setFeedback] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
   const [isAuthSubmitting, setIsAuthSubmitting] = useState(false);
   const [isSaveSubmitting, setIsSaveSubmitting] = useState(false);
   const [deletingSlug, setDeletingSlug] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const baseRoleSlugSet = useMemo(() => new Set(defaultCareersRoles.map((role) => role.slug)), []);
+  const baseRoleSlugSet = useMemo(
+    () => new Set(defaultCareersRoles.map((role) => role.slug)),
+    [],
+  );
   const orderedRoles = useMemo(
     () => [...roles].sort((a, b) => a.title.localeCompare(b.title, "pt-BR")),
     [roles],
   );
 
-  const setFieldValue = (field: keyof CareersEditorFormState, value: string) => {
+  const setFieldValue = (
+    field: keyof CareersEditorFormState,
+    value: string,
+  ) => {
     setFormState((current) => ({
       ...current,
       [field]: value,
@@ -3301,9 +4643,7 @@ function CareersEditorPage({
   };
 
   const handleDelete = async (slug: string) => {
-    const isConfirmed = window.confirm(
-      "Excluir esta vaga?",
-    );
+    const isConfirmed = window.confirm("Excluir esta vaga?");
     if (!isConfirmed) return;
     setDeletingSlug(slug);
     const result = await onDeleteRole(slug);
@@ -3332,22 +4672,37 @@ function CareersEditorPage({
     const model = formState.model.trim();
     const area = formState.area.trim() || "Geral";
     const bodyMarkdown = formState.bodyMarkdown.trim();
-    const intro = formState.intro.trim() || extractIntroFromMarkdown(bodyMarkdown) || "Descrição da vaga.";
+    const intro =
+      formState.intro.trim() ||
+      extractIntroFromMarkdown(bodyMarkdown) ||
+      "Descrição da vaga.";
     const slug = toOptionalTrimmed(formState.slug) ?? slugifyRole(title);
 
     if (!title || !location || !commitment || !model || !slug) {
-      setFeedback({ type: "error", message: "Preencha os campos obrigatórios: título, localização, regime e modelo." });
+      setFeedback({
+        type: "error",
+        message:
+          "Preencha os campos obrigatórios: título, localização, regime e modelo.",
+      });
       return;
     }
 
     if (!bodyMarkdown && !intro) {
-      setFeedback({ type: "error", message: "Preencha o corpo em Markdown ou o resumo da vaga." });
+      setFeedback({
+        type: "error",
+        message: "Preencha o corpo em Markdown ou o resumo da vaga.",
+      });
       return;
     }
 
-    const hasDuplicateSlug = roles.some((role) => role.slug === slug && role.slug !== editingSlug);
+    const hasDuplicateSlug = roles.some(
+      (role) => role.slug === slug && role.slug !== editingSlug,
+    );
     if (hasDuplicateSlug) {
-      setFeedback({ type: "error", message: "Já existe uma vaga com esse slug. Use outro slug." });
+      setFeedback({
+        type: "error",
+        message: "Já existe uma vaga com esse slug. Use outro slug.",
+      });
       return;
     }
 
@@ -3388,15 +4743,23 @@ function CareersEditorPage({
     }
     setEditingSlug(nextRole.slug);
     setFormState(createEditorFormState(nextRole));
-    setFeedback({ type: "success", message: "Vaga salva. Ela já aparece em /vagas e na página interna." });
+    setFeedback({
+      type: "success",
+      message: "Vaga salva. Ela já aparece em /vagas e na página interna.",
+    });
   };
 
-  const handleSignInSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSignInSubmit = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
     event.preventDefault();
     const email = authState.email.trim();
     const password = authState.password;
     if (!email || !password) {
-      setFeedback({ type: "error", message: "Preencha e-mail e senha para entrar." });
+      setFeedback({
+        type: "error",
+        message: "Preencha e-mail e senha para entrar.",
+      });
       return;
     }
     setIsAuthSubmitting(true);
@@ -3422,14 +4785,27 @@ function CareersEditorPage({
     <div className="relative min-h-screen w-full overflow-x-hidden bg-[#f2f3ef] text-[#101700]">
       <CareersHeader />
 
-      <main className={`mt-[66px] min-h-[calc(100vh-66px)] border-y ${careersBorder}`}>
+      <main
+        className={`mt-[66px] min-h-[calc(100vh-66px)] border-y ${careersBorder}`}
+      >
         <section className={`border-b ${careersBorder}`}>
           <div className="max-w-[1512px] mx-auto px-6 md:px-8 py-6 md:py-8">
-            <h1 className="text-[30px] text-[#101700] md:text-[32px]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: "normal" }}>
+            <h1
+              className="text-[30px] text-[#101700] md:text-[32px]"
+              style={{
+                fontFamily: heading,
+                fontWeight: 500,
+                lineHeight: "normal",
+              }}
+            >
               Editor de Vagas
             </h1>
-            <p className="mt-2 text-[14px] text-[#5f644c] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
-              Crie, edite e remova vagas. As alterações são salvas no Supabase e ficam disponíveis para todos.
+            <p
+              className="mt-2 text-[14px] text-[#5f644c] md:text-[16px]"
+              style={{ fontFamily: body, lineHeight: 1.3 }}
+            >
+              Crie, edite e remova vagas. As alterações são salvas no Supabase e
+              ficam disponíveis para todos.
             </p>
           </div>
         </section>
@@ -3437,8 +4813,12 @@ function CareersEditorPage({
         {!hasSupabaseConfig ? (
           <div className="max-w-[1512px] mx-auto px-6 py-8 md:px-8 md:py-10">
             <div className={`border ${careersBorder} p-5 md:p-6`}>
-              <p className="text-[15px] text-[#9f2b2b]" style={{ fontFamily: body }}>
-                Configure `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` para usar o editor persistente.
+              <p
+                className="text-[15px] text-[#9f2b2b]"
+                style={{ fontFamily: body }}
+              >
+                Configure `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` para
+                usar o editor persistente.
               </p>
             </div>
           </div>
@@ -3446,8 +4826,13 @@ function CareersEditorPage({
 
         {hasSupabaseConfig && authLoading ? (
           <div className="max-w-[1512px] mx-auto px-6 py-8 md:px-8 md:py-10">
-            <div className={`mx-auto w-full max-w-[460px] border ${careersBorder} bg-[#f2f3ef] p-5`}>
-              <p className="text-[14px] text-[#5f644c]" style={{ fontFamily: body }}>
+            <div
+              className={`mx-auto w-full max-w-[460px] border ${careersBorder} bg-[#f2f3ef] p-5`}
+            >
+              <p
+                className="text-[14px] text-[#5f644c]"
+                style={{ fontFamily: body }}
+              >
                 Verificando sessão...
               </p>
             </div>
@@ -3456,37 +4841,65 @@ function CareersEditorPage({
 
         {hasSupabaseConfig && !isAuthenticated && !authLoading ? (
           <div className="max-w-[1512px] mx-auto px-6 py-8 md:px-8 md:py-10">
-            <form onSubmit={handleSignInSubmit} className={`mx-auto w-full max-w-[460px] border ${careersBorder} bg-[#f2f3ef]`}>
+            <form
+              onSubmit={handleSignInSubmit}
+              className={`mx-auto w-full max-w-[460px] border ${careersBorder} bg-[#f2f3ef]`}
+            >
               <div className={`border-b ${careersBorder} px-5 py-4`}>
-                <h2 className="text-[20px] text-[#101700]" style={{ fontFamily: heading, fontWeight: 500 }}>
+                <h2
+                  className="text-[20px] text-[#101700]"
+                  style={{ fontFamily: heading, fontWeight: 500 }}
+                >
                   Entrar no editor
                 </h2>
               </div>
               <div className="grid grid-cols-1 gap-4 p-5">
                 <label className="flex flex-col gap-1.5">
-                  <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>E-mail</span>
+                  <span
+                    className="text-[13px] text-[#5f644c]"
+                    style={{ fontFamily: body }}
+                  >
+                    E-mail
+                  </span>
                   <input
                     type="email"
                     autoComplete="email"
                     value={authState.email}
-                    onChange={(event) => setAuthState((current) => ({ ...current, email: event.target.value }))}
+                    onChange={(event) =>
+                      setAuthState((current) => ({
+                        ...current,
+                        email: event.target.value,
+                      }))
+                    }
                     className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                     style={{ fontFamily: body }}
                   />
                 </label>
                 <label className="flex flex-col gap-1.5">
-                  <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Senha</span>
+                  <span
+                    className="text-[13px] text-[#5f644c]"
+                    style={{ fontFamily: body }}
+                  >
+                    Senha
+                  </span>
                   <input
                     type="password"
                     autoComplete="current-password"
                     value={authState.password}
-                    onChange={(event) => setAuthState((current) => ({ ...current, password: event.target.value }))}
+                    onChange={(event) =>
+                      setAuthState((current) => ({
+                        ...current,
+                        password: event.target.value,
+                      }))
+                    }
                     className="h-11 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                     style={{ fontFamily: body }}
                   />
                 </label>
               </div>
-              <div className={`flex flex-wrap items-center gap-3 border-t ${careersBorder} p-5`}>
+              <div
+                className={`flex flex-wrap items-center gap-3 border-t ${careersBorder} p-5`}
+              >
                 <button
                   type="submit"
                   disabled={isAuthSubmitting || authLoading}
@@ -3518,7 +4931,9 @@ function CareersEditorPage({
                 className="inline-flex border border-[#d6dace] px-3 py-2 text-[12px] uppercase text-[#5f644c] hover:text-[#101700] disabled:cursor-not-allowed disabled:opacity-70"
                 style={{ fontFamily: mono }}
               >
-                {isRefreshing || isLoadingRoles ? "Atualizando..." : "Atualizar lista"}
+                {isRefreshing || isLoadingRoles
+                  ? "Atualizando..."
+                  : "Atualizar lista"}
               </button>
               <button
                 type="button"
@@ -3533,64 +4948,114 @@ function CareersEditorPage({
             </div>
 
             <div className="grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1fr)_400px]">
-              <form onSubmit={(event) => { void handleSave(event); }} className={`border ${careersBorder} bg-[#f2f3ef]`}>
+              <form
+                onSubmit={(event) => {
+                  void handleSave(event);
+                }}
+                className={`border ${careersBorder} bg-[#f2f3ef]`}
+              >
                 <div className={`border-b ${careersBorder} px-4 py-3 md:px-5`}>
-                  <h2 className="text-[18px] text-[#101700] md:text-[20px]" style={{ fontFamily: heading, fontWeight: 500 }}>
+                  <h2
+                    className="text-[18px] text-[#101700] md:text-[20px]"
+                    style={{ fontFamily: heading, fontWeight: 500 }}
+                  >
                     {editingSlug ? "Editar vaga" : "Nova vaga"}
                   </h2>
                 </div>
                 <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 md:gap-5 md:p-5">
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Título *</span>
+                    <span
+                      className="text-[13px] text-[#5f644c]"
+                      style={{ fontFamily: body }}
+                    >
+                      Título *
+                    </span>
                     <input
                       value={formState.title}
-                      onChange={(event) => setFieldValue("title", event.target.value)}
+                      onChange={(event) =>
+                        setFieldValue("title", event.target.value)
+                      }
                       className="h-10 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body }}
                     />
                   </label>
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Slug (opcional)</span>
+                    <span
+                      className="text-[13px] text-[#5f644c]"
+                      style={{ fontFamily: body }}
+                    >
+                      Slug (opcional)
+                    </span>
                     <input
                       value={formState.slug}
-                      onChange={(event) => setFieldValue("slug", event.target.value)}
+                      onChange={(event) =>
+                        setFieldValue("slug", event.target.value)
+                      }
                       placeholder="gerado automaticamente"
                       className="h-10 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: mono }}
                     />
                   </label>
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Localização *</span>
+                    <span
+                      className="text-[13px] text-[#5f644c]"
+                      style={{ fontFamily: body }}
+                    >
+                      Localização *
+                    </span>
                     <input
                       value={formState.location}
-                      onChange={(event) => setFieldValue("location", event.target.value)}
+                      onChange={(event) =>
+                        setFieldValue("location", event.target.value)
+                      }
                       className="h-10 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body }}
                     />
                   </label>
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Regime *</span>
+                    <span
+                      className="text-[13px] text-[#5f644c]"
+                      style={{ fontFamily: body }}
+                    >
+                      Regime *
+                    </span>
                     <input
                       value={formState.commitment}
-                      onChange={(event) => setFieldValue("commitment", event.target.value)}
+                      onChange={(event) =>
+                        setFieldValue("commitment", event.target.value)
+                      }
                       className="h-10 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body }}
                     />
                   </label>
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Modelo *</span>
+                    <span
+                      className="text-[13px] text-[#5f644c]"
+                      style={{ fontFamily: body }}
+                    >
+                      Modelo *
+                    </span>
                     <input
                       value={formState.model}
-                      onChange={(event) => setFieldValue("model", event.target.value)}
+                      onChange={(event) =>
+                        setFieldValue("model", event.target.value)
+                      }
                       className="h-10 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body }}
                     />
                   </label>
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>Área (opcional)</span>
+                    <span
+                      className="text-[13px] text-[#5f644c]"
+                      style={{ fontFamily: body }}
+                    >
+                      Área (opcional)
+                    </span>
                     <input
                       value={formState.area}
-                      onChange={(event) => setFieldValue("area", event.target.value)}
+                      onChange={(event) =>
+                        setFieldValue("area", event.target.value)
+                      }
                       className="h-10 border border-[#d6dace] bg-[#f2f3ef] px-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body }}
                     />
@@ -3599,24 +5064,38 @@ function CareersEditorPage({
 
                 <div className={`border-y ${careersBorder} p-4 md:p-5`}>
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] text-[#5f644c]" style={{ fontFamily: body }}>
+                    <span
+                      className="text-[13px] text-[#5f644c]"
+                      style={{ fontFamily: body }}
+                    >
                       Corpo da vaga (Markdown)
                     </span>
                     <textarea
                       value={formState.bodyMarkdown}
-                      onChange={(event) => setFieldValue("bodyMarkdown", event.target.value)}
+                      onChange={(event) =>
+                        setFieldValue("bodyMarkdown", event.target.value)
+                      }
                       rows={22}
-                      placeholder={"## Why ShiftLabs?\nCole aqui o texto em Markdown do Notion.\n\n## What you'll do\n- Item 1\n- Item 2"}
+                      placeholder={
+                        "## Why ShiftLabs?\nCole aqui o texto em Markdown do Notion.\n\n## What you'll do\n- Item 1\n- Item 2"
+                      }
                       className="min-h-[460px] border border-[#d6dace] bg-[#f2f3ef] px-3 py-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                       style={{ fontFamily: body, lineHeight: 1.45 }}
                     />
-                    <p className="text-[12px] text-[#5f644c]" style={{ fontFamily: body }}>
-                      Aceita títulos (`##`), listas (`-` e `1.`), negrito (`**texto**`), itálico (`*texto*`) e links (`[texto](url)`).
+                    <p
+                      className="text-[12px] text-[#5f644c]"
+                      style={{ fontFamily: body }}
+                    >
+                      Aceita títulos (`##`), listas (`-` e `1.`), negrito
+                      (`**texto**`), itálico (`*texto*`) e links
+                      (`[texto](url)`).
                     </p>
                   </label>
                 </div>
 
-                <div className={`flex flex-wrap items-center gap-3 border-t ${careersBorder} p-4 md:p-5`}>
+                <div
+                  className={`flex flex-wrap items-center gap-3 border-t ${careersBorder} p-4 md:p-5`}
+                >
                   <button
                     type="submit"
                     disabled={isSaveSubmitting}
@@ -3646,17 +5125,26 @@ function CareersEditorPage({
 
               <aside className={`border ${careersBorder} bg-[#f2f3ef]`}>
                 <div className={`border-b ${careersBorder} px-4 py-3 md:px-5`}>
-                  <h2 className="text-[18px] text-[#101700] md:text-[20px]" style={{ fontFamily: heading, fontWeight: 500 }}>
+                  <h2
+                    className="text-[18px] text-[#101700] md:text-[20px]"
+                    style={{ fontFamily: heading, fontWeight: 500 }}
+                  >
                     Vagas cadastradas
                   </h2>
                 </div>
                 {isLoadingRoles ? (
-                  <p className="p-4 text-[13px] text-[#5f644c] md:p-5" style={{ fontFamily: body }}>
+                  <p
+                    className="p-4 text-[13px] text-[#5f644c] md:p-5"
+                    style={{ fontFamily: body }}
+                  >
                     Carregando vagas...
                   </p>
                 ) : null}
                 {!isLoadingRoles && !orderedRoles.length ? (
-                  <p className="p-4 text-[13px] text-[#5f644c] md:p-5" style={{ fontFamily: body }}>
+                  <p
+                    className="p-4 text-[13px] text-[#5f644c] md:p-5"
+                    style={{ fontFamily: body }}
+                  >
                     Nenhuma vaga cadastrada.
                   </p>
                 ) : null}
@@ -3664,13 +5152,22 @@ function CareersEditorPage({
                   {orderedRoles.map((role) => {
                     const isBase = baseRoleSlugSet.has(role.slug);
                     return (
-                      <li key={role.slug} className={`border-b ${careersBorder} p-4 last:border-b-0 md:p-5`}>
+                      <li
+                        key={role.slug}
+                        className={`border-b ${careersBorder} p-4 last:border-b-0 md:p-5`}
+                      >
                         <div className="flex items-start justify-between gap-3">
                           <div>
-                            <p className="text-[18px] text-[#101700]" style={{ fontFamily: heading, fontWeight: 500 }}>
+                            <p
+                              className="text-[18px] text-[#101700]"
+                              style={{ fontFamily: heading, fontWeight: 500 }}
+                            >
                               {role.title}
                             </p>
-                            <p className="mt-1 text-[12px] text-[#5f644c]" style={{ fontFamily: mono }}>
+                            <p
+                              className="mt-1 text-[12px] text-[#5f644c]"
+                              style={{ fontFamily: mono }}
+                            >
                               /{role.slug}
                             </p>
                           </div>
@@ -3693,11 +5190,15 @@ function CareersEditorPage({
                           <button
                             type="button"
                             disabled={deletingSlug === role.slug}
-                            onClick={() => { void handleDelete(role.slug); }}
+                            onClick={() => {
+                              void handleDelete(role.slug);
+                            }}
                             className="inline-flex border border-[#d6dace] px-3 py-2 text-[12px] uppercase text-[#9f2b2b] hover:bg-[#f3e2e2] disabled:cursor-not-allowed disabled:opacity-70"
                             style={{ fontFamily: mono }}
                           >
-                            {deletingSlug === role.slug ? "Excluindo..." : "Excluir"}
+                            {deletingSlug === role.slug
+                              ? "Excluindo..."
+                              : "Excluir"}
                           </button>
                           <a
                             href={`/vagas/${role.slug}`}
@@ -3720,14 +5221,24 @@ function CareersEditorPage({
   );
 }
 
-function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoading?: boolean }) {
+function CareersPage({
+  roles,
+  isLoading = false,
+}: {
+  roles: CareersRole[];
+  isLoading?: boolean;
+}) {
   const [isHeaderCondensed, setIsHeaderCondensed] = useState(false);
   const sortedRoles = useMemo(
     () =>
       [...roles].sort((first, second) =>
-        getDisplayRoleTitle(first.title, first.displayTitle).localeCompare(getDisplayRoleTitle(second.title, second.displayTitle), "pt-BR", {
-          sensitivity: "base",
-        }),
+        getDisplayRoleTitle(first.title, first.displayTitle).localeCompare(
+          getDisplayRoleTitle(second.title, second.displayTitle),
+          "pt-BR",
+          {
+            sensitivity: "base",
+          },
+        ),
       ),
     [roles],
   );
@@ -3737,7 +5248,9 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
 
     const updateHeaderMode = () => {
       const shouldCondense = window.scrollY > 28 && window.innerWidth >= 1024;
-      setIsHeaderCondensed((current) => (current === shouldCondense ? current : shouldCondense));
+      setIsHeaderCondensed((current) =>
+        current === shouldCondense ? current : shouldCondense,
+      );
     };
 
     const scheduleHeaderUpdate = () => {
@@ -3767,7 +5280,11 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
           isHeaderCondensed ? "pt-3" : "pt-0"
         }`}
       >
-        <div className={isHeaderCondensed ? "mx-auto w-full max-w-[1040px] px-4" : "w-full"}>
+        <div
+          className={
+            isHeaderCondensed ? "mx-auto w-full max-w-[1040px] px-4" : "w-full"
+          }
+        >
           <header
             className={`transition-all duration-300 ease-out ${
               isHeaderCondensed
@@ -3777,10 +5294,17 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
           >
             <div
               className={`mx-auto h-[72px] flex items-center justify-between gap-6 transition-[padding,max-width] duration-300 ease-out ${
-                isHeaderCondensed ? "max-w-none px-6" : "max-w-[1512px] px-6 xl:px-[192px]"
+                isHeaderCondensed
+                  ? "max-w-none px-6"
+                  : "max-w-[1512px] px-6 xl:px-[192px]"
               }`}
             >
-              <a href="/" aria-label="ShiftLabs" title="ShiftLabs" className="inline-flex min-h-[44px] items-center gap-2 py-1">
+              <a
+                href="/"
+                aria-label="ShiftLabs"
+                title="ShiftLabs"
+                className="inline-flex min-h-[44px] items-center gap-2 py-1"
+              >
                 <ShiftLabsIcon />
                 <ShiftLabsWordmark />
               </a>
@@ -3788,7 +5312,11 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                 <a
                   href="/vagas"
                   className="inline-flex min-h-[44px] items-center px-2 text-[#101700] transition-colors text-[14px]"
-                  style={{ fontFamily: mono, fontWeight: 400, lineHeight: "normal" }}
+                  style={{
+                    fontFamily: mono,
+                    fontWeight: 400,
+                    lineHeight: "normal",
+                  }}
                 >
                   /VAGAS
                 </a>
@@ -3836,8 +5364,9 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                     className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[420px]"
                     style={{ fontFamily: body, lineHeight: 1.3 }}
                   >
-                    Procuramos pessoas que pensam em sistemas, executam com autonomia e querem construir operações
-                    previsíveis em negócios que crescem rápido.
+                    Procuramos pessoas que pensam em sistemas, executam com
+                    autonomia e querem construir operações previsíveis em
+                    negócios que crescem rápido.
                   </p>
                 </div>
                 <div className="mt-8 lg:mt-0">
@@ -3855,34 +5384,70 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                 <div className="w-full max-w-[532px] border border-[#d6dace]">
                   <div className="grid grid-cols-2">
                     <div className="border-b border-r border-[#d6dace] p-6 min-h-[146px] flex flex-col justify-end gap-2">
-                      <p className="text-[#5f644c] text-[12px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
+                      <p
+                        className="text-[#5f644c] text-[12px] md:text-[14px] uppercase"
+                        style={{ fontFamily: mono }}
+                      >
                         vagas ativas
                       </p>
-                      <p className="text-[#101700] text-[36px] md:text-[48px]" style={{ fontFamily: heading, fontWeight: 500 }}>
+                      <p
+                        className="text-[#101700] text-[36px] md:text-[48px]"
+                        style={{ fontFamily: heading, fontWeight: 500 }}
+                      >
                         {isLoading ? "..." : roles.length}
                       </p>
                     </div>
                     <div className="border-b border-[#d6dace] p-6 min-h-[146px] flex flex-col justify-end gap-2">
-                      <p className="text-[#5f644c] text-[12px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
+                      <p
+                        className="text-[#5f644c] text-[12px] md:text-[14px] uppercase"
+                        style={{ fontFamily: mono }}
+                      >
                         foco
                       </p>
-                      <p className="text-[#101700] text-[18px] md:text-[24px]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: 1.1 }}>
+                      <p
+                        className="text-[#101700] text-[18px] md:text-[24px]"
+                        style={{
+                          fontFamily: heading,
+                          fontWeight: 500,
+                          lineHeight: 1.1,
+                        }}
+                      >
                         Produto, Tech, Growth e Operações
                       </p>
                     </div>
                     <div className="border-r border-[#d6dace] p-6 min-h-[146px] flex flex-col justify-end gap-2">
-                      <p className="text-[#5f644c] text-[12px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
+                      <p
+                        className="text-[#5f644c] text-[12px] md:text-[14px] uppercase"
+                        style={{ fontFamily: mono }}
+                      >
                         modelo
                       </p>
-                      <p className="text-[#101700] text-[18px] md:text-[24px]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: 1.1 }}>
+                      <p
+                        className="text-[#101700] text-[18px] md:text-[24px]"
+                        style={{
+                          fontFamily: heading,
+                          fontWeight: 500,
+                          lineHeight: 1.1,
+                        }}
+                      >
                         Estruturas enxutas e ownership alto
                       </p>
                     </div>
                     <div className="p-6 min-h-[146px] flex flex-col justify-end gap-2">
-                      <p className="text-[#5f644c] text-[12px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
+                      <p
+                        className="text-[#5f644c] text-[12px] md:text-[14px] uppercase"
+                        style={{ fontFamily: mono }}
+                      >
                         abordagem
                       </p>
-                      <p className="text-[#101700] text-[18px] md:text-[24px]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: 1.1 }}>
+                      <p
+                        className="text-[#101700] text-[18px] md:text-[24px]"
+                        style={{
+                          fontFamily: heading,
+                          fontWeight: 500,
+                          lineHeight: 1.1,
+                        }}
+                      >
                         Menos burocracia, mais entrega
                       </p>
                     </div>
@@ -3895,7 +5460,10 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
           </div>
         </div>
 
-        <div id="lista-vagas" className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] pt-16 pb-9 scroll-mt-[96px]">
+        <div
+          id="lista-vagas"
+          className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] pt-16 pb-9 scroll-mt-[96px]"
+        >
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
             <div className="flex flex-col gap-6 max-w-[560px]">
               <p
@@ -3925,7 +5493,10 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
         {isLoading ? (
           <div className="border-y border-[#d6dace]">
             <div className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-10">
-              <p className="text-[16px] text-[#5f644c]" style={{ fontFamily: body }}>
+              <p
+                className="text-[16px] text-[#5f644c]"
+                style={{ fontFamily: body }}
+              >
                 Carregando vagas...
               </p>
             </div>
@@ -3935,7 +5506,10 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
         {!isLoading && !roles.length ? (
           <div className="border-y border-[#d6dace]">
             <div className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-10">
-              <p className="text-[16px] text-[#5f644c]" style={{ fontFamily: body }}>
+              <p
+                className="text-[16px] text-[#5f644c]"
+                style={{ fontFamily: body }}
+              >
                 Nenhuma vaga publicada no momento.
               </p>
             </div>
@@ -3949,8 +5523,15 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
               {sortedRoles.map((role, index) => {
                 const introPreview = getRoleCardSummary(role);
                 const displayArea = getRoleCardArea(role);
-                const displayRoleTitle = getDisplayRoleTitle(role.title, role.displayTitle);
-                const seniorityBadge = getRoleSeniorityBadge(role.title, role.displaySeniority, role.slug);
+                const displayRoleTitle = getDisplayRoleTitle(
+                  role.title,
+                  role.displayTitle,
+                );
+                const seniorityBadge = getRoleSeniorityBadge(
+                  role.title,
+                  role.displaySeniority,
+                  role.slug,
+                );
                 return (
                   <li
                     key={role.slug}
@@ -3960,10 +5541,16 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                       index >= 2 ? "md:border-t md:border-[#d6dace]" : ""
                     } ${index === 1 ? "md:border-t-0" : ""}`}
                   >
-                    <a href={`/vagas/${role.slug}`} className="group block h-full transition-colors hover:bg-[#ecefe7]">
+                    <a
+                      href={`/vagas/${role.slug}`}
+                      className="group block h-full transition-colors hover:bg-[#ecefe7]"
+                    >
                       <article className="flex h-full min-h-[318px] flex-col justify-between gap-8 p-6">
                         <div className="flex flex-col gap-4">
-                          <p className="text-[#5f644c] text-[13px] md:text-[14px] uppercase" style={{ fontFamily: mono }}>
+                          <p
+                            className="text-[#5f644c] text-[13px] md:text-[14px] uppercase"
+                            style={{ fontFamily: mono }}
+                          >
                             /{displayArea}
                           </p>
                           <div className="flex flex-wrap items-center gap-2 md:gap-3">
@@ -3973,7 +5560,9 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                             >
                               {displayRoleTitle}
                             </h2>
-                            {seniorityBadge ? <RoleSeniorityBadge label={seniorityBadge} /> : null}
+                            {seniorityBadge ? (
+                              <RoleSeniorityBadge label={seniorityBadge} />
+                            ) : null}
                           </div>
                           <p
                             className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[480px]"
@@ -4022,7 +5611,9 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
               })}
             </ul>
             <XlHelper className="border-t border-[#d6dace]" />
-            <SectionBorderTicks positions={["192px", "756px", "calc(100% - 192px)"]} />
+            <SectionBorderTicks
+              positions={["192px", "756px", "calc(100% - 192px)"]}
+            />
           </div>
         ) : null}
 
@@ -4032,10 +5623,20 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
             <div className="flex flex-col lg:flex-row flex-1 min-w-0 bg-[#b4eb38]">
               <div className="flex flex-col justify-between p-6 w-full lg:w-1/2 min-h-[300px] lg:h-[360px]">
                 <div className="flex flex-col gap-6 max-w-[450px]">
-                  <p className="text-[#456300] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
+                  <p
+                    className="text-[#456300] text-[14px] md:text-[16px] uppercase"
+                    style={{ fontFamily: mono }}
+                  >
                     /call to action
                   </p>
-                  <div className="text-[#101700] text-[28px] md:text-[36px] lg:text-[40px]" style={{ fontFamily: heading, fontWeight: 500, lineHeight: "normal" }}>
+                  <div
+                    className="text-[#101700] text-[28px] md:text-[36px] lg:text-[40px]"
+                    style={{
+                      fontFamily: heading,
+                      fontWeight: 500,
+                      lineHeight: "normal",
+                    }}
+                  >
                     Não encontrou a vaga ideal?
                   </div>
                 </div>
@@ -4043,7 +5644,8 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
                   className="text-[#456300] text-[14px] md:text-[16px] max-w-[390px] mt-8"
                   style={{ fontFamily: body, lineHeight: 1.3 }}
                 >
-                  Envie seu perfil e contexto. Se fizer sentido para o momento da operação, a gente conversa.
+                  Envie seu perfil e contexto. Se fizer sentido para o momento
+                  da operação, a gente conversa.
                 </p>
               </div>
               <div className="flex items-end justify-end p-6 w-full lg:w-1/2 min-h-[120px] lg:h-[360px]">
@@ -4065,23 +5667,47 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 pb-9">
             <div className="flex flex-col gap-8 max-w-[356px]">
               <ShiftLabsIcon />
-              <p className="text-[#5f644c] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
-                Construímos estruturas para produto, tecnologia, comercial e operação evoluírem no mesmo ritmo.
+              <p
+                className="text-[#5f644c] text-[14px] md:text-[16px]"
+                style={{ fontFamily: body, lineHeight: 1.3 }}
+              >
+                Construímos estruturas para produto, tecnologia, comercial e
+                operação evoluírem no mesmo ritmo.
               </p>
-              <p className="text-[#5f644c] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
-                <span className="text-[#101700]" style={{ fontFamily: display, fontWeight: 500 }}>© 2026 ShiftLabs.</span>
+              <p
+                className="text-[#5f644c] text-[14px] md:text-[16px]"
+                style={{ fontFamily: body, lineHeight: 1.3 }}
+              >
+                <span
+                  className="text-[#101700]"
+                  style={{ fontFamily: display, fontWeight: 500 }}
+                >
+                  © 2026 ShiftLabs.
+                </span>
                 <span> Todos os direitos reservados.</span>
               </p>
             </div>
             <div className="flex flex-col gap-6">
-              <p className="text-[#5f644c] text-[14px] md:text-[16px] uppercase" style={{ fontFamily: mono }}>
+              <p
+                className="text-[#5f644c] text-[14px] md:text-[16px] uppercase"
+                style={{ fontFamily: mono }}
+              >
                 /social
               </p>
               <div className="flex items-center gap-5">
                 {careersSocialLinks.map(({ name, href, Icon }) => (
-                  <a key={`careers-footer-${name}`} href={href} target="_blank" rel="noreferrer" className="inline-flex min-h-[44px] items-center gap-2 py-1">
+                  <a
+                    key={`careers-footer-${name}`}
+                    href={href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex min-h-[44px] items-center gap-2 py-1"
+                  >
                     <Icon />
-                    <span className="text-[#5f644c] text-[14px] md:text-[16px]" style={{ fontFamily: body, lineHeight: 1.3 }}>
+                    <span
+                      className="text-[#5f644c] text-[14px] md:text-[16px]"
+                      style={{ fontFamily: body, lineHeight: 1.3 }}
+                    >
                       {name}
                     </span>
                   </a>
@@ -4099,24 +5725,40 @@ function CareersPage({ roles, isLoading = false }: { roles: CareersRole[]; isLoa
 }
 
 export default function App() {
-  const pathname = typeof window !== "undefined" ? window.location.pathname.replace(/\/+$/, "") || "/" : "/";
+  const pathname =
+    typeof window !== "undefined"
+      ? window.location.pathname.replace(/\/+$/, "") || "/"
+      : "/";
+  const careersApplyMatch = pathname.match(/^\/vagas\/([^/]+)\/candidatar$/);
   const isCareersEditorRoute = pathname === "/vagas/editor";
   const isCareersListRoute = pathname === "/vagas";
-  const isCareersRoleRoute = pathname.startsWith("/vagas/") && !isCareersEditorRoute;
-  const shouldLoadCareersData = isCareersEditorRoute || isCareersListRoute || isCareersRoleRoute;
+  const isCareersApplyRoute = Boolean(careersApplyMatch);
+  const isCareersRoleRoute =
+    pathname.startsWith("/vagas/") &&
+    !isCareersEditorRoute &&
+    !isCareersApplyRoute;
+  const shouldLoadCareersData =
+    isCareersEditorRoute ||
+    isCareersListRoute ||
+    isCareersRoleRoute ||
+    isCareersApplyRoute;
 
   const [careersRoles, setCareersRoles] = useState<CareersRole[]>(
-    hasSupabaseConfig && shouldLoadCareersData ? [] : defaultCareersRoles,
+    hasSupabaseConfig && shouldLoadCareersData ? [] : fallbackCareersRoles,
   );
   const [editorRoles, setEditorRoles] = useState<CareersRole[]>([]);
-  const [isLoadingPublicRoles, setIsLoadingPublicRoles] = useState(hasSupabaseConfig && shouldLoadCareersData);
+  const [isLoadingPublicRoles, setIsLoadingPublicRoles] = useState(
+    hasSupabaseConfig && shouldLoadCareersData,
+  );
   const [isLoadingEditorRoles, setIsLoadingEditorRoles] = useState(false);
   const [editorSession, setEditorSession] = useState<Session | null>(null);
-  const [authLoading, setAuthLoading] = useState(hasSupabaseConfig && shouldLoadCareersData && isCareersEditorRoute);
+  const [authLoading, setAuthLoading] = useState(
+    hasSupabaseConfig && shouldLoadCareersData && isCareersEditorRoute,
+  );
 
   const fetchPublishedRoles = async () => {
     if (!supabase) {
-      setCareersRoles(defaultCareersRoles);
+      setCareersRoles(fallbackCareersRoles);
       setIsLoadingPublicRoles(false);
       return;
     }
@@ -4129,21 +5771,27 @@ export default function App() {
       .order("title", { ascending: true });
 
     if (error) {
-      console.error("Erro ao buscar vagas públicas no Supabase:", error.message);
-      setCareersRoles(defaultCareersRoles);
+      console.error(
+        "Erro ao buscar vagas públicas no Supabase:",
+        error.message,
+      );
+      setCareersRoles(fallbackCareersRoles);
       setIsLoadingPublicRoles(false);
       return;
     }
 
     const mapped = ((data ?? []) as CareersRoleRow[]).map(rowToCareersRole);
     const visibleMapped = filterVisibleCareersRoles(mapped);
-    setCareersRoles(visibleMapped.length ? visibleMapped : defaultCareersRoles);
+    const mergedVisible = mergeAlwaysPublishedCareersRoles(visibleMapped);
+    setCareersRoles(
+      visibleMapped.length ? mergedVisible : fallbackCareersRoles,
+    );
     setIsLoadingPublicRoles(false);
   };
 
   const fetchEditorRoles = async () => {
     if (!supabase) {
-      setEditorRoles(defaultCareersRoles);
+      setEditorRoles(fallbackCareersRoles);
       setIsLoadingEditorRoles(false);
       return;
     }
@@ -4155,15 +5803,22 @@ export default function App() {
       .order("title", { ascending: true });
 
     if (error) {
-      console.error("Erro ao buscar vagas do editor no Supabase:", error.message);
-      setEditorRoles([]);
+      console.error(
+        "Erro ao buscar vagas do editor no Supabase:",
+        error.message,
+      );
+      setEditorRoles(fallbackCareersRoles);
       setIsLoadingEditorRoles(false);
       return;
     }
 
     const rows = (data ?? []) as CareersRoleRow[];
-    const hasDisplaySeniorityColumn = rows.some((row) => Object.prototype.hasOwnProperty.call(row, "display_seniority"));
-    const hasDisplayCommitmentColumn = rows.some((row) => Object.prototype.hasOwnProperty.call(row, "display_commitment"));
+    const hasDisplaySeniorityColumn = rows.some((row) =>
+      Object.prototype.hasOwnProperty.call(row, "display_seniority"),
+    );
+    const hasDisplayCommitmentColumn = rows.some((row) =>
+      Object.prototype.hasOwnProperty.call(row, "display_commitment"),
+    );
     const rowsNeedingNormalization = rows
       .map((row) => ({
         id: row.id,
@@ -4189,16 +5844,20 @@ export default function App() {
           about: toTextArray(row.about),
           cardSummary: undefined,
         }),
-        inferredDisplaySeniority: getRoleSeniorityBadge(row.title, undefined, row.slug) ?? "",
+        inferredDisplaySeniority:
+          getRoleSeniorityBadge(row.title, undefined, row.slug) ?? "",
         inferredDisplayCommitment: getRoleDisplayCommitment(row.commitment),
       }))
-      .filter((entry) =>
-        entry.inferredArea !== entry.currentArea ||
-        entry.currentDisplayArea !== entry.inferredArea ||
-        entry.currentDisplayTitle !== entry.inferredDisplayTitle ||
-        entry.currentCardSummary !== entry.inferredCardSummary ||
-        (hasDisplaySeniorityColumn && entry.currentDisplaySeniority !== entry.inferredDisplaySeniority) ||
-        (hasDisplayCommitmentColumn && entry.currentDisplayCommitment !== entry.inferredDisplayCommitment),
+      .filter(
+        (entry) =>
+          entry.inferredArea !== entry.currentArea ||
+          entry.currentDisplayArea !== entry.inferredArea ||
+          entry.currentDisplayTitle !== entry.inferredDisplayTitle ||
+          entry.currentCardSummary !== entry.inferredCardSummary ||
+          (hasDisplaySeniorityColumn &&
+            entry.currentDisplaySeniority !== entry.inferredDisplaySeniority) ||
+          (hasDisplayCommitmentColumn &&
+            entry.currentDisplayCommitment !== entry.inferredDisplayCommitment),
       );
 
     if (rowsNeedingNormalization.length) {
@@ -4214,13 +5873,20 @@ export default function App() {
 
       const failed = results.filter((result) => result.updateError);
       if (failed.length) {
-        console.error("Não foi possível atualizar a área de algumas vagas:", failed.map((result) => result.updateError?.message));
+        console.error(
+          "Não foi possível atualizar a área de algumas vagas:",
+          failed.map((result) => result.updateError?.message),
+        );
       } else {
         void fetchPublishedRoles();
       }
     }
 
-    setEditorRoles(filterVisibleCareersRoles(rows.map(rowToCareersRole)));
+    setEditorRoles(
+      mergeAlwaysPublishedCareersRoles(
+        filterVisibleCareersRoles(rows.map(rowToCareersRole)),
+      ),
+    );
     setIsLoadingEditorRoles(false);
   };
 
@@ -4235,7 +5901,7 @@ export default function App() {
     if (!supabase) {
       setAuthLoading(false);
       setIsLoadingPublicRoles(false);
-      setEditorRoles(defaultCareersRoles);
+      setEditorRoles(fallbackCareersRoles);
       return;
     }
 
@@ -4269,17 +5935,19 @@ export default function App() {
 
     void initialize();
 
-    const { data: authData } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!isActive) return;
-      setEditorSession(session);
-      setAuthLoading(false);
-      void fetchPublishedRoles();
-      if (session) {
-        void fetchEditorRoles();
-      } else {
-        setEditorRoles([]);
-      }
-    });
+    const { data: authData } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        if (!isActive) return;
+        setEditorSession(session);
+        setAuthLoading(false);
+        void fetchPublishedRoles();
+        if (session) {
+          void fetchEditorRoles();
+        } else {
+          setEditorRoles([]);
+        }
+      },
+    );
 
     return () => {
       isActive = false;
@@ -4348,7 +6016,10 @@ export default function App() {
       return { ok: false, message: "Supabase não está configurado." };
     }
 
-    const { error } = await supabase.from("careers_roles").delete().eq("slug", slug);
+    const { error } = await supabase
+      .from("careers_roles")
+      .delete()
+      .eq("slug", slug);
     if (error) {
       return { ok: false, message: error.message };
     }
@@ -4365,16 +6036,35 @@ export default function App() {
     await fetchPublishedRoles();
   };
 
-  const roleSlugFromPath = isCareersRoleRoute ? decodeURIComponent(pathname.slice("/vagas/".length)) : null;
-  const selectedRole = roleSlugFromPath ? careersRoles.find((role) => role.slug === roleSlugFromPath) : undefined;
-  const shouldShowRoleLoadingState = Boolean(isCareersRoleRoute && isLoadingPublicRoles);
-  const isUnknownRoleRoute = Boolean(isCareersRoleRoute && !isLoadingPublicRoles && roleSlugFromPath && !selectedRole);
+  const roleSlugFromPath = isCareersRoleRoute
+    ? decodeURIComponent(pathname.slice("/vagas/".length))
+    : null;
+  const applyRoleSlugFromPath =
+    isCareersApplyRoute && careersApplyMatch?.[1]
+      ? decodeURIComponent(careersApplyMatch[1])
+      : null;
+  const selectedRoleSlug = isCareersApplyRoute
+    ? applyRoleSlugFromPath
+    : roleSlugFromPath;
+  const selectedRole = selectedRoleSlug
+    ? careersRoles.find((role) => role.slug === selectedRoleSlug)
+    : undefined;
+  const shouldShowRoleLoadingState = Boolean(
+    (isCareersRoleRoute || isCareersApplyRoute) && isLoadingPublicRoles,
+  );
+  const isUnknownRoleRoute = Boolean(
+    (isCareersRoleRoute || isCareersApplyRoute) &&
+    !isLoadingPublicRoles &&
+    selectedRoleSlug &&
+    !selectedRole,
+  );
 
   useEffect(() => {
     if (isCareersEditorRoute) {
       applySeoPayload({
         title: "Editor de Vagas | ShiftLabs",
-        description: "Painel interno para publicacao e manutencao das vagas da ShiftLabs.",
+        description:
+          "Painel interno para publicacao e manutencao das vagas da ShiftLabs.",
         path: "/vagas/editor",
         noindex: true,
         pageSchema: null,
@@ -4382,8 +6072,26 @@ export default function App() {
       return;
     }
 
+    if (isCareersApplyRoute && selectedRole) {
+      const displayRoleTitle = getDisplayRoleTitle(
+        selectedRole.title,
+        selectedRole.displayTitle,
+      );
+      applySeoPayload({
+        title: `Candidatar-se | ${displayRoleTitle} | ShiftLabs`,
+        description: `Envie sua candidatura para a vaga de ${displayRoleTitle} na ShiftLabs.`,
+        path: `/vagas/${selectedRole.slug}/candidatar`,
+        noindex: true,
+        pageSchema: null,
+      });
+      return;
+    }
+
     if (isCareersRoleRoute && selectedRole) {
-      const displayRoleTitle = getDisplayRoleTitle(selectedRole.title, selectedRole.displayTitle);
+      const displayRoleTitle = getDisplayRoleTitle(
+        selectedRole.title,
+        selectedRole.displayTitle,
+      );
       applySeoPayload({
         title: `${displayRoleTitle} | Vagas ShiftLabs`,
         description: getRoleCardSummary(selectedRole),
@@ -4394,12 +6102,13 @@ export default function App() {
       return;
     }
 
-    if (isCareersListRoute || isCareersRoleRoute) {
+    if (isCareersListRoute || isCareersRoleRoute || isCareersApplyRoute) {
       applySeoPayload({
         title: "Vagas na ShiftLabs | Carreiras",
         description:
           "Explore as vagas abertas da ShiftLabs em produto, tecnologia, growth, comercial e operacoes.",
-        path: isCareersRoleRoute ? "/vagas" : pathname,
+        path:
+          isCareersRoleRoute || isCareersApplyRoute ? "/vagas" : pathname,
         noindex: Boolean(isUnknownRoleRoute || shouldShowRoleLoadingState),
         pageSchema: buildCareersCollectionSchema(careersRoles),
       });
@@ -4416,6 +6125,7 @@ export default function App() {
     pathname,
     isCareersEditorRoute,
     isCareersListRoute,
+    isCareersApplyRoute,
     isCareersRoleRoute,
     isUnknownRoleRoute,
     shouldShowRoleLoadingState,
@@ -4440,7 +6150,19 @@ export default function App() {
   }
 
   if (isCareersListRoute) {
-    return <CareersPage roles={careersRoles} isLoading={isLoadingPublicRoles} />;
+    return (
+      <CareersPage roles={careersRoles} isLoading={isLoadingPublicRoles} />
+    );
+  }
+
+  if (isCareersApplyRoute) {
+    if (shouldShowRoleLoadingState) {
+      return <CareersPage roles={[]} isLoading />;
+    }
+    if (selectedRole) {
+      return <CareerRoleApplyPage role={selectedRole} />;
+    }
+    return <CareersPage roles={careersRoles} />;
   }
 
   if (isCareersRoleRoute) {

@@ -7,6 +7,9 @@
     "build": "node scripts/generate-seo-files.mjs && vite build && node scripts/generate-static-route-html.mjs",
     "seo:build": "node scripts/generate-seo-files.mjs",
     "seo:verify": "node scripts/verify-seo-build.mjs",
+    "seo:verify:production": "node scripts/verify-production-seo.mjs",
+    "seo:verify:lighthouse": "node scripts/verify-lighthouse.mjs",
+    "seo:verify:all": "npm run seo:verify && npm run seo:verify:production && npm run seo:verify:lighthouse",
     "ux-copy:verify": "node scripts/verify-ux-copy.mjs",
     "dev": "vite"
   },

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { createClient, type Session } from "@supabase/supabase-js";
+import type { Session } from "@supabase/supabase-js";
 import svgPaths from "../imports/svg-pgtixnbxan";
 import {
   MenuxLogo,
@@ -22,15 +22,26 @@ const supabasePublishableKey =
   (import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined) ??
   "sb_publishable_EWydN_Aqm9YbtXkQUNGfrA_BpB8LD4R";
 const hasSupabaseConfig = Boolean(supabaseUrl && supabasePublishableKey);
-const supabase = hasSupabaseConfig
-  ? createClient(supabaseUrl, supabasePublishableKey, {
-      auth: {
-        autoRefreshToken: true,
-        persistSession: true,
-        detectSessionInUrl: true,
-      },
-    })
-  : null;
+type SupabaseModule = typeof import("@supabase/supabase-js");
+type ShiftLabsSupabaseClient = ReturnType<SupabaseModule["createClient"]>;
+let supabaseClientPromise: Promise<ShiftLabsSupabaseClient> | null = null;
+
+async function getSupabaseClient() {
+  if (!hasSupabaseConfig) return null;
+
+  supabaseClientPromise ??= import("@supabase/supabase-js").then(
+    ({ createClient }) =>
+      createClient(supabaseUrl, supabasePublishableKey, {
+        auth: {
+          autoRefreshToken: true,
+          persistSession: true,
+          detectSessionInUrl: true,
+        },
+      }),
+  );
+
+  return supabaseClientPromise;
+}
 const fallbackSiteUrl = "https://www.shiftlabs.digital";
 const configuredSiteUrl = (
   (import.meta.env.VITE_SITE_URL as string | undefined) ?? fallbackSiteUrl
@@ -2356,6 +2367,7 @@ function LandingPage() {
   const [isContactSubmitting, setIsContactSubmitting] = useState(false);
   const [heroContactFeedback, setHeroContactFeedback] =
     useState<HeroContactFeedback | null>(null);
+  const [isHomeDeferredReady, setIsHomeDeferredReady] = useState(false);
   const isContactSuccess = heroContactFeedback?.type === "success";
   const isContactError = heroContactFeedback?.type === "error";
 
@@ -2415,6 +2427,8 @@ function LandingPage() {
       return;
     }
 
+    const supabase = await getSupabaseClient();
+
     if (!supabase) {
       setHeroContactFeedback({
         type: "error",
@@ -2459,6 +2473,25 @@ function LandingPage() {
     );
     if (!revealNodes.length) return;
     revealNodes.forEach((node) => node.classList.add("is-visible"));
+  }, []);
+
+  useEffect(() => {
+    if ("requestIdleCallback" in window) {
+      const idleId = window.requestIdleCallback(
+        () => {
+          setIsHomeDeferredReady(true);
+        },
+        { timeout: 1400 },
+      );
+
+      return () => window.cancelIdleCallback(idleId);
+    }
+
+    const timer = window.setTimeout(() => {
+      setIsHomeDeferredReady(true);
+    }, 900);
+
+    return () => window.clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -2528,7 +2561,7 @@ function LandingPage() {
             }`}
           >
             <div
-              className={`mx-auto h-[72px] flex items-center justify-between gap-6 transition-[padding,max-width] duration-300 ease-out ${
+              className={`mx-auto h-[72px] flex items-center justify-between gap-3 transition-[padding,max-width] duration-300 ease-out ${
                 isHeaderCondensed
                   ? "max-w-none px-6"
                   : "max-w-[1512px] px-6 xl:px-[192px]"
@@ -2543,10 +2576,10 @@ function LandingPage() {
                 <ShiftLabsIcon />
                 <ShiftLabsWordmark />
               </a>
-              <div className="flex items-center gap-3 md:gap-6">
+              <div className="flex items-center gap-2 sm:gap-3 md:gap-6">
                 <a
                   href="/vagas"
-                  className="inline-flex min-h-[44px] items-center px-2 text-[#5f644c] hover:text-[#101700] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700] text-[14px]"
+                  className="inline-flex min-h-[44px] items-center px-1.5 sm:px-2 text-[#5f644c] hover:text-[#101700] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700] text-[13px] sm:text-[14px]"
                   style={{
                     fontFamily: mono,
                     fontWeight: 400,
@@ -2558,7 +2591,7 @@ function LandingPage() {
                 <button
                   type="button"
                   onClick={openContactModal}
-                  className="hidden sm:inline-flex min-h-[44px] items-center border border-[#d6dace] px-3 text-[#101700] transition-[background-color,border-color,color,transform] hover:border-[#101700] hover:bg-[#101700] hover:text-[#f2f3ef] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700] text-[12px] md:text-[14px] uppercase cursor-pointer"
+                  className="inline-flex min-h-[44px] items-center border border-[#d6dace] px-2.5 sm:px-3 text-[#101700] transition-[background-color,border-color,color,transform] hover:border-[#101700] hover:bg-[#101700] hover:text-[#f2f3ef] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700] text-[12px] md:text-[14px] uppercase cursor-pointer"
                   style={{
                     fontFamily: mono,
                     fontWeight: 400,
@@ -2618,8 +2651,8 @@ function LandingPage() {
                   </button>
                 </div>
               </div>
-              <div className="flex items-center justify-center p-6 w-full lg:w-1/2 min-h-[300px] lg:h-[462px] lg:border-l border-[#d6dace]">
-                <div className="relative w-full max-w-[532px] aspect-[532/430] overflow-hidden bg-transparent">
+              <div className="flex items-center justify-center p-4 md:p-6 w-full lg:w-1/2 min-h-[180px] md:min-h-[300px] lg:h-[462px] border-t lg:border-t-0 lg:border-l border-[#d6dace]">
+                <div className="relative w-full max-w-[320px] md:max-w-[532px] aspect-[532/430] overflow-hidden bg-transparent">
                   <svg
                     aria-hidden="true"
                     focusable="false"
@@ -2644,14 +2677,20 @@ function LandingPage() {
                       clipPath: "inset(2px)",
                       filter: "url(#hero-video-alpha-key)",
                     }}
-                    src="/videos/hero-header.mp4"
+                    poster="/videos/hero-header-poster.jpg"
                     autoPlay
                     loop
                     muted
                     playsInline
-                    preload="auto"
+                    preload="metadata"
                     aria-label="Video institucional da ShiftLabs"
-                  />
+                  >
+                    <source
+                      src="/videos/hero-header.mp4"
+                      type="video/mp4"
+                      media="(min-width: 768px)"
+                    />
+                  </video>
                 </div>
               </div>
             </div>
@@ -2680,7 +2719,32 @@ function LandingPage() {
           </div>
         </div>
 
-        {/* ===== PROBLEM HEADER ===== */}
+        <nav
+          aria-label="Seções da home"
+          className="sticky top-[72px] z-40 md:hidden border-b border-[#d6dace] bg-[#f2f3ef]"
+        >
+          <div className="flex overflow-x-auto px-4">
+            {[
+              ["#problema", "Problema"],
+              ["#servicos", "Serviços"],
+              ["#como-trabalhamos", "Método"],
+              ["#cases", "Cases"],
+            ].map(([href, label]) => (
+              <a
+                key={href}
+                href={href}
+                className="inline-flex min-h-[44px] shrink-0 items-center px-3 text-[12px] uppercase text-[#5f644c] hover:text-[#101700] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#101700]"
+                style={{ fontFamily: mono }}
+              >
+                {label}
+              </a>
+            ))}
+          </div>
+        </nav>
+
+        {isHomeDeferredReady ? (
+          <>
+            {/* ===== PROBLEM HEADER ===== */}
         <div
           id="problema"
           data-reveal="section"
@@ -2717,7 +2781,7 @@ function LandingPage() {
               {problemCards.map((card, index) => (
                 <div
                   key={card.id}
-                  className={`relative flex flex-col p-6 min-h-[248px] md:h-[231px] md:pr-[249px] ${
+                  className={`relative flex flex-col p-6 min-h-[220px] md:h-[231px] md:pr-[249px] ${
                     index > 0 ? "border-t border-[#d6dace]" : ""
                   } ${index % 2 === 1 ? "sm:border-l sm:border-[#d6dace]" : ""} ${
                     index >= 2 ? "sm:border-t sm:border-[#d6dace]" : ""
@@ -2925,7 +2989,7 @@ function LandingPage() {
             {services.map((svc, index) => (
               <div
                 key={svc.title}
-                className={`relative flex flex-col p-6 min-h-[286px] md:h-[231px] md:pr-[249px] ${
+                className={`relative flex flex-col p-6 min-h-[250px] md:h-[231px] md:pr-[249px] ${
                   index > 0 ? "border-t border-[#d6dace]" : ""
                 } ${index % 2 === 1 ? "md:border-l md:border-[#d6dace]" : ""} ${
                   index >= 2 ? "md:border-t md:border-[#d6dace]" : ""
@@ -3086,7 +3150,7 @@ function LandingPage() {
               {workSteps.map((step, index) => (
                 <div
                   key={step.title}
-                  className={`flex min-h-[260px] flex-col justify-between gap-10 p-6 ${
+                  className={`flex min-h-[230px] flex-col justify-between gap-8 p-6 md:min-h-[260px] md:gap-10 ${
                     index > 0 ? "border-t border-[#d6dace]" : ""
                   } ${index > 0 ? "md:border-t-0 md:border-l md:border-[#d6dace]" : ""}`}
                 >
@@ -3147,7 +3211,7 @@ function LandingPage() {
               <div className="flex flex-col w-full lg:w-1/2 border-x border-b lg:border-b-0 border-[#d6dace]">
                 {/* Case 1 */}
                 <div
-                  className="flex flex-col justify-between p-6 min-h-[300px] lg:min-h-[330px]"
+                  className="flex flex-col justify-between p-6 min-h-[270px] lg:min-h-[330px]"
                   onMouseEnter={() => setActiveCaseLogo("menux")}
                   onClick={() => setActiveCaseLogo("menux")}
                 >
@@ -3193,7 +3257,7 @@ function LandingPage() {
                 </div>
                 {/* Case 2 */}
                 <div
-                  className="flex flex-col justify-between p-6 min-h-[300px] lg:min-h-[330px] border-t border-[#d6dace]"
+                  className="flex flex-col justify-between p-6 min-h-[270px] lg:min-h-[330px] border-t border-[#d6dace]"
                   onMouseEnter={() => setActiveCaseLogo("cortex")}
                   onClick={() => setActiveCaseLogo("cortex")}
                 >
@@ -3536,11 +3600,13 @@ function LandingPage() {
             <BigWordmark />
           </div>
         </div>
+          </>
+        ) : null}
       </main>
 
       {isContactModalOpen ? (
         <div
-          className="fixed inset-0 z-[140] flex items-center justify-center px-4 py-6"
+          className="fixed inset-0 z-[140] flex items-start justify-center overflow-y-auto px-4 py-4 sm:items-center sm:py-6"
           onClick={closeContactModal}
         >
           <div className="absolute inset-0 bg-[#101700]/45 backdrop-blur-[1px]" />
@@ -3548,10 +3614,10 @@ function LandingPage() {
             role="dialog"
             aria-modal="true"
             aria-label="Formulário de contato"
-            className="relative w-full max-w-[760px] border border-[#d6dace] bg-[#f2f3ef]"
+            className="relative flex max-h-[calc(100dvh-32px)] w-full max-w-[760px] flex-col overflow-hidden border border-[#d6dace] bg-[#f2f3ef]"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="border-b border-[#d6dace] px-5 py-4 md:px-6">
+            <div className="shrink-0 border-b border-[#d6dace] px-5 py-4 md:px-6">
               <div className="flex items-center justify-between gap-4">
                 <p
                   className="text-[#5f644c] text-[13px] md:text-[14px] uppercase"
@@ -3584,7 +3650,7 @@ function LandingPage() {
             </div>
 
             {isContactSuccess ? (
-              <div className="p-5 md:p-6">
+              <div className="min-h-0 overflow-y-auto p-5 md:p-6">
                 <div className="shiftlabs-success-shell border border-[#d6dace] p-5 md:p-6">
                   <div className="relative z-[1] flex flex-col gap-5 md:gap-6">
                     <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -3687,7 +3753,10 @@ function LandingPage() {
                 </div>
               </div>
             ) : (
-              <form onSubmit={submitHeroContactForm} className="p-5 md:p-6">
+              <form
+                onSubmit={submitHeroContactForm}
+                className="min-h-0 overflow-y-auto p-5 md:p-6"
+              >
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <label className="flex flex-col gap-1.5">
                     <span
@@ -3793,7 +3862,7 @@ function LandingPage() {
                   Usaremos seus dados apenas para responder seu contato.
                 </p>
 
-                <div className="mt-3 flex flex-wrap items-center gap-3">
+                <div className="sticky bottom-0 -mx-5 mt-3 flex flex-wrap items-center gap-3 border-t border-[#d6dace] bg-[#f2f3ef] px-5 pt-3 pb-1 md:-mx-6 md:px-6">
                   <button
                     type="button"
                     onClick={closeContactModal}
@@ -4589,6 +4658,8 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
       "Mensagem:",
       message || "Sem mensagem adicional.",
     ].join("\n");
+
+    const supabase = await getSupabaseClient();
 
     if (!supabase) {
       if (typeof window !== "undefined") {
@@ -6417,6 +6488,8 @@ export default function App() {
   );
 
   const fetchPublishedRoles = async () => {
+    const supabase = await getSupabaseClient();
+
     if (!supabase) {
       setCareersRoles(fallbackCareersRoles);
       setIsLoadingPublicRoles(false);
@@ -6450,6 +6523,8 @@ export default function App() {
   };
 
   const fetchEditorRoles = async () => {
+    const supabase = await getSupabaseClient();
+
     if (!supabase) {
       setEditorRoles(fallbackCareersRoles);
       setIsLoadingEditorRoles(false);
@@ -6558,25 +6633,27 @@ export default function App() {
       return;
     }
 
-    if (!supabase) {
-      setAuthLoading(false);
-      setIsLoadingPublicRoles(false);
-      setEditorRoles(fallbackCareersRoles);
-      return;
-    }
-
     let isActive = true;
+    let unsubscribeAuth: (() => void) | undefined;
 
-    if (!isCareersEditorRoute) {
-      setAuthLoading(false);
-      setEditorSession(null);
-      void fetchPublishedRoles();
-      return () => {
-        isActive = false;
-      };
-    }
+    const initializeCareers = async () => {
+      const supabase = await getSupabaseClient();
+      if (!isActive) return;
 
-    const initialize = async () => {
+      if (!supabase) {
+        setAuthLoading(false);
+        setIsLoadingPublicRoles(false);
+        setEditorRoles(fallbackCareersRoles);
+        return;
+      }
+
+      if (!isCareersEditorRoute) {
+        setAuthLoading(false);
+        setEditorSession(null);
+        void fetchPublishedRoles();
+        return;
+      }
+
       const { data, error } = await supabase.auth.getSession();
       if (!isActive) return;
       if (error) {
@@ -6591,31 +6668,33 @@ export default function App() {
       } else {
         setEditorRoles([]);
       }
+      const { data: authData } = supabase.auth.onAuthStateChange(
+        (_event, session) => {
+          if (!isActive) return;
+          setEditorSession(session);
+          setAuthLoading(false);
+          void fetchPublishedRoles();
+          if (session) {
+            void fetchEditorRoles();
+          } else {
+            setEditorRoles([]);
+          }
+        },
+      );
+      unsubscribeAuth = () => authData.subscription.unsubscribe();
     };
 
-    void initialize();
-
-    const { data: authData } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        if (!isActive) return;
-        setEditorSession(session);
-        setAuthLoading(false);
-        void fetchPublishedRoles();
-        if (session) {
-          void fetchEditorRoles();
-        } else {
-          setEditorRoles([]);
-        }
-      },
-    );
+    void initializeCareers();
 
     return () => {
       isActive = false;
-      authData.subscription.unsubscribe();
+      unsubscribeAuth?.();
     };
   }, [isCareersEditorRoute, shouldLoadCareersData]);
 
   const handleSignIn = async (email: string, password: string) => {
+    const supabase = await getSupabaseClient();
+
     if (!supabase) {
       return { ok: false, message: "Supabase não está configurado." };
     }
@@ -6631,6 +6710,8 @@ export default function App() {
   };
 
   const handleSignOut = async () => {
+    const supabase = await getSupabaseClient();
+
     if (!supabase) return;
     const { error } = await supabase.auth.signOut();
     if (error) {
@@ -6639,6 +6720,8 @@ export default function App() {
   };
 
   const handleSaveRole = async (role: CareersRole, previousSlug?: string) => {
+    const supabase = await getSupabaseClient();
+
     if (!supabase) {
       return { ok: false, message: "Supabase não está configurado." };
     }
@@ -6672,6 +6755,8 @@ export default function App() {
   };
 
   const handleDeleteRole = async (slug: string) => {
+    const supabase = await getSupabaseClient();
+
     if (!supabase) {
       return { ok: false, message: "Supabase não está configurado." };
     }

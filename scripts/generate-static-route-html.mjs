@@ -56,6 +56,10 @@ const baseHtmlPath = path.join(distDir, "index.html");
 const rawSiteUrl =
   firstNonEmptyEnv("SITE_URL", "VITE_SITE_URL") ?? fallbackSiteUrl;
 const siteUrl = rawSiteUrl.trim().replace(/\/+$/, "") || fallbackSiteUrl;
+const googleSiteVerification = firstNonEmptyEnv(
+  "GOOGLE_SITE_VERIFICATION",
+  "VITE_GOOGLE_SITE_VERIFICATION",
+);
 
 function firstNonEmptyEnv(...names) {
   for (const name of names) {
@@ -512,6 +516,11 @@ function buildHead({
     `<meta name="robots" content="${escapeHtml(robots)}" />`,
     '<meta name="theme-color" content="#f2f3ef" />',
     '<meta name="author" content="ShiftLabs" />',
+    ...(googleSiteVerification
+      ? [
+          `<meta name="google-site-verification" content="${escapeHtml(googleSiteVerification)}" />`,
+        ]
+      : []),
     '<meta property="og:site_name" content="ShiftLabs" />',
     '<meta property="og:locale" content="pt_BR" />',
     `<meta property="og:type" content="${escapeHtml(type)}" />`,

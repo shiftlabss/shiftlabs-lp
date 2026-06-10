@@ -526,6 +526,13 @@
   will-change: auto;
 }
 
+#inicio[data-reveal],
+#inicio [data-reveal] {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .marquee-track {
     animation: none;
@@ -554,7 +561,9 @@
 
 @media (hover: none) and (pointer: coarse) {
   .marquee-track {
-    animation-duration: 36s;
+    animation: none;
+    transform: none;
+    will-change: auto;
   }
 
   [data-reveal],
@@ -570,5 +579,13 @@
   .shiftlabs-success-check,
   .shiftlabs-success-progress::after {
     animation-duration: 2s;
+  }
+
+  .framework-layer,
+  .framework-layer-orb,
+  .framework-layer-icon,
+  .framework-layer-track::after {
+    animation: none;
+    will-change: auto;
   }
 }

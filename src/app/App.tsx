@@ -97,6 +97,22 @@ function XlHelper({ className = "" }: { className?: string }) {
   return <div className={`hidden xl:block w-[192px] shrink-0 ${className}`} />;
 }
 
+const edgeTickPositions = ["192px", "calc(100% - 192px)"];
+const twoColumnTickPositions = ["192px", "50%", "calc(100% - 192px)"];
+const threeColumnTickPositions = [
+  "192px",
+  "calc(33.333333% + 64px)",
+  "calc(66.666667% - 64px)",
+  "calc(100% - 192px)",
+];
+const serviceTagTickPositions = [
+  "192px",
+  "50%",
+  "calc(66.666667% - 64px)",
+  "calc(83.333333% - 128px)",
+  "calc(100% - 192px)",
+];
+
 function SectionBorderTicks({
   positions,
   showTop = true,
@@ -817,6 +833,24 @@ const frameworkLayers = [
   },
 ];
 
+const workSteps = [
+  {
+    step: "/01",
+    title: "Diagnóstico estrutural",
+    desc: "Mapeamos produto, tecnologia, operação e crescimento para encontrar gargalos reais, dependências críticas e oportunidades de coordenação.",
+  },
+  {
+    step: "/02",
+    title: "Arquitetura de execução",
+    desc: "Transformamos o diagnóstico em um plano claro: prioridades, fluxos, indicadores, responsáveis e sequência de implementação.",
+  },
+  {
+    step: "/03",
+    title: "Implementação coordenada",
+    desc: "Executamos com frentes integradas, rituais objetivos e decisões orientadas por contexto, conectando estratégia, software, growth e operação na mesma direção.",
+  },
+];
+
 const audienceItems = [
   { text: "Empresas que já validaram mercado.", textMaxClass: "max-w-[162px]" },
   {
@@ -838,7 +872,7 @@ const featureItems = [
   "Código isolado.",
   "Marketing isolado.",
 ];
-const marqueeText = "Most players optimize pieces. We optimize the system.";
+const marqueeText = "Muita gente melhora peças soltas. A ShiftLabs estrutura o sistema.";
 
 const socialLinks = [
   {
@@ -2509,10 +2543,22 @@ function LandingPage() {
                 <ShiftLabsIcon />
                 <ShiftLabsWordmark />
               </a>
-              <div className="flex items-center gap-4 md:gap-6">
+              <div className="flex items-center gap-3 md:gap-6">
+                <button
+                  type="button"
+                  onClick={openContactModal}
+                  className="hidden sm:inline-flex min-h-[44px] items-center border border-[#d6dace] px-3 text-[#101700] transition-[background-color,border-color,color,transform] hover:border-[#101700] hover:bg-[#101700] hover:text-[#f2f3ef] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700] text-[12px] md:text-[14px] uppercase cursor-pointer"
+                  style={{
+                    fontFamily: mono,
+                    fontWeight: 400,
+                    lineHeight: "normal",
+                  }}
+                >
+                  Contato
+                </button>
                 <a
                   href="/vagas"
-                  className="inline-flex min-h-[44px] items-center px-2 text-[#5f644c] hover:text-[#101700] transition-colors text-[14px]"
+                  className="inline-flex min-h-[44px] items-center px-2 text-[#5f644c] hover:text-[#101700] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700] text-[14px]"
                   style={{
                     fontFamily: mono,
                     fontWeight: 400,
@@ -2581,7 +2627,7 @@ function LandingPage() {
                   <button
                     type="button"
                     onClick={openContactModal}
-                    className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase cursor-pointer"
+                    className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase cursor-pointer transition-[background-color,transform] hover:bg-[#263600] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700]"
                     style={{ fontFamily: mono }}
                   >
                     conversar com a ShiftLabs
@@ -2589,9 +2635,31 @@ function LandingPage() {
                 </div>
               </div>
               <div className="flex items-center justify-center p-6 w-full lg:w-1/2 min-h-[300px] lg:h-[462px] lg:border-l border-[#d6dace]">
-                <div className="bg-white w-full max-w-[532px] aspect-[532/430] overflow-hidden">
+                <div className="relative w-full max-w-[532px] aspect-[532/430] overflow-hidden bg-transparent">
+                  <svg
+                    aria-hidden="true"
+                    focusable="false"
+                    className="absolute h-0 w-0 overflow-hidden"
+                  >
+                    <filter
+                      id="hero-video-alpha-key"
+                      colorInterpolationFilters="sRGB"
+                    >
+                      <feColorMatrix
+                        type="matrix"
+                        values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 -1 -1 -1 0 2.86"
+                      />
+                      <feComponentTransfer>
+                        <feFuncA type="table" tableValues="0 0 0.95 1" />
+                      </feComponentTransfer>
+                    </filter>
+                  </svg>
                   <video
-                    className="w-full h-full object-cover pointer-events-none"
+                    className="w-full h-full scale-[1.02] object-cover pointer-events-none"
+                    style={{
+                      clipPath: "inset(2px)",
+                      filter: "url(#hero-video-alpha-key)",
+                    }}
                     src="/videos/hero-header.mp4"
                     autoPlay
                     loop
@@ -2604,7 +2672,7 @@ function LandingPage() {
               </div>
             </div>
             <XlHelper className="border-l border-[#d6dace]" />
-            <SectionBorderTicks positions={["192px", "calc(100% - 192px)"]} />
+            <SectionBorderTicks positions={edgeTickPositions} />
           </div>
         </div>
 
@@ -2614,7 +2682,7 @@ function LandingPage() {
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
               <div className="flex flex-col gap-6 max-w-[405px]">
                 <SectionLabel>/Nosso Ecossistema</SectionLabel>
-                <SectionTitle className="text-[20px] md:text-[24px]">
+                <SectionTitle as="h2" className="text-[20px] md:text-[24px]">
                   Plataformas e operações coordenadas pela mesma engenharia.
                 </SectionTitle>
               </div>
@@ -2638,7 +2706,10 @@ function LandingPage() {
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
               <div className="flex flex-col gap-6 max-w-[499px]">
                 <SectionLabel>/problema</SectionLabel>
-                <SectionTitle className="text-[28px] md:text-[36px] lg:text-[40px]">
+                <SectionTitle
+                  as="h2"
+                  className="text-[28px] md:text-[36px] lg:text-[40px]"
+                >
                   Crescer não é o problema. Crescer desorganizado é.
                 </SectionTitle>
               </div>
@@ -2699,9 +2770,7 @@ function LandingPage() {
               ))}
             </div>
             <XlHelper />
-            <SectionBorderTicks
-              positions={["192px", "756px", "calc(100% - 192px)"]}
-            />
+            <SectionBorderTicks positions={twoColumnTickPositions} />
           </div>
         </div>
 
@@ -2735,7 +2804,10 @@ function LandingPage() {
           <div className="flex flex-col lg:flex-row lg:items-end gap-8 lg:gap-12">
             <div className="flex flex-col gap-8 max-w-[649px]">
               <SectionLabel>/Abordagem ShiftLabs</SectionLabel>
-              <SectionTitle className="text-[36px] md:text-[48px] lg:text-[64px]">
+              <SectionTitle
+                as="h2"
+                className="text-[36px] md:text-[48px] lg:text-[64px]"
+              >
                 Do caos a sistemas coordenados.
               </SectionTitle>
             </div>
@@ -2775,7 +2847,10 @@ function LandingPage() {
             <XlHelper className="border-r border-[#d6dace]" />
             <div className="flex flex-col lg:flex-row flex-1 min-w-0">
               <div className="flex flex-col justify-between p-6 border-b lg:border-b-0 lg:border-r border-[#d6dace] w-full lg:w-1/2 min-h-[140px] lg:h-[174px]">
-                <SectionTitle className="text-[20px] md:text-[24px] max-w-[242px]">
+                <SectionTitle
+                  as="h2"
+                  className="text-[20px] md:text-[24px] max-w-[242px]"
+                >
                   Somos a engenharia estrutural do negócio.
                 </SectionTitle>
                 <p
@@ -2833,13 +2908,7 @@ function LandingPage() {
             </div>
             <XlHelper className="border-l border-[#d6dace]" />
             <SectionBorderTicks
-              positions={[
-                "192px",
-                "756px",
-                "944px",
-                "1132px",
-                "calc(100% - 192px)",
-              ]}
+              positions={serviceTagTickPositions}
             />
           </div>
         </div>
@@ -2852,9 +2921,12 @@ function LandingPage() {
         >
           <div className="flex flex-col gap-6 max-w-[499px]">
             <SectionLabel>/O QUE FAZEMOS</SectionLabel>
-            <SectionTitle className="text-[28px] md:text-[36px] lg:text-[40px]">
-              <p className="mb-0">Como estruturamos</p>
-              <p>negócios.</p>
+            <SectionTitle
+              as="h2"
+              className="text-[28px] md:text-[36px] lg:text-[40px]"
+            >
+              <span className="block">Como estruturamos </span>
+              <span className="block">negócios.</span>
             </SectionTitle>
           </div>
         </div>
@@ -2915,9 +2987,7 @@ function LandingPage() {
             ))}
           </div>
           <XlHelper className="border-t border-[#d6dace]" />
-          <SectionBorderTicks
-            positions={["192px", "756px", "calc(100% - 192px)"]}
-          />
+          <SectionBorderTicks positions={twoColumnTickPositions} />
         </div>
 
         {/* ===== SERVICES QUOTE ===== */}
@@ -2995,6 +3065,78 @@ function LandingPage() {
           </div>
         </div>
 
+        {/* ===== HOW WE WORK ===== */}
+        <div
+          id="como-trabalhamos"
+          data-reveal="section"
+          className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] pt-16 pb-9 scroll-mt-[96px]"
+        >
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 lg:gap-12">
+            <div className="flex flex-col gap-6 max-w-[560px]">
+              <SectionLabel>/Como trabalhamos</SectionLabel>
+              <SectionTitle
+                as="h2"
+                className="text-[28px] md:text-[36px] lg:text-[40px]"
+              >
+                Da primeira conversa à execução coordenada.
+              </SectionTitle>
+            </div>
+            <p
+              data-reveal="text"
+              className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[420px]"
+              style={{ fontFamily: body, lineHeight: 1.25 }}
+            >
+              Antes de sair construindo, entendemos onde o negócio trava,
+              desenhamos a arquitetura de execução e colocamos produto,
+              tecnologia, crescimento e operação para trabalhar no mesmo sistema.
+            </p>
+          </div>
+        </div>
+
+        <div data-reveal="section" className="border-y border-[#d6dace]">
+          <div className="max-w-[1512px] mx-auto flex relative">
+            <XlHelper />
+            <div className="flex-1 grid grid-cols-1 md:grid-cols-3 border-x border-[#d6dace]">
+              {workSteps.map((step, index) => (
+                <div
+                  key={step.title}
+                  className={`flex min-h-[260px] flex-col justify-between gap-10 p-6 ${
+                    index > 0 ? "border-t border-[#d6dace]" : ""
+                  } ${index > 0 ? "md:border-t-0 md:border-l md:border-[#d6dace]" : ""}`}
+                >
+                  <p
+                    data-reveal="text"
+                    className="text-[#5f644c] text-[14px] md:text-[16px] uppercase"
+                    style={{ fontFamily: mono }}
+                  >
+                    {step.step}
+                  </p>
+                  <div className="flex flex-col gap-4">
+                    <p
+                      data-reveal="text"
+                      className="text-[#101700] text-[18px] md:text-[20px]"
+                      style={{ fontFamily: display, fontWeight: 500 }}
+                    >
+                      {step.title}
+                    </p>
+                    <p
+                      data-reveal="text"
+                      className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[310px]"
+                      style={{ fontFamily: body, lineHeight: 1.2 }}
+                    >
+                      {step.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <XlHelper />
+            <SectionBorderTicks
+              positions={threeColumnTickPositions}
+            />
+          </div>
+        </div>
+
         {/* ===== CASES ===== */}
         <div
           id="cases"
@@ -3003,7 +3145,10 @@ function LandingPage() {
         >
           <div className="flex flex-col gap-6 max-w-[499px]">
             <SectionLabel>/cases</SectionLabel>
-            <SectionTitle className="text-[28px] md:text-[36px] lg:text-[40px]">
+            <SectionTitle
+              as="h2"
+              className="text-[28px] md:text-[36px] lg:text-[40px]"
+            >
               Onde a estratégia virou sistema.
             </SectionTitle>
           </div>
@@ -3016,7 +3161,7 @@ function LandingPage() {
               <div className="flex flex-col w-full lg:w-1/2 border-x border-b lg:border-b-0 border-[#d6dace]">
                 {/* Case 1 */}
                 <div
-                  className="flex flex-col justify-between p-6 min-h-[200px] lg:h-[231px]"
+                  className="flex flex-col justify-between p-6 min-h-[300px] lg:min-h-[330px]"
                   onMouseEnter={() => setActiveCaseLogo("menux")}
                   onClick={() => setActiveCaseLogo("menux")}
                 >
@@ -3027,21 +3172,42 @@ function LandingPage() {
                       className="text-[#101700] text-[14px] md:text-[16px]"
                       style={{ fontFamily: display, fontWeight: 500 }}
                     >
-                      IA na mesa.
+                      Tecnologia aplicada à experiência de restaurante.
                     </p>
-                    <p
-                      data-reveal="text"
-                      className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[315px]"
-                      style={{ fontFamily: body, lineHeight: 1.076 }}
-                    >
-                      IA aplicada à experiência de restaurante, conectando
-                      cliente, equipe e gestor.
-                    </p>
+                    <div className="flex flex-col gap-3">
+                      <p
+                        data-reveal="text"
+                        className="text-[#5f644c] text-[13px] md:text-[14px] max-w-[460px]"
+                        style={{ fontFamily: body, lineHeight: 1.2 }}
+                      >
+                        <span className="text-[#101700]">Contexto: </span>
+                        restaurantes operam com cliente, atendimento, equipe,
+                        gestão e decisão diária acontecendo ao mesmo tempo.
+                      </p>
+                      <p
+                        data-reveal="text"
+                        className="text-[#5f644c] text-[13px] md:text-[14px] max-w-[460px]"
+                        style={{ fontFamily: body, lineHeight: 1.2 }}
+                      >
+                        <span className="text-[#101700]">Efeito: </span>
+                        Menux aproxima cliente, equipe e gestor para reduzir
+                        fricção entre atendimento, operação e tomada de decisão.
+                      </p>
+                      <p
+                        data-reveal="text"
+                        className="text-[#5f644c] text-[13px] md:text-[14px] max-w-[460px]"
+                        style={{ fontFamily: body, lineHeight: 1.2 }}
+                      >
+                        <span className="text-[#101700]">Capacidade: </span>
+                        produto operacional com experiência, dados e rotina de
+                        gestão conectados.
+                      </p>
+                    </div>
                   </div>
                 </div>
                 {/* Case 2 */}
                 <div
-                  className="flex flex-col justify-between p-6 min-h-[200px] lg:h-[231px] border-t border-[#d6dace]"
+                  className="flex flex-col justify-between p-6 min-h-[300px] lg:min-h-[330px] border-t border-[#d6dace]"
                   onMouseEnter={() => setActiveCaseLogo("cortex")}
                   onClick={() => setActiveCaseLogo("cortex")}
                 >
@@ -3052,21 +3218,42 @@ function LandingPage() {
                       className="text-[#101700] text-[14px] md:text-[16px]"
                       style={{ fontFamily: display, fontWeight: 500 }}
                     >
-                      Camada de inteligência organizacional.
+                      Coordenação organizacional para empresas em crescimento.
                     </p>
-                    <p
-                      data-reveal="text"
-                      className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[315px]"
-                      style={{ fontFamily: body, lineHeight: 1.076 }}
-                    >
-                      Estrutura organizacional inteligente para empresas que
-                      crescem mais rápido que sua capacidade operacional.
-                    </p>
+                    <div className="flex flex-col gap-3">
+                      <p
+                        data-reveal="text"
+                        className="text-[#5f644c] text-[13px] md:text-[14px] max-w-[460px]"
+                        style={{ fontFamily: body, lineHeight: 1.2 }}
+                      >
+                        <span className="text-[#101700]">Contexto: </span>
+                        empresas em crescimento acumulam informação, prioridades
+                        e responsabilidades em pontos diferentes da operação.
+                      </p>
+                      <p
+                        data-reveal="text"
+                        className="text-[#5f644c] text-[13px] md:text-[14px] max-w-[460px]"
+                        style={{ fontFamily: body, lineHeight: 1.2 }}
+                      >
+                        <span className="text-[#101700]">Efeito: </span>
+                        Cortex conecta informação, prioridades e execução para
+                        dar mais visibilidade entre áreas.
+                      </p>
+                      <p
+                        data-reveal="text"
+                        className="text-[#5f644c] text-[13px] md:text-[14px] max-w-[460px]"
+                        style={{ fontFamily: body, lineHeight: 1.2 }}
+                      >
+                        <span className="text-[#101700]">Capacidade: </span>
+                        sistemas internos, dados e operação sustentando
+                        crescimento com coordenação.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
               {/* Case image */}
-              <div className="flex items-center justify-center p-6 w-full lg:w-1/2 min-h-[300px] lg:h-[462px] border-x lg:border-l-0 border-[#d6dace]">
+              <div className="flex items-center justify-center p-6 w-full lg:w-1/2 min-h-[300px] lg:min-h-[660px] border-x lg:border-l-0 border-[#d6dace]">
                 <div className="relative bg-white w-full max-w-[532px] aspect-[532/430] overflow-hidden">
                   <img
                     src="/case-logos/logo-menux.svg"
@@ -3087,7 +3274,7 @@ function LandingPage() {
             </div>
             <XlHelper />
             <SectionBorderTicks
-              positions={["192px", "756px", "calc(100% - 192px)"]}
+              positions={twoColumnTickPositions}
             />
           </div>
         </div>
@@ -3106,7 +3293,7 @@ function LandingPage() {
                 >
                   /Para Quem é a ShiftLabs
                 </p>
-                <div
+                <h2
                   data-reveal="title"
                   className="text-[#101700] leading-[normal] text-[28px] md:text-[36px] lg:text-[40px] text-center max-w-[454px]"
                   style={{
@@ -3116,7 +3303,7 @@ function LandingPage() {
                   }}
                 >
                   Estrutura que acompanha crescimento.
-                </div>
+                </h2>
               </div>
             </div>
             <XlHelper />
@@ -3152,7 +3339,7 @@ function LandingPage() {
             </div>
             <XlHelper />
             <SectionBorderTicks
-              positions={["192px", "756px", "calc(100% - 192px)"]}
+              positions={twoColumnTickPositions}
             />
           </div>
         </div>
@@ -3170,8 +3357,8 @@ function LandingPage() {
             >
               Não somos para quem quer apenas “uma landing page”.
             </p>
-            <SectionTitle className="text-[20px] md:text-[24px] text-center">
-              What makes us different
+            <SectionTitle as="h2" className="text-[20px] md:text-[24px] text-center">
+              O que torna a ShiftLabs diferente
             </SectionTitle>
           </div>
         </div>
@@ -3236,7 +3423,7 @@ function LandingPage() {
             </div>
             <XlHelper />
             <SectionBorderTicks
-              positions={["192px", "568px", "944px", "calc(100% - 192px)"]}
+              positions={threeColumnTickPositions}
             />
           </div>
         </div>
@@ -3246,7 +3433,7 @@ function LandingPage() {
           data-reveal="section"
           className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-9 flex justify-center"
         >
-          <SectionTitle className="text-[20px] md:text-[24px] text-center ">
+          <SectionTitle as="h2" className="text-[20px] md:text-[24px] text-center ">
             A ShiftLabs entrega coordenação.
           </SectionTitle>
         </div>
@@ -3263,10 +3450,13 @@ function LandingPage() {
                     className="text-[#456300] text-[14px] md:text-[16px] uppercase"
                     style={{ fontFamily: mono }}
                   >
-                    /Call to Action
+                    /Próximo passo
                   </p>
-                  <SectionTitle className="text-[28px] md:text-[36px] lg:text-[40px]">
-                    Ready to structure what you’re building?
+                  <SectionTitle
+                    as="h2"
+                    className="text-[28px] md:text-[36px] lg:text-[40px]"
+                  >
+                    Vamos estruturar o que sua empresa precisa executar agora?
                   </SectionTitle>
                 </div>
                 <p
@@ -3274,24 +3464,24 @@ function LandingPage() {
                   className="text-[#456300] text-[14px] md:text-[16px] max-w-[360px] mt-8"
                   style={{ fontFamily: body, lineHeight: 1.076 }}
                 >
-                  Se você sente que sua empresa poderia estar melhor organizada,
-                  mais previsível e mais eficiente, o problema provavelmente não
-                  é esforço.
+                  Se o crescimento já depende de muitas frentes ao mesmo tempo,
+                  a primeira conversa serve para entender onde o sistema trava e
+                  qual arquitetura pode destravar a execução.
                 </p>
               </div>
               <div className="flex items-end justify-end p-6 w-full lg:w-1/2 min-h-[120px] lg:h-[462px]">
                 <button
                   type="button"
                   onClick={openContactModal}
-                  className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase cursor-pointer"
+                  className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase cursor-pointer transition-[background-color,transform] hover:bg-[#263600] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700]"
                   style={{ fontFamily: mono }}
                 >
-                  iniciar uma conversa
+                  iniciar diagnóstico
                 </button>
               </div>
             </div>
             <XlHelper className="border-l border-[#d6dace]" />
-            <SectionBorderTicks positions={["192px", "calc(100% - 192px)"]} />
+            <SectionBorderTicks positions={edgeTickPositions} />
           </div>
         </div>
 
@@ -3331,8 +3521,8 @@ function LandingPage() {
                 data-reveal="text"
                 className="text-[#5f644c] text-[14px] md:text-[16px] uppercase"
                 style={{ fontFamily: mono }}
-              >
-                /Call to Action
+                >
+                /Contato
               </p>
               <div className="flex items-center gap-5">
                 {socialLinks.map(({ name, href, Icon }) => (
@@ -4032,7 +4222,7 @@ function CareerRolePage({ role }: { role: CareersRole }) {
               </article>
             </div>
             <XlHelper className="border-l border-[#d6dace]" />
-            <SectionBorderTicks positions={["192px", "calc(100% - 192px)"]} />
+            <SectionBorderTicks positions={edgeTickPositions} />
           </div>
         </div>
 
@@ -4183,7 +4373,7 @@ function CareerRolePage({ role }: { role: CareersRole }) {
               </div>
             </article>
             <XlHelper className="border-l border-[#d6dace]" />
-            <SectionBorderTicks positions={["192px", "calc(100% - 192px)"]} />
+            <SectionBorderTicks positions={edgeTickPositions} />
           </div>
         </div>
 
@@ -4236,7 +4426,7 @@ function CareerRolePage({ role }: { role: CareersRole }) {
               </div>
             </div>
             <XlHelper className="border-l border-[#d6dace]" />
-            <SectionBorderTicks positions={["192px", "calc(100% - 192px)"]} />
+            <SectionBorderTicks positions={edgeTickPositions} />
           </div>
         </div>
 
@@ -5044,7 +5234,7 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
               </section>
             </div>
             <XlHelper className="border-l border-[#d6dace]" />
-            <SectionBorderTicks positions={["192px", "calc(100% - 192px)"]} />
+            <SectionBorderTicks positions={edgeTickPositions} />
           </div>
         </div>
       </main>
@@ -5940,7 +6130,7 @@ function CareersPage({
               </div>
             </div>
             <XlHelper className="border-l border-[#d6dace]" />
-            <SectionBorderTicks positions={["192px", "calc(100% - 192px)"]} />
+            <SectionBorderTicks positions={edgeTickPositions} />
           </div>
         </div>
 
@@ -6096,7 +6286,7 @@ function CareersPage({
             </ul>
             <XlHelper className="border-t border-[#d6dace]" />
             <SectionBorderTicks
-              positions={["192px", "756px", "calc(100% - 192px)"]}
+              positions={twoColumnTickPositions}
             />
           </div>
         ) : null}
@@ -6143,7 +6333,7 @@ function CareersPage({
               </div>
             </div>
             <XlHelper className="border-l border-[#d6dace]" />
-            <SectionBorderTicks positions={["192px", "calc(100% - 192px)"]} />
+            <SectionBorderTicks positions={edgeTickPositions} />
           </div>
         </div>
 

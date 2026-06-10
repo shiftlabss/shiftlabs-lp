@@ -21,6 +21,13 @@ const forbiddenSnippets = [
   "linkedin.com/in/seu-perfil",
   "Retornamos em alguns dias úteis",
   "Retornaremos em breve",
+  "What makes us different",
+  "Ready to structure what you’re building?",
+  "/Call to Action",
+  "Most players optimize pieces. We optimize the system.",
+  "IA na mesa.",
+  "IA aplicada à experiência de restaurante",
+  "Camada de inteligência organizacional.",
 ];
 
 const requiredSnippets = [
@@ -39,6 +46,18 @@ const requiredSnippets = [
   "Retornamos em até 5 dias úteis",
   "Retornaremos em até 2 dias úteis",
   "ver detalhes",
+  "/Como trabalhamos",
+  "Da primeira conversa à execução coordenada.",
+  "Diagnóstico estrutural",
+  "Arquitetura de execução",
+  "Implementação coordenada",
+  "O que torna a ShiftLabs diferente",
+  "Muita gente melhora peças soltas. A ShiftLabs estrutura o sistema.",
+  "Vamos estruturar o que sua empresa precisa executar agora?",
+  "iniciar diagnóstico",
+  "Tecnologia aplicada à experiência de restaurante.",
+  "Coordenação organizacional para empresas em crescimento.",
+  "Contato",
 ];
 
 const forbiddenPatterns = [

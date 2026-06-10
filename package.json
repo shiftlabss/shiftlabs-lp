@@ -4,8 +4,10 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "build": "node scripts/generate-seo-files.mjs && vite build",
+    "build": "node scripts/generate-seo-files.mjs && vite build && node scripts/generate-static-route-html.mjs",
     "seo:build": "node scripts/generate-seo-files.mjs",
+    "seo:verify": "node scripts/verify-seo-build.mjs",
+    "ux-copy:verify": "node scripts/verify-ux-copy.mjs",
     "dev": "vite"
   },
   "dependencies": {

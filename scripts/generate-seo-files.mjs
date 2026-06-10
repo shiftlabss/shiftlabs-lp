@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-const fallbackSiteUrl = "https://shiftlabs.digital";
+const fallbackSiteUrl = "https://www.shiftlabs.digital";
 const fallbackSupabaseUrl = "https://cjoyxelowsfkhgswkipd.supabase.co";
 const fallbackSupabaseAnonKey = "sb_publishable_EWydN_Aqm9YbtXkQUNGfrA_BpB8LD4R";
 const hiddenCareerRoleSlugs = new Set([

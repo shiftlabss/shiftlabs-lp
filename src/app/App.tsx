@@ -31,14 +31,15 @@ const supabase = hasSupabaseConfig
       },
     })
   : null;
-const fallbackSiteUrl = "https://shiftlabs.digital";
+const fallbackSiteUrl = "https://www.shiftlabs.digital";
 const configuredSiteUrl = (
   (import.meta.env.VITE_SITE_URL as string | undefined) ?? fallbackSiteUrl
 ).trim();
 const siteUrl = configuredSiteUrl.replace(/\/+$/, "") || fallbackSiteUrl;
 const seoDefaultDescription =
   "A ShiftLabs estrutura produto, tecnologia, growth e operacoes para empresas crescerem com previsibilidade e execucao coordenada.";
-const seoDefaultImagePath = "/fav-icon.svg";
+const seoDefaultImagePath = "/social-preview.png";
+const seoOrganizationLogoPath = "/fav-icon.svg";
 
 /* ─── Reusable sub-components ─── */
 
@@ -57,18 +58,20 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 function SectionTitle({
   children,
   className = "",
+  as: Tag = "div",
 }: {
   children: React.ReactNode;
   className?: string;
+  as?: "div" | "h1" | "h2";
 }) {
   return (
-    <div
+    <Tag
       data-reveal="title"
       className={`text-[#101700] leading-[normal] ${className}`}
       style={{ fontFamily: heading, fontWeight: 500 }}
     >
       {children}
-    </div>
+    </Tag>
   );
 }
 
@@ -893,6 +896,8 @@ type CareersRole = {
   joinTitle?: string;
   joinUs?: string[];
   bodyMarkdown?: string;
+  datePosted?: string;
+  updatedAt?: string;
 };
 
 type CareersRoleRow = {
@@ -1368,13 +1373,28 @@ function mapCommitmentToEmploymentType(commitment: string): string {
   return "FULL_TIME";
 }
 
+function toSchemaDate(value?: string): string | undefined {
+  if (!value) return undefined;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return undefined;
+  return date.toISOString().slice(0, 10);
+}
+
+function parseBrazilianLocation(location: string) {
+  const [city, region] = location.split(",").map((part) => part.trim());
+  return {
+    city: city || location,
+    region: region || undefined,
+  };
+}
+
 function buildOrganizationSchema(): Record<string, unknown> {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "ShiftLabs",
     url: `${siteUrl}/`,
-    logo: toAbsoluteUrl(seoDefaultImagePath),
+    logo: toAbsoluteUrl(seoOrganizationLogoPath),
     sameAs: careersSocialLinks.map((link) => link.href),
   };
 }
@@ -1426,19 +1446,20 @@ function buildCareersCollectionSchema(
 function buildJobPostingSchema(role: CareersRole): Record<string, unknown> {
   const displayRoleTitle = getDisplayRoleTitle(role.title, role.displayTitle);
   const displayArea = getRoleCardArea(role);
-  const normalizedDescription = truncateWithEllipsis(
-    toRoleIntroPreview(
-      role.bodyMarkdown ?? role.intro ?? getRoleCardSummary(role),
-    ),
-    5000,
-  );
+  const descriptionHtml = markdownToHtml(roleToMarkdown(role));
+  const normalizedDescription = descriptionHtml
+    ? descriptionHtml
+    : escapeHtml(getRoleCardSummary(role));
   const isRemoteModel = /(remot|remote)/i.test(role.model);
+  const datePosted = toSchemaDate(role.datePosted ?? role.updatedAt);
+  const location = parseBrazilianLocation(role.location);
 
   return {
     "@context": "https://schema.org",
     "@type": "JobPosting",
     title: displayRoleTitle,
     description: normalizedDescription,
+    datePosted,
     identifier: {
       "@type": "PropertyValue",
       name: "ShiftLabs",
@@ -1449,10 +1470,11 @@ function buildJobPostingSchema(role: CareersRole): Record<string, unknown> {
       "@type": "Organization",
       name: "ShiftLabs",
       sameAs: `${siteUrl}/`,
-      logo: toAbsoluteUrl(seoDefaultImagePath),
+      logo: toAbsoluteUrl(seoOrganizationLogoPath),
     },
     industry: displayArea,
     workHours: role.commitment,
+    directApply: true,
     jobLocationType: isRemoteModel ? "TELECOMMUTE" : undefined,
     applicantLocationRequirements: isRemoteModel
       ? {
@@ -1466,7 +1488,8 @@ function buildJobPostingSchema(role: CareersRole): Record<string, unknown> {
           "@type": "Place",
           address: {
             "@type": "PostalAddress",
-            addressLocality: role.location,
+            addressLocality: location.city,
+            addressRegion: location.region,
             addressCountry: "BR",
           },
         },
@@ -1560,6 +1583,8 @@ function rowToCareersRole(row: CareersRoleRow): CareersRole {
     joinTitle: row.join_title ?? undefined,
     joinUs,
     bodyMarkdown: row.body_markdown ?? undefined,
+    datePosted: row.created_at,
+    updatedAt: row.updated_at,
   };
 }
 
@@ -2359,7 +2384,8 @@ function LandingPage() {
     if (!supabase) {
       setHeroContactFeedback({
         type: "error",
-        message: "Configuração de backend indisponível no momento.",
+        message:
+          "Não conseguimos enviar pelo formulário agora. Tente novamente em instantes ou fale com a gente pelo Instagram.",
       });
       return;
     }
@@ -2389,7 +2415,7 @@ function LandingPage() {
     setHeroContactForm(initialHeroContactFormState);
     setHeroContactFeedback({
       type: "success",
-      message: "Contato enviado com sucesso. Retornaremos em breve.",
+      message: "Contato enviado. Retornaremos em até 2 dias úteis.",
     });
   };
 
@@ -2530,10 +2556,15 @@ function LandingPage() {
               <div className="flex flex-col justify-between p-6 w-full lg:w-1/2 min-h-[360px] lg:h-[462px]">
                 <div className="flex flex-col gap-12 max-w-[450px]">
                   <div className="flex flex-col gap-6">
-                    <SectionLabel>Engineering Predictable Growth</SectionLabel>
-                    <SectionTitle className="text-[28px] md:text-[36px] lg:text-[40px]">
-                      <p className="mb-0">{`We don’t build ideas. `}</p>
-                      <p>We engineer businesses.</p>
+                    <SectionLabel>
+                      Engenharia para crescimento previsível
+                    </SectionLabel>
+                    <SectionTitle
+                      as="h1"
+                      className="text-[28px] md:text-[36px] lg:text-[40px]"
+                    >
+                      <span className="block">{`Não construímos ideias. `}</span>
+                      <span className="block">Estruturamos negócios.</span>
                     </SectionTitle>
                   </div>
                   <p
@@ -2541,7 +2572,7 @@ function LandingPage() {
                     className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[343px]"
                     style={{ fontFamily: body, lineHeight: 1.333 }}
                   >
-                    A Shift Labs transforma ideias, operações confusas ou
+                    A ShiftLabs transforma ideias, operações confusas ou
                     produtos mal estruturados em negócios organizados,
                     previsíveis e escaláveis.
                   </p>
@@ -2553,7 +2584,7 @@ function LandingPage() {
                     className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase cursor-pointer"
                     style={{ fontFamily: mono }}
                   >
-                    conhecer mais
+                    conversar com a ShiftLabs
                   </button>
                 </div>
               </div>
@@ -2703,9 +2734,9 @@ function LandingPage() {
         >
           <div className="flex flex-col lg:flex-row lg:items-end gap-8 lg:gap-12">
             <div className="flex flex-col gap-8 max-w-[649px]">
-              <SectionLabel>/The Shift Approach</SectionLabel>
+              <SectionLabel>/Abordagem ShiftLabs</SectionLabel>
               <SectionTitle className="text-[36px] md:text-[48px] lg:text-[64px]">
-                From chaos to coordinated systems.
+                Do caos a sistemas coordenados.
               </SectionTitle>
             </div>
             <p
@@ -2713,7 +2744,7 @@ function LandingPage() {
               className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[320px]"
               style={{ fontFamily: body, lineHeight: 1.022 }}
             >
-              <span>A Shift Labs não é </span>
+              <span>A ShiftLabs não é </span>
               <span
                 className="text-[#101700]"
                 style={{ fontFamily: display, fontWeight: 500 }}
@@ -2919,14 +2950,14 @@ function LandingPage() {
                   className="text-[#b6bea1] text-[14px] md:text-[16px] uppercase"
                   style={{ fontFamily: mono }}
                 >
-                  Engineering Predictable Growth
+                  Crescimento previsível
                 </p>
                 <p
                   data-reveal="title"
                   className="text-[#f2f3ef] text-[20px] md:text-[24px]"
                   style={{ fontFamily: heading, fontWeight: 500 }}
                 >
-                  The Business Engineering Framework™
+                  Framework de Engenharia de Negócios™
                 </p>
                 <p
                   data-reveal="text"
@@ -2996,7 +3027,7 @@ function LandingPage() {
                       className="text-[#101700] text-[14px] md:text-[16px]"
                       style={{ fontFamily: display, fontWeight: 500 }}
                     >
-                      The AI at the table.
+                      IA na mesa.
                     </p>
                     <p
                       data-reveal="text"
@@ -3021,7 +3052,7 @@ function LandingPage() {
                       className="text-[#101700] text-[14px] md:text-[16px]"
                       style={{ fontFamily: display, fontWeight: 500 }}
                     >
-                      Organizational Intelligence Layer.
+                      Camada de inteligência organizacional.
                     </p>
                     <p
                       data-reveal="text"
@@ -3073,7 +3104,7 @@ function LandingPage() {
                   className="text-[#5f644c] text-[14px] md:text-[16px] uppercase"
                   style={{ fontFamily: mono, textShadow: audienceTextHalo }}
                 >
-                  /Para Quem é a Shift Labs
+                  /Para Quem é a ShiftLabs
                 </p>
                 <div
                   data-reveal="title"
@@ -3255,7 +3286,7 @@ function LandingPage() {
                   className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase cursor-pointer"
                   style={{ fontFamily: mono }}
                 >
-                  conhecer mais
+                  iniciar uma conversa
                 </button>
               </div>
             </div>
@@ -3579,7 +3610,14 @@ function LandingPage() {
                   </label>
                 </div>
 
-                <div className="mt-5 flex flex-wrap items-center gap-3">
+                <p
+                  className="mt-5 text-[12px] text-[#5f644c]"
+                  style={{ fontFamily: body, lineHeight: 1.3 }}
+                >
+                  Usaremos seus dados apenas para responder seu contato.
+                </p>
+
+                <div className="mt-3 flex flex-wrap items-center gap-3">
                   <button
                     type="button"
                     onClick={closeContactModal}
@@ -4331,7 +4369,7 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
     ) {
       setFeedback({
         type: "error",
-        message: "Responda as perguntas do bloco 2 para enviar.",
+        message: "Responda todas as perguntas de alinhamento para enviar.",
       });
       return;
     }
@@ -4423,7 +4461,7 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
     setFormState(initialRoleApplicationFormState);
     setFeedback({
       type: "success",
-      message: "Candidatura enviada com sucesso. Retornaremos em breve.",
+      message: "Candidatura enviada. Retornamos em até 5 dias úteis.",
     });
   };
 
@@ -4617,7 +4655,7 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
                         className="mt-1 text-[14px] text-[#101700]"
                         style={{ fontFamily: body, lineHeight: 1.3 }}
                       >
-                        Nosso time revisa o perfil alinhado a /{displayArea}.
+                        Nosso time revisa seu perfil com foco em {displayArea}.
                       </p>
                     </li>
                     <li className="px-4 py-3 md:px-5">
@@ -4631,7 +4669,7 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
                         className="mt-1 text-[14px] text-[#101700]"
                         style={{ fontFamily: body, lineHeight: 1.3 }}
                       >
-                        Retornamos em alguns dias úteis com próximos passos.
+                        Retornamos em até 5 dias úteis com os próximos passos.
                       </p>
                     </li>
                   </ol>
@@ -4703,7 +4741,7 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
                           type="email"
                           required
                           autoComplete="email"
-                          placeholder="seuemail@exemplo.com"
+                          placeholder="nome@exemplo.com"
                           value={formState.email}
                           onChange={(event) =>
                             updateField("email", event.target.value)
@@ -4743,7 +4781,7 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
                         </span>
                         <input
                           type="text"
-                          placeholder="linkedin.com/in/seu-perfil"
+                          placeholder="linkedin.com/in/seu-nome ou portfolio.com"
                           value={formState.portfolio}
                           onChange={(event) =>
                             updateField("portfolio", event.target.value)
@@ -4766,8 +4804,8 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
                           className="mt-1 text-[14px] text-[#5f644c]"
                           style={{ fontFamily: body, lineHeight: 1.3 }}
                         >
-                          Bloco 2: respostas de múltipla escolha para triagem
-                          inicial.
+                          Perguntas de alinhamento inicial para entendermos seu
+                          momento, disponibilidade e forma de trabalho.
                         </p>
                       </div>
                       <div className="grid grid-cols-1 gap-4 p-4 md:gap-5 md:p-5">
@@ -4943,7 +4981,7 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
                           className="text-[13px] text-[#5f644c]"
                           style={{ fontFamily: body }}
                         >
-                          Agora me fala aqui o que a ShiftLabs ganha contratando você
+                          Conte como sua experiência pode gerar impacto nesta vaga
                         </span>
                         <textarea
                           rows={5}
@@ -4951,7 +4989,7 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
                           onChange={(event) =>
                             updateField("message", event.target.value)
                           }
-                          placeholder="Descreva de forma objetiva o impacto que você pode gerar."
+                          placeholder="Resumo objetivo do impacto que você pode gerar, com exemplos."
                           className="min-h-[130px] border border-[#d6dace] bg-[#f2f3ef] px-3 py-3 text-[14px] text-[#101700] outline-none focus:border-[#5f644c]"
                           style={{ fontFamily: body, lineHeight: 1.4 }}
                         />
@@ -4959,12 +4997,19 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
                           className="text-[12px] text-[#5f644c]"
                           style={{ fontFamily: body, lineHeight: 1.3 }}
                         >
-                          Enviamos confirmação no pipeline interno da ShiftLabs.
+                          Use este espaço para conectar sua trajetória ao desafio da vaga.
                         </p>
                       </label>
                     </div>
 
                     <div className="flex flex-wrap items-center gap-3 border-t border-[#d6dace] p-4 md:p-5">
+                      <p
+                        className="w-full text-[12px] text-[#5f644c]"
+                        style={{ fontFamily: body, lineHeight: 1.3 }}
+                      >
+                        Usaremos seus dados apenas para avaliar sua candidatura.
+                        Não compartilhamos seu perfil fora do processo seletivo.
+                      </p>
                       <button
                         type="submit"
                         disabled={isSubmitting}
@@ -5851,7 +5896,7 @@ function CareersPage({
                           lineHeight: 1.1,
                         }}
                       >
-                        Produto, Tech, Growth e Operações
+                        Produto, Tecnologia, Growth e Operações
                       </p>
                     </div>
                     <div className="border-r border-[#d6dace] p-6 min-h-[146px] flex flex-col justify-end gap-2">
@@ -5869,7 +5914,7 @@ function CareersPage({
                           lineHeight: 1.1,
                         }}
                       >
-                        Estruturas enxutas e ownership alto
+                        Times enxutos, autonomia clara
                       </p>
                     </div>
                     <div className="p-6 min-h-[146px] flex flex-col justify-end gap-2">
@@ -5911,12 +5956,12 @@ function CareersPage({
               >
                 /vagas abertas
               </p>
-              <div
+              <h1
                 className="text-[#101700] text-[28px] md:text-[36px] lg:text-[40px] leading-[normal]"
                 style={{ fontFamily: heading, fontWeight: 500 }}
               >
                 Onde você entra para construir sistema, não só tarefa.
-              </div>
+              </h1>
             </div>
             <p
               className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[340px]"
@@ -6040,7 +6085,7 @@ function CareersPage({
                             className="inline-flex w-fit bg-[#101700] text-[#f2f3ef] px-4 py-3 text-[14px] uppercase"
                             style={{ fontFamily: mono, lineHeight: "normal" }}
                           >
-                            ver vaga
+                            ver detalhes
                           </span>
                         </div>
                       </article>

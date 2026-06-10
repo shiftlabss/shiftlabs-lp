@@ -4,7 +4,14 @@ import path from "node:path";
 const fallbackSiteUrl = "https://shiftlabs.digital";
 const fallbackSupabaseUrl = "https://cjoyxelowsfkhgswkipd.supabase.co";
 const fallbackSupabaseAnonKey = "sb_publishable_EWydN_Aqm9YbtXkQUNGfrA_BpB8LD4R";
-const hiddenCareerRoleSlugs = new Set();
+const hiddenCareerRoleSlugs = new Set([
+  "analista-financeiro-operacional",
+  "designer-ui-ux-pleno",
+  "diretor-de-arte",
+  "gerente-operacional",
+  "rh-operacional",
+  "social-media",
+]);
 const alwaysPublishedCareerRoleSlugs = new Set(["social-media"]);
 
 const projectRoot = process.cwd();
@@ -36,6 +43,7 @@ async function readFallbackRoleSlugs() {
     const unique = new Set();
     for (const match of matches) {
       const slug = match[1]?.trim();
+      if (hiddenCareerRoleSlugs.has(slug)) continue;
       if (slug) unique.add(slug);
     }
     return Array.from(unique).map((slug) => ({ slug, lastmod: nowDate }));
@@ -81,6 +89,7 @@ async function fetchPublishedRoles() {
     }
 
     for (const slug of alwaysPublishedCareerRoleSlugs) {
+      if (hiddenCareerRoleSlugs.has(slug)) continue;
       if (!unique.has(slug)) unique.set(slug, nowDate);
     }
 

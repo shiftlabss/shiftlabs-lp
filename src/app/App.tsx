@@ -1274,7 +1274,14 @@ type SeoPayload = {
   pageSchema?: Record<string, unknown> | Array<Record<string, unknown>> | null;
 };
 
-const hiddenCareerRoleSlugs = new Set<string>();
+const hiddenCareerRoleSlugs = new Set<string>([
+  "analista-financeiro-operacional",
+  "designer-ui-ux-pleno",
+  "diretor-de-arte",
+  "gerente-operacional",
+  "rh-operacional",
+  "social-media",
+]);
 const alwaysPublishedCareerRoleSlugs = new Set(["social-media"]);
 
 function filterVisibleCareersRoles<T extends { slug: string }>(
@@ -2235,9 +2242,11 @@ function hasStyledRoleDescription(role: CareersRole): boolean {
 function mergeAlwaysPublishedCareersRoles(roles: CareersRole[]): CareersRole[] {
   const mergedBySlug = new Map<string, CareersRole>();
   for (const role of roles) {
+    if (hiddenCareerRoleSlugs.has(role.slug)) continue;
     mergedBySlug.set(role.slug, role);
   }
   for (const role of defaultCareersRoles) {
+    if (hiddenCareerRoleSlugs.has(role.slug)) continue;
     if (!alwaysPublishedCareerRoleSlugs.has(role.slug)) continue;
     const existingRole = mergedBySlug.get(role.slug);
     const shouldReplaceWithFallback =

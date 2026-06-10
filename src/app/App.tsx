@@ -2544,6 +2544,17 @@ function LandingPage() {
                 <ShiftLabsWordmark />
               </a>
               <div className="flex items-center gap-3 md:gap-6">
+                <a
+                  href="/vagas"
+                  className="inline-flex min-h-[44px] items-center px-2 text-[#5f644c] hover:text-[#101700] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700] text-[14px]"
+                  style={{
+                    fontFamily: mono,
+                    fontWeight: 400,
+                    lineHeight: "normal",
+                  }}
+                >
+                  /VAGAS
+                </a>
                 <button
                   type="button"
                   onClick={openContactModal}
@@ -2556,33 +2567,6 @@ function LandingPage() {
                 >
                   Contato
                 </button>
-                <a
-                  href="/vagas"
-                  className="inline-flex min-h-[44px] items-center px-2 text-[#5f644c] hover:text-[#101700] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700] text-[14px]"
-                  style={{
-                    fontFamily: mono,
-                    fontWeight: 400,
-                    lineHeight: "normal",
-                  }}
-                >
-                  /VAGAS
-                </a>
-                <span aria-hidden className="h-4 w-px bg-[#d6dace]" />
-                <div className="flex items-center gap-3 md:gap-4">
-                  {socialLinks.map(({ name, href, Icon }) => (
-                    <a
-                      key={`header-${name}`}
-                      href={href}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={name}
-                      title={name}
-                      className="inline-flex h-11 w-11 items-center justify-center opacity-70 transition-opacity hover:opacity-100"
-                    >
-                      <Icon />
-                    </a>
-                  ))}
-                </div>
               </div>
             </div>
           </header>
@@ -3041,14 +3025,16 @@ function LandingPage() {
                   Estruturamos cada projeto em camadas:
                 </p>
               </div>
-              <div className="flex flex-wrap items-start justify-center gap-8 md:gap-10 lg:gap-12">
+              <div className="framework-layer-track flex flex-wrap items-start justify-center gap-8 md:gap-10 lg:gap-12">
                 {frameworkLayers.map((layer) => (
                   <div
                     key={layer.label}
-                    className={`flex flex-col items-center gap-6 ${layer.widthClass}`}
+                    className={`framework-layer flex flex-col items-center gap-6 ${layer.widthClass}`}
                   >
-                    <div className="w-[85px] h-[85px] rounded-full border border-[#b6bea1] flex items-center justify-center">
-                      <layer.Icon />
+                    <div className="framework-layer-orb w-[85px] h-[85px] rounded-full border border-[#b6bea1] flex items-center justify-center">
+                      <span className="framework-layer-icon">
+                        <layer.Icon />
+                      </span>
                     </div>
                     <p
                       data-reveal="text"

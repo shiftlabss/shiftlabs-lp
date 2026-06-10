@@ -261,6 +261,72 @@
   }
 }
 
+@keyframes framework-signal {
+  0% {
+    left: 42px;
+    opacity: 0;
+    transform: scaleX(0.2);
+  }
+
+  12% {
+    opacity: 0.9;
+  }
+
+  72% {
+    left: calc(100% - 138px);
+    opacity: 0.9;
+    transform: scaleX(1);
+  }
+
+  100% {
+    left: calc(100% - 138px);
+    opacity: 0;
+    transform: scaleX(0.18);
+  }
+}
+
+@keyframes framework-layer-lift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  42%,
+  54% {
+    transform: translate3d(0, -5px, 0);
+  }
+}
+
+@keyframes framework-orb-pulse {
+  0%,
+  28%,
+  100% {
+    border-color: rgba(182, 190, 161, 0.82);
+    box-shadow: 0 0 0 0 rgba(180, 235, 56, 0);
+  }
+
+  42%,
+  54% {
+    border-color: rgba(180, 235, 56, 0.82);
+    box-shadow: 0 0 0 8px rgba(180, 235, 56, 0.08);
+  }
+}
+
+@keyframes framework-icon-glow {
+  0%,
+  30%,
+  100% {
+    opacity: 0.78;
+    transform: scale(1);
+  }
+
+  42%,
+  54% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
 .shiftlabs-success-shell {
   position: relative;
   overflow: hidden;
@@ -352,6 +418,80 @@
   will-change: transform;
 }
 
+.framework-layer-track {
+  position: relative;
+  isolation: isolate;
+}
+
+.framework-layer {
+  position: relative;
+  z-index: 1;
+  animation: framework-layer-lift 6.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  animation-delay: var(--framework-delay, 0ms);
+}
+
+.framework-layer:nth-child(1) {
+  --framework-delay: 0ms;
+}
+
+.framework-layer:nth-child(2) {
+  --framework-delay: 420ms;
+}
+
+.framework-layer:nth-child(3) {
+  --framework-delay: 840ms;
+}
+
+.framework-layer:nth-child(4) {
+  --framework-delay: 1260ms;
+}
+
+.framework-layer:nth-child(5) {
+  --framework-delay: 1680ms;
+}
+
+.framework-layer-orb {
+  position: relative;
+  z-index: 1;
+  background: #101700;
+  animation: framework-orb-pulse 6.4s ease-in-out infinite;
+  animation-delay: var(--framework-delay, 0ms);
+  will-change: transform, box-shadow, border-color;
+}
+
+.framework-layer-icon {
+  display: inline-flex;
+  color: #b6bea1;
+  animation: framework-icon-glow 6.4s ease-in-out infinite;
+  animation-delay: var(--framework-delay, 0ms);
+}
+
+@media (min-width: 768px) {
+  .framework-layer-track::before,
+  .framework-layer-track::after {
+    content: "";
+    position: absolute;
+    left: 42px;
+    right: 42px;
+    top: 42px;
+    height: 1px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .framework-layer-track::before {
+    background: rgba(182, 190, 161, 0.22);
+  }
+
+  .framework-layer-track::after {
+    width: 96px;
+    right: auto;
+    background: linear-gradient(90deg, rgba(180, 235, 56, 0), rgba(180, 235, 56, 0.8), rgba(180, 235, 56, 0));
+    transform-origin: left center;
+    animation: framework-signal 6.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  }
+}
+
 [data-reveal] {
   opacity: 0;
   transform: translate3d(0, 22px, 0);
@@ -403,7 +543,11 @@
   .shiftlabs-success-shell,
   .shiftlabs-success-orb::before,
   .shiftlabs-success-check,
-  .shiftlabs-success-progress::after {
+  .shiftlabs-success-progress::after,
+  .framework-layer,
+  .framework-layer-orb,
+  .framework-layer-icon,
+  .framework-layer-track::after {
     animation: none;
   }
 }

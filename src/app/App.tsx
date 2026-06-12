@@ -2388,7 +2388,6 @@ function LandingPage() {
   const [isContactSubmitting, setIsContactSubmitting] = useState(false);
   const [heroContactFeedback, setHeroContactFeedback] =
     useState<HeroContactFeedback | null>(null);
-  const [isHomeDeferredReady, setIsHomeDeferredReady] = useState(false);
   const isContactSuccess = heroContactFeedback?.type === "success";
   const isContactError = heroContactFeedback?.type === "error";
 
@@ -2494,25 +2493,6 @@ function LandingPage() {
     );
     if (!revealNodes.length) return;
     revealNodes.forEach((node) => node.classList.add("is-visible"));
-  }, []);
-
-  useEffect(() => {
-    if ("requestIdleCallback" in window) {
-      const idleId = window.requestIdleCallback(
-        () => {
-          setIsHomeDeferredReady(true);
-        },
-        { timeout: 1400 },
-      );
-
-      return () => window.cancelIdleCallback(idleId);
-    }
-
-    const timer = window.setTimeout(() => {
-      setIsHomeDeferredReady(true);
-    }, 900);
-
-    return () => window.clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -2763,9 +2743,7 @@ function LandingPage() {
           </div>
         </nav>
 
-        {isHomeDeferredReady ? (
-          <>
-            {/* ===== PROBLEM HEADER ===== */}
+        {/* ===== PROBLEM HEADER ===== */}
         <div
           id="problema"
           data-reveal="section"
@@ -3621,8 +3599,6 @@ function LandingPage() {
             <BigWordmark />
           </div>
         </div>
-          </>
-        ) : null}
       </main>
 
       {isContactModalOpen ? (

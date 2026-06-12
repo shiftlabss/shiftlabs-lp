@@ -1,7 +1,16 @@
 
-  import { createRoot } from "react-dom/client";
-  import App from "./app/App.tsx";
-  import "./styles/index.css";
+import { createRoot } from "react-dom/client";
+import App from "./app/App.tsx";
+import "./styles/index.css";
 
-  createRoot(document.getElementById("root")!).render(<App />);
-  
+const rootElement = document.getElementById("root");
+
+if (!rootElement) {
+  throw new Error("Root element not found.");
+}
+
+if (rootElement.querySelector("[data-static-route='true']")) {
+  rootElement.replaceChildren();
+}
+
+createRoot(rootElement).render(<App />);

@@ -541,16 +541,39 @@ function buildHead({
   return tags.map((tag) => `    ${tag}`).join("\n");
 }
 
+const staticShellStyles = {
+  main: "min-height:100vh;background:#f2f3ef;color:#101700;font-family:InterDisplay,Inter Tight,Arial,sans-serif;",
+  header:
+    "height:72px;border-bottom:1px solid #d6dace;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 clamp(24px,12vw,192px);",
+  brand:
+    "color:#101700;text-decoration:none;font-family:Inter Tight,InterDisplay,Arial,sans-serif;font-size:20px;font-weight:600;letter-spacing:0;",
+  nav: "color:#5f644c;text-decoration:none;font-family:Basis Grotesque Pro Mono,InterDisplay,monospace;font-size:14px;text-transform:uppercase;",
+  section:
+    "max-width:1512px;margin:0 auto;padding:clamp(48px,8vw,112px) clamp(24px,12vw,192px);border-bottom:1px solid #d6dace;",
+  eyebrow:
+    "margin:0 0 24px;color:#5f644c;font-family:Basis Grotesque Pro Mono,InterDisplay,monospace;font-size:14px;text-transform:uppercase;",
+  title:
+    "max-width:780px;margin:0;color:#101700;font-family:Inter Tight,InterDisplay,Arial,sans-serif;font-size:clamp(32px,7vw,72px);font-weight:500;line-height:1.02;letter-spacing:0;",
+  description:
+    "max-width:560px;margin:28px 0 0;color:#5f644c;font-size:clamp(16px,2vw,20px);line-height:1.35;",
+};
+
 function buildStaticLayout({ eyebrow, title, description, bodyHtml = "" }) {
   const safeDescription = description
-    ? `<p>${escapeHtml(description)}</p>`
+    ? `<p style="${staticShellStyles.description}">${escapeHtml(description)}</p>`
     : "";
 
   return [
-    '<main data-static-route="true">',
-    "  <section>",
-    eyebrow ? `    <p>${escapeHtml(eyebrow)}</p>` : "",
-    `    <h1>${escapeHtml(title)}</h1>`,
+    `<main data-static-route="true" style="${staticShellStyles.main}">`,
+    `  <header style="${staticShellStyles.header}">`,
+    `    <a href="/" style="${staticShellStyles.brand}">ShiftLabs</a>`,
+    `    <a href="/vagas" style="${staticShellStyles.nav}">/VAGAS</a>`,
+    "  </header>",
+    `  <section style="${staticShellStyles.section}">`,
+    eyebrow
+      ? `    <p style="${staticShellStyles.eyebrow}">${escapeHtml(eyebrow)}</p>`
+      : "",
+    `    <h1 style="${staticShellStyles.title}">${escapeHtml(title)}</h1>`,
     safeDescription ? `    ${safeDescription}` : "",
     bodyHtml,
     "  </section>",
@@ -565,12 +588,16 @@ function buildRoleListHtml(roles) {
   const items = roles
     .map(
       (role) =>
-        `<li><a href="/vagas/${escapeHtml(role.slug)}">${escapeHtml(
+        `<li style="list-style:none;border:1px solid #d6dace;padding:20px;min-height:168px;display:flex;flex-direction:column;justify-content:space-between;gap:24px;"><span style="color:#5f644c;font-family:Basis Grotesque Pro Mono,InterDisplay,monospace;font-size:13px;text-transform:uppercase;">/${escapeHtml(
+          getRoleArea(role),
+        )}</span><a href="/vagas/${escapeHtml(
+          role.slug,
+        )}" style="color:#101700;text-decoration:none;font-family:Inter Tight,InterDisplay,Arial,sans-serif;font-size:28px;font-weight:500;line-height:1.08;">${escapeHtml(
           getDisplayRoleTitle(role),
-        )}</a> <span>${escapeHtml(getRoleArea(role))}</span></li>`,
+        )}</a></li>`,
     )
     .join("");
-  return `    <ul>${items}</ul>`;
+  return `    <ul style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0;margin:40px 0 0;padding:0;">${items}</ul>`;
 }
 
 function buildRoleBodyHtml(role) {
@@ -582,21 +609,34 @@ function buildRoleBodyHtml(role) {
     getRoleArea(role),
   ]
     .filter(Boolean)
-    .map((item) => `<li>${escapeHtml(item)}</li>`)
+    .map(
+      (item) =>
+        `<li style="list-style:none;border:1px solid #d6dace;color:#5f644c;padding:10px 12px;">${escapeHtml(item)}</li>`,
+    )
     .join("");
 
   return [
-    metaItems ? `    <ul>${metaItems}</ul>` : "",
-    `    <div>${markdownToSimpleHtml(roleToMarkdown(role))}</div>`,
-    `    <p><a href="${escapeHtml(applyHref)}">Candidatar-se</a></p>`,
+    metaItems
+      ? `    <ul style="display:flex;flex-wrap:wrap;gap:8px;margin:32px 0 0;padding:0;">${metaItems}</ul>`
+      : "",
+    `    <div style="max-width:760px;margin-top:40px;color:#101700;font-size:17px;line-height:1.55;">${markdownToSimpleHtml(roleToMarkdown(role))}</div>`,
+    `    <p style="margin-top:32px;"><a href="${escapeHtml(applyHref)}" style="display:inline-flex;background:#101700;color:#f2f3ef;padding:14px 16px;text-decoration:none;font-family:Basis Grotesque Pro Mono,InterDisplay,monospace;font-size:14px;text-transform:uppercase;">Candidatar-se</a></p>`,
   ]
     .filter(Boolean)
     .join("\n");
 }
 
+function buildPreloadedCareersScript(roles) {
+  if (!Array.isArray(roles) || !roles.length) return "";
+  return `    <script id="shiftlabs-careers-roles" type="application/json">${escapeJsonLd(roles)}</script>`;
+}
+
 function buildHtmlDocument(baseHtml, page) {
   const preservedAssetTags = extractPreservedAssetTags(baseHtml);
   const head = buildHead({ ...page, preservedAssetTags });
+  const preloadedCareersScript = buildPreloadedCareersScript(
+    page.preloadedCareersRoles,
+  );
   return [
     "<!DOCTYPE html>",
     '<html lang="pt-BR">',
@@ -605,6 +645,7 @@ function buildHtmlDocument(baseHtml, page) {
     "  </head>",
     "",
     "  <body>",
+    preloadedCareersScript,
     `    <div id="root">${page.bodyHtml}</div>`,
     "  </body>",
     "</html>",
@@ -706,6 +747,7 @@ async function run() {
     routePath: "/vagas",
     robots: "index, follow, max-image-preview:large",
     jsonLd: [organizationSchema, buildCareersCollectionSchema(roles)],
+    preloadedCareersRoles: roles,
     bodyHtml: buildStaticLayout({
       eyebrow: "/vagas abertas",
       title: "Onde você entra para construir sistema, não só tarefa.",
@@ -727,6 +769,7 @@ async function run() {
       type: "article",
       robots: "index, follow, max-image-preview:large",
       jsonLd: [organizationSchema, buildJobPostingSchema(role)],
+      preloadedCareersRoles: roles,
       bodyHtml: buildStaticLayout({
         eyebrow: "/vaga",
         title: displayRoleTitle,
@@ -746,6 +789,7 @@ async function run() {
       canonicalPath: "/vagas",
       robots: "noindex, nofollow, noarchive",
       jsonLd: [organizationSchema, buildCareersCollectionSchema(roles)],
+      preloadedCareersRoles: roles,
       bodyHtml: buildStaticLayout({
         eyebrow: "/carreiras",
         title: "Vagas na ShiftLabs",

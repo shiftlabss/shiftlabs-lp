@@ -2333,6 +2333,27 @@ function mergeAlwaysPublishedCareersRoles(roles: CareersRole[]): CareersRole[] {
 const fallbackCareersRoles =
   mergeAlwaysPublishedCareersRoles(defaultCareersRoles);
 
+function getPreloadedCareersRoles(): CareersRole[] {
+  if (typeof document === "undefined") return [];
+
+  const preloadedRolesElement = document.getElementById(
+    "shiftlabs-careers-roles",
+  );
+  if (!preloadedRolesElement?.textContent) return [];
+
+  try {
+    const parsed = JSON.parse(preloadedRolesElement.textContent);
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(
+      (role): role is CareersRole =>
+        typeof role?.slug === "string" && typeof role?.title === "string",
+    );
+  } catch (error) {
+    console.error("Erro ao carregar vagas pré-renderizadas:", error);
+    return [];
+  }
+}
+
 type CaseLogoKey = "menux" | "cortex";
 
 type HeroContactFormState = {
@@ -6473,13 +6494,22 @@ export default function App() {
     isCareersListRoute ||
     isCareersRoleRoute ||
     isCareersApplyRoute;
+  const preloadedCareersRoles = useMemo(getPreloadedCareersRoles, []);
+  const shouldSeedPublicCareersFallback =
+    shouldLoadCareersData &&
+    !isCareersEditorRoute &&
+    preloadedCareersRoles.length > 0;
 
   const [careersRoles, setCareersRoles] = useState<CareersRole[]>(
-    hasSupabaseConfig && shouldLoadCareersData ? [] : fallbackCareersRoles,
+    shouldSeedPublicCareersFallback
+      ? preloadedCareersRoles
+      : !hasSupabaseConfig || !shouldLoadCareersData
+        ? fallbackCareersRoles
+        : [],
   );
   const [editorRoles, setEditorRoles] = useState<CareersRole[]>([]);
   const [isLoadingPublicRoles, setIsLoadingPublicRoles] = useState(
-    hasSupabaseConfig && shouldLoadCareersData,
+    hasSupabaseConfig && shouldLoadCareersData && !shouldSeedPublicCareersFallback,
   );
   const [isLoadingEditorRoles, setIsLoadingEditorRoles] = useState(false);
   const [editorSession, setEditorSession] = useState<Session | null>(null);
@@ -6487,7 +6517,11 @@ export default function App() {
     hasSupabaseConfig && shouldLoadCareersData && isCareersEditorRoute,
   );
 
-  const fetchPublishedRoles = async () => {
+  const fetchPublishedRoles = async ({
+    showLoading = true,
+  }: {
+    showLoading?: boolean;
+  } = {}) => {
     const supabase = await getSupabaseClient();
 
     if (!supabase) {
@@ -6495,20 +6529,33 @@ export default function App() {
       setIsLoadingPublicRoles(false);
       return;
     }
-    setIsLoadingPublicRoles(true);
+    if (showLoading) {
+      setIsLoadingPublicRoles(true);
+    }
+
+    const abortController = new AbortController();
+    const timeoutId = window.setTimeout(() => {
+      abortController.abort();
+    }, 3500);
     const { data, error } = await supabase
       .from("careers_roles")
       .select("*")
       .eq("is_published", true)
       .order("sort_order", { ascending: true })
-      .order("title", { ascending: true });
+      .order("title", { ascending: true })
+      .abortSignal(abortController.signal);
+    window.clearTimeout(timeoutId);
 
     if (error) {
-      console.error(
-        "Erro ao buscar vagas públicas no Supabase:",
-        error.message,
+      if (!/abort|aborted/i.test(error.message)) {
+        console.error(
+          "Erro ao buscar vagas públicas no Supabase:",
+          error.message,
+        );
+      }
+      setCareersRoles((current) =>
+        current.length ? current : fallbackCareersRoles,
       );
-      setCareersRoles(fallbackCareersRoles);
       setIsLoadingPublicRoles(false);
       return;
     }
@@ -6650,7 +6697,7 @@ export default function App() {
       if (!isCareersEditorRoute) {
         setAuthLoading(false);
         setEditorSession(null);
-        void fetchPublishedRoles();
+        void fetchPublishedRoles({ showLoading: false });
         return;
       }
 

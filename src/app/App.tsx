@@ -445,18 +445,6 @@ function InstagramIcon() {
     </svg>
   );
 }
-function GitHubIcon() {
-  return (
-    <svg className="size-[14px]" fill="none" viewBox="0 0 14 14">
-      <path
-        clipRule="evenodd"
-        d={svgPaths.p27f75600}
-        fill="#101700"
-        fillRule="evenodd"
-      />
-    </svg>
-  );
-}
 
 function CareersLocationIcon() {
   return (
@@ -896,7 +884,6 @@ const socialLinks = [
     href: "https://instagram.com/shiftlabs.br",
     Icon: InstagramIcon,
   },
-  { name: "GitHub", href: "https://github.com/shiftlabs-br", Icon: GitHubIcon },
 ];
 
 const careersSocialLinks = [
@@ -910,7 +897,6 @@ const careersSocialLinks = [
     href: "https://instagram.com/shiftlabs.br",
     Icon: InstagramIcon,
   },
-  { name: "GitHub", href: "https://github.com/shiftlabs-br", Icon: GitHubIcon },
 ];
 
 type CareersRole = {

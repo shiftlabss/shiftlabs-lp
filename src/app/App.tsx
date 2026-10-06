@@ -1,17 +1,27 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 import svgPaths from "../imports/svg-pgtixnbxan";
-import {
-  MenuxLogo,
-  CortexLogo,
-  AtomLogo,
-  AuraLogo,
-} from "./components/BrandLogos";
+import { MenuxLogo, CortexLogo } from "./components/BrandLogos";
+import { HairlineFigure } from "./components/HairlineFigure";
+import { HeroTimeline } from "./components/HeroTimeline";
+import sondagemFigure from "../vendor/hairline/framework/sondagem.js";
+import maqueteFigure from "../vendor/hairline/framework/maquete.js";
+import motorFigure from "../vendor/hairline/framework/motor.js";
+import balancaFigure from "../vendor/hairline/framework/balanca.js";
+import roadmapFigure from "../vendor/hairline/servicos/roadmap.js";
+import torreFigure from "../vendor/hairline/servicos/torre.js";
+import funilFigure from "../vendor/hairline/servicos/funil.js";
+import chipFigure from "../vendor/hairline/servicos/chip.js";
+import ponteFigure from "../vendor/hairline/problemas/ponte.js";
+import pedidosFigure from "../vendor/hairline/problemas/pedidos.js";
+import gaveteiroFigure from "../vendor/hairline/problemas/gaveteiro.js";
+import painelFigure from "../vendor/hairline/problemas/painel.js";
 
-const mono = "'Basis Grotesque Pro Mono', 'InterDisplay', sans-serif";
-const heading = "'Inter Tight', 'InterDisplay', sans-serif";
-const body = "'InterDisplay', 'Inter Tight', sans-serif";
-const display = "'InterDisplay', 'Inter Tight', sans-serif";
+const mono = "var(--font-system-mono)";
+const heading = "var(--font-system)";
+const body = "var(--font-system)";
+const display = "var(--font-system)";
+const titleTracking = "var(--tracking-title)";
 const audienceTextHalo =
   "0 0 0 #F2F3EF, 1px 0 0 #F2F3EF, -1px 0 0 #F2F3EF, 0 1px 0 #F2F3EF, 0 -1px 0 #F2F3EF, 2px 0 0 #F2F3EF, -2px 0 0 #F2F3EF, 0 2px 0 #F2F3EF, 0 -2px 0 #F2F3EF, 0 0 12px #F2F3EF, 0 0 22px #F2F3EF, 0 0 34px #F2F3EF";
 
@@ -58,7 +68,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <p
       data-reveal="text"
-      className="text-[#5f644c] text-[14px] md:text-[16px] uppercase"
+      className="text-[#5f644c] text-[12px] lowercase"
       style={{ fontFamily: mono }}
     >
       {children}
@@ -79,7 +89,7 @@ function SectionTitle({
     <Tag
       data-reveal="title"
       className={`text-[#101700] leading-[normal] ${className}`}
-      style={{ fontFamily: heading, fontWeight: 500 }}
+      style={{ fontFamily: heading, fontWeight: 500, letterSpacing: titleTracking }}
     >
       {children}
     </Tag>
@@ -116,11 +126,11 @@ const threeColumnTickPositions = [
   "calc(66.666667% - 64px)",
   "calc(100% - 192px)",
 ];
-const serviceTagTickPositions = [
+const fourColumnTickPositions = [
   "192px",
+  "calc(25% + 96px)",
   "50%",
-  "calc(66.666667% - 64px)",
-  "calc(83.333333% - 128px)",
+  "calc(75% - 96px)",
   "calc(100% - 192px)",
 ];
 
@@ -737,82 +747,96 @@ function BigWordmark() {
 }
 
 /* ─── Data ─── */
+const heroTimeline = [
+  {
+    step: "/01",
+    title: "diagnóstico",
+    figure: sondagemFigure,
+    label:
+      "Um terreno de sondagem com uma grade de estacas; com o mouse, as estacas sobem onde o solo cede, e no ponto fraco sobem mais.",
+  },
+  {
+    step: "/02",
+    title: "arquitetura",
+    figure: maqueteFigure,
+    label:
+      "A maquete de um prédio de quatro andares; com o mouse, os andares se afastam e um deles mostra a laje e os pilares.",
+  },
+  {
+    step: "/03",
+    title: "execução",
+    figure: motorFigure,
+    label:
+      "Um motor de quatro cilindros rodando em compasso; com o mouse, ele acelera e os quatro pistões seguem juntos, presos ao mesmo eixo.",
+  },
+  {
+    step: "/04",
+    title: "inteligência",
+    figure: balancaFigure,
+    label:
+      "Uma balança romana; com o mouse, entra carga no prato e o contrapeso corre sozinho pela escala até nivelar de novo.",
+  },
+];
+
 const problemCards = [
   {
     id: 1,
     text: "Produto evolui sem alinhamento com comercial.",
-    textMaxClass: "max-w-[207px]",
-    illustrationSrc: "/illustrations/problem-01-produto-comercial.svg",
-    illustrationClassName: "w-[128px] sm:w-[122px]",
-    illustrationDesktopClassName: "left-[55px] top-[38px] w-[140px]",
+    figure: ponteFigure,
+    figureLabel:
+      "Duas metades de uma ponte, feitas de margens opostas; com o mouse, elas crescem e passam uma ao lado da outra, sem se encontrar.",
   },
   {
     id: 2,
     text: "Marketing gera demanda que a operação não absorve.",
-    textMaxClass: "max-w-[207px]",
-    illustrationSrc: "/illustrations/problem-02-marketing-operacao.svg",
-    illustrationClassName: "w-[118px] sm:w-[104px]",
-    illustrationDesktopClassName: "left-[65px] top-[38px] w-[118px]",
+    figure: pedidosFigure,
+    figureLabel:
+      "Pedidos caem numa bandeja mais rápido do que um carimbo despacha; com o mouse, a pilha transborda.",
   },
   {
     id: 3,
     text: "Tecnologia acumula decisões sem arquitetura clara.",
-    textMaxClass: "max-w-[225px]",
-    illustrationSrc: "/illustrations/problem-03-tecnologia-arquitetura.svg",
-    illustrationClassName: "w-[132px] sm:w-[124px]",
-    illustrationDesktopClassName: "left-[53px] top-[38px] w-[143px]",
+    figure: gaveteiroFigure,
+    figureLabel:
+      "Um arquivo com gavetas abarrotadas; com o mouse, a gaveta é empurrada e volta a abrir, cuspindo papel.",
   },
   {
     id: 4,
     text: "Gestão decide por percepção, não por sistema.",
-    textMaxClass: "max-w-[207px]",
-    illustrationSrc: "/illustrations/problem-04-gestao-percepcao.svg",
-    illustrationClassName: "w-[122px] sm:w-[110px]",
-    illustrationDesktopClassName: "left-[61px] top-[34px] w-[127px]",
+    figure: painelFigure,
+    figureLabel:
+      "Um painel com três mostradores cujos ponteiros oscilam no palpite; com o mouse, a medição liga e os ponteiros vão para bem longe do palpite.",
   },
-];
-
-const serviceTags = [
-  "Produto",
-  "Tecnologia",
-  "Comercial",
-  "Operações",
-  "Growth",
-  "Inteligência Artificial",
 ];
 
 const services = [
   {
     title: "Produto & Estratégia",
     desc: "Estruturamos proposta de valor, arquitetura e roadmap com base em pesquisa e validação.",
-    titleMaxClass: "max-w-[146px]",
-    illustrationSrc: "/illustrations/services-01-produto-estrategia.svg",
-    illustrationClassName: "w-[126px] sm:w-[112px]",
-    illustrationDesktopClassName: "left-[59px] top-[37px] w-[130px]",
+    figure: roadmapFigure,
+    figureLabel:
+      "Uma trilha de pedras até uma bandeira; com o mouse em cima, o caminho se constrói em degraus até o marco escolhido.",
   },
   {
     title: "Tecnologia & Arquitetura",
     desc: "Projetamos arquiteturas escaláveis com stack moderna e bem definida.",
-    titleMaxClass: "max-w-[175px]",
-    illustrationSrc: "/illustrations/services-02-tecnologia-arquitetura.svg",
-    illustrationClassName: "w-[150px] sm:w-[150px]",
-    illustrationDesktopClassName: "left-[32px] top-[51px] w-[184px]",
+    figure: torreFigure,
+    figureLabel:
+      "Uma torre de blocos empilhados sem prumo; com o mouse em cima, as camadas entram no prumo.",
   },
   {
     title: "Growth & Comercial",
     desc: "Estruturamos posicionamento, pricing e funis com lógica de margem e LTV.",
-    titleMaxClass: "max-w-[143px]",
-    illustrationSrc: "/illustrations/services-03-growth-comercial.svg",
-    illustrationClassName: "w-[136px] sm:w-[122px]",
-    illustrationDesktopClassName: "left-[55px] top-[51px] w-[139px]",
+    figure: funilFigure,
+    figureLabel:
+      "Um funil em degraus por onde descem bolinhas; as das bordas caem pelo caminho e só as do centro chegam ao cofre.",
   },
   {
     title: "Inteligência & Operação",
     desc: "Modelamos indicadores, automatizamos processos e reduzimos fricção operacional.",
-    titleMaxClass: "max-w-[169px]",
-    illustrationSrc: "/illustrations/services-04-inteligencia-operacao.svg",
-    illustrationClassName: "w-[154px] sm:w-[146px]",
-    illustrationDesktopClassName: "left-[39px] top-[51px] w-[171px]",
+    figure: chipFigure,
+    figureLabel:
+      "Um chip numa placa recebendo sinais sem parar; com o mouse em cima, o chip sobe, e a trilha sob o mouse recebe todo o fluxo.",
   },
 ];
 
@@ -851,18 +875,18 @@ const workSteps = [
 ];
 
 const audienceItems = [
-  { text: "Empresas que já validaram mercado.", textMaxClass: "max-w-[162px]" },
+  { text: "Empresas que já validaram mercado.", textMaxClass: "max-w-[171px]" },
   {
     text: "Fundadores que querem previsibilidade.",
-    textMaxClass: "max-w-[171px]",
+    textMaxClass: "max-w-[181px]",
   },
   {
     text: "Negócios que cresceram rápido demais.",
-    textMaxClass: "max-w-[194px]",
+    textMaxClass: "max-w-[205px]",
   },
   {
     text: "Produtos que precisam de estrutura.",
-    textMaxClass: "max-w-[162px]",
+    textMaxClass: "max-w-[172px]",
   },
 ];
 
@@ -871,7 +895,15 @@ const featureItems = [
   "Código isolado.",
   "Marketing isolado.",
 ];
-const marqueeText = "Muita gente melhora peças soltas. A ShiftLabs estrutura o sistema.";
+const thesisLead = "Muita gente melhora peças soltas.";
+const thesisClose = "A ShiftLabs estrutura o sistema.";
+
+const homeSections = [
+  ["#problema", "Problema"],
+  ["#servicos", "Serviços"],
+  ["#como-trabalhamos", "Método"],
+  ["#cases", "Cases"],
+];
 
 const socialLinks = [
   {
@@ -1294,7 +1326,7 @@ function getRoleDisplayCommitment(
 
   const normalized = normalizeSearchText(commitment);
   if (normalized === "tempo integral") {
-    return "Segunda à Sexta, 09h às 18h";
+    return "Segunda a sexta, 09h às 18h";
   }
 
   return commitment;
@@ -1853,7 +1885,7 @@ function markdownToHtml(markdown: string): string {
       const headingText = headingMatch[2].trim();
       if (isStyledRoleSectionHeading(headingText)) {
         html.push(
-          `<h2 class="role-section-label" style="font-family: 'Basis Grotesque Pro Mono', 'InterDisplay', sans-serif;">${escapeHtml(formatRoleSectionHeading(headingText))}</h2>`,
+          `<h2 class="role-section-label" style="font-family: var(--font-system-mono);">${escapeHtml(formatRoleSectionHeading(headingText))}</h2>`,
         );
       } else {
         html.push(
@@ -1901,7 +1933,7 @@ function markdownToHtml(markdown: string): string {
     }
     if (paragraph.length === 1 && isStyledRoleSectionHeading(paragraph[0])) {
       html.push(
-        `<h2 class="role-section-label" style="font-family: 'Basis Grotesque Pro Mono', 'InterDisplay', sans-serif;">${escapeHtml(formatRoleSectionHeading(paragraph[0]))}</h2>`,
+        `<h2 class="role-section-label" style="font-family: var(--font-system-mono);">${escapeHtml(formatRoleSectionHeading(paragraph[0]))}</h2>`,
       );
     } else {
       html.push(`<p>${inlineMarkdownToHtml(paragraph.join(" "))}</p>`);
@@ -2543,7 +2575,7 @@ function LandingPage() {
           <header
             className={`transition-all duration-300 ease-out ${
               isHeaderCondensed
-                ? "rounded-[16px] border border-[#d6dace] bg-[#f2f3ef]"
+                ? "border border-[#d6dace] bg-[#f2f3ef]"
                 : "border-b border-[#d6dace] bg-[#f2f3ef]"
             }`}
           >
@@ -2564,6 +2596,29 @@ function LandingPage() {
                 <ShiftLabsWordmark />
               </a>
               <div className="flex items-center gap-2 sm:gap-3 md:gap-6">
+                <nav
+                  aria-label="Seções da home"
+                  className="hidden lg:flex items-center gap-1"
+                >
+                  {homeSections.map(([href, label]) => (
+                    <a
+                      key={href}
+                      href={href}
+                      className="inline-flex min-h-[44px] items-center px-2 text-[#5f644c] hover:text-[#101700] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700] text-[13px] uppercase"
+                      style={{
+                        fontFamily: mono,
+                        fontWeight: 400,
+                        lineHeight: "normal",
+                      }}
+                    >
+                      {label}
+                    </a>
+                  ))}
+                </nav>
+                <span
+                  aria-hidden
+                  className="hidden lg:block h-4 w-px bg-[#d6dace]"
+                />
                 <a
                   href="/vagas"
                   className="inline-flex min-h-[44px] items-center px-1.5 sm:px-2 text-[#5f644c] hover:text-[#101700] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700] text-[13px] sm:text-[14px]"
@@ -2578,7 +2633,7 @@ function LandingPage() {
                 <button
                   type="button"
                   onClick={openContactModal}
-                  className="inline-flex min-h-[44px] items-center border border-[#d6dace] px-2.5 sm:px-3 text-[#101700] transition-[background-color,border-color,color,transform] hover:border-[#101700] hover:bg-[#101700] hover:text-[#f2f3ef] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700] text-[12px] md:text-[14px] uppercase cursor-pointer"
+                  className="inline-flex min-h-[36px] items-center border border-[#d6dace] px-2.5 sm:px-3 text-[#101700] transition-[background-color,border-color,color,transform] hover:border-[#101700] hover:bg-[#101700] hover:text-[#f2f3ef] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700] text-[12px] uppercase cursor-pointer"
                   style={{
                     fontFamily: mono,
                     fontWeight: 400,
@@ -2603,15 +2658,15 @@ function LandingPage() {
           <div className="max-w-[1512px] mx-auto flex relative">
             <XlHelper className="border-r border-[#d6dace]" />
             <div className="flex flex-col lg:flex-row flex-1 min-w-0">
-              <div className="flex flex-col justify-between p-6 w-full lg:w-1/2 min-h-[360px] lg:h-[462px]">
-                <div className="flex flex-col gap-12 max-w-[450px]">
+              <div className="flex flex-col justify-between p-6 w-full lg:w-[58%] min-h-[360px] lg:h-[462px]">
+                <div className="flex flex-col gap-12 max-w-[540px]">
                   <div className="flex flex-col gap-6">
                     <SectionLabel>
-                      Engenharia para crescimento previsível
+                      /Engenharia para crescimento previsível
                     </SectionLabel>
                     <SectionTitle
                       as="h1"
-                      className="text-[28px] md:text-[36px] lg:text-[40px]"
+                      className="text-[32px]"
                     >
                       <span className="block">{`Não construímos ideias. `}</span>
                       <span className="block">Estruturamos negócios.</span>
@@ -2622,63 +2677,24 @@ function LandingPage() {
                     className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[343px]"
                     style={{ fontFamily: body, lineHeight: 1.333 }}
                   >
-                    A ShiftLabs transforma ideias, operações confusas ou
-                    produtos mal estruturados em negócios organizados,
-                    previsíveis e escaláveis.
+                    A ShiftLabs transforma operações confusas e produtos mal
+                    estruturados em negócios organizados, previsíveis e
+                    escaláveis.
                   </p>
                 </div>
                 <div className="mt-8 lg:mt-0">
                   <button
                     type="button"
                     onClick={openContactModal}
-                    className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase cursor-pointer transition-[background-color,transform] hover:bg-[#263600] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700]"
+                    className="inline-flex min-h-[36px] items-center bg-[#101700] text-[#f2f3ef] px-3 py-2 text-[12px] uppercase cursor-pointer transition-[background-color,transform] hover:bg-[#263600] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700]"
                     style={{ fontFamily: mono }}
                   >
                     conversar com a ShiftLabs
                   </button>
                 </div>
               </div>
-              <div className="flex items-center justify-center p-4 md:p-6 w-full lg:w-1/2 min-h-[180px] md:min-h-[300px] lg:h-[462px] border-t lg:border-t-0 lg:border-l border-[#d6dace]">
-                <div className="relative w-full max-w-[320px] md:max-w-[532px] aspect-[532/430] overflow-hidden bg-transparent">
-                  <svg
-                    aria-hidden="true"
-                    focusable="false"
-                    className="absolute h-0 w-0 overflow-hidden"
-                  >
-                    <filter
-                      id="hero-video-alpha-key"
-                      colorInterpolationFilters="sRGB"
-                    >
-                      <feColorMatrix
-                        type="matrix"
-                        values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 -1 -1 -1 0 2.86"
-                      />
-                      <feComponentTransfer>
-                        <feFuncA type="table" tableValues="0 0 0.95 1" />
-                      </feComponentTransfer>
-                    </filter>
-                  </svg>
-                  <video
-                    className="w-full h-full scale-[1.02] object-cover pointer-events-none"
-                    style={{
-                      clipPath: "inset(2px)",
-                      filter: "url(#hero-video-alpha-key)",
-                    }}
-                    poster="/videos/hero-header-poster.jpg"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    preload="metadata"
-                    aria-label="Video institucional da ShiftLabs"
-                  >
-                    <source
-                      src="/videos/hero-header.mp4"
-                      type="video/mp4"
-                      media="(min-width: 768px)"
-                    />
-                  </video>
-                </div>
+              <div className="flex items-center justify-center p-4 md:p-6 w-full lg:w-[42%] min-h-[180px] md:min-h-[300px] lg:h-[462px] border-t lg:border-t-0 lg:border-l border-[#d6dace]">
+                <HeroTimeline slides={heroTimeline} />
               </div>
             </div>
             <XlHelper className="border-l border-[#d6dace]" />
@@ -2691,16 +2707,15 @@ function LandingPage() {
           <div className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-12">
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
               <div className="flex flex-col gap-6 max-w-[405px]">
-                <SectionLabel>/Nosso Ecossistema</SectionLabel>
-                <SectionTitle as="h2" className="text-[20px] md:text-[24px]">
-                  Plataformas e operações coordenadas pela mesma engenharia.
+                <SectionLabel>/Negócios próprios</SectionLabel>
+                <SectionTitle as="h2" className="text-[32px]">
+                  Plataformas e operações próprias, coordenadas pela mesma
+                  engenharia.
                 </SectionTitle>
               </div>
               <div className="flex flex-wrap items-center gap-6 md:gap-12">
                 <MenuxLogo />
                 <CortexLogo />
-                <AtomLogo />
-                <AuraLogo />
               </div>
             </div>
           </div>
@@ -2708,15 +2723,10 @@ function LandingPage() {
 
         <nav
           aria-label="Seções da home"
-          className="sticky top-[72px] z-40 md:hidden border-b border-[#d6dace] bg-[#f2f3ef]"
+          className="sticky top-[72px] z-40 lg:hidden border-b border-[#d6dace] bg-[#f2f3ef]"
         >
           <div className="flex overflow-x-auto px-4">
-            {[
-              ["#problema", "Problema"],
-              ["#servicos", "Serviços"],
-              ["#como-trabalhamos", "Método"],
-              ["#cases", "Cases"],
-            ].map(([href, label]) => (
+            {homeSections.map(([href, label]) => (
               <a
                 key={href}
                 href={href}
@@ -2741,7 +2751,7 @@ function LandingPage() {
                 <SectionLabel>/problema</SectionLabel>
                 <SectionTitle
                   as="h2"
-                  className="text-[28px] md:text-[36px] lg:text-[40px]"
+                  className="text-[32px]"
                 >
                   Crescer não é o problema. Crescer desorganizado é.
                 </SectionTitle>
@@ -2749,7 +2759,7 @@ function LandingPage() {
               <p
                 data-reveal="text"
                 className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[335px]"
-                style={{ fontFamily: body, lineHeight: 1.022 }}
+                style={{ fontFamily: body, lineHeight: 1.4 }}
               >
                 A maioria das empresas cresce mais rápido do que sua própria
                 estrutura consegue sustentar.
@@ -2762,37 +2772,28 @@ function LandingPage() {
         <div data-reveal="section" className="border-b border-[#d6dace]">
           <div className="max-w-[1512px] mx-auto flex relative">
             <XlHelper />
-            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 border-x border-[#d6dace]">
+            <div className="hairline-row flex-1 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 border-x border-[#d6dace]">
               {problemCards.map((card, index) => (
                 <div
                   key={card.id}
-                  className={`relative flex flex-col p-6 min-h-[220px] md:h-[231px] md:pr-[249px] ${
+                  className={`hairline-card relative flex flex-col px-6 py-8 xl:px-5 ${
                     index > 0 ? "border-t border-[#d6dace]" : ""
                   } ${index % 2 === 1 ? "sm:border-l sm:border-[#d6dace]" : ""} ${
                     index >= 2 ? "sm:border-t sm:border-[#d6dace]" : ""
-                  } ${index === 1 ? "sm:border-t-0" : ""}`}
+                  } ${index === 1 ? "sm:border-t-0" : ""} ${
+                    index > 0 ? "xl:border-t-0 xl:border-l" : ""
+                  }`}
                 >
-                  <div className="pointer-events-none mb-4 flex w-full justify-end md:hidden">
-                    <img
-                      alt=""
-                      aria-hidden
-                      src={card.illustrationSrc}
-                      className={`h-auto w-auto object-contain ${card.illustrationClassName}`}
-                    />
-                  </div>
-                  <div className="pointer-events-none absolute right-0 top-0 hidden h-[232px] w-[249px] md:block">
-                    <img
-                      alt=""
-                      aria-hidden
-                      src={card.illustrationSrc}
-                      className={`absolute h-auto object-contain ${card.illustrationDesktopClassName}`}
-                    />
-                  </div>
+                  <HairlineFigure
+                    figure={card.figure}
+                    label={card.figureLabel}
+                  />
                   <p
                     data-reveal="text"
-                    className={`relative z-[1] max-w-[250px] text-[#101700] text-[14px] md:text-[16px] md:mt-auto ${card.textMaxClass}`}
+                    className="relative z-[1] max-w-[380px] text-[#101700] text-[14px] md:text-[16px]"
                     style={{
                       fontFamily: display,
+                      letterSpacing: titleTracking,
                       fontWeight: 500,
                       lineHeight: "normal",
                     }}
@@ -2803,7 +2804,7 @@ function LandingPage() {
               ))}
             </div>
             <XlHelper />
-            <SectionBorderTicks positions={twoColumnTickPositions} />
+            <SectionBorderTicks positions={fourColumnTickPositions} />
           </div>
         </div>
 
@@ -2816,6 +2817,7 @@ function LandingPage() {
                 className="text-[#101700] text-[18px] md:text-[20px] lg:text-[24px] max-w-[472px]"
                 style={{
                   fontFamily: display,
+                  letterSpacing: titleTracking,
                   fontWeight: 500,
                   lineHeight: "normal",
                 }}
@@ -2825,6 +2827,73 @@ function LandingPage() {
                 empresas que “estavam indo bem”.
               </p>
             </div>
+          </div>
+        </div>
+
+        {/* ===== AUDIENCE ===== */}
+        <div data-reveal="section">
+          <div className="max-w-[1512px] mx-auto flex">
+            <XlHelper />
+            <div className="relative overflow-hidden flex-1 flex flex-col items-center justify-center p-6 min-h-[300px] lg:h-[462px] border-x border-[#d6dace]">
+              <AsciiStarfield className="absolute inset-0 hidden md:block" />
+              <div className="relative z-[1] flex flex-col items-center gap-6 text-center">
+                <p
+                  data-reveal="text"
+                  className="text-[#5f644c] text-[12px] lowercase"
+                  style={{ fontFamily: mono, textShadow: audienceTextHalo }}
+                >
+                  /Para Quem é a ShiftLabs
+                </p>
+                <h2
+                  data-reveal="title"
+                  className="text-[#101700] leading-[normal] text-[32px] text-center max-w-[454px]"
+                  style={{
+                    fontFamily: heading,
+                    letterSpacing: titleTracking,
+                    fontWeight: 500,
+                    textShadow: audienceTextHalo,
+                  }}
+                >
+                  Estrutura que acompanha crescimento.
+                </h2>
+              </div>
+            </div>
+            <XlHelper />
+          </div>
+        </div>
+
+        <div data-reveal="section" className="border-y border-[#d6dace]">
+          <div className="max-w-[1512px] mx-auto flex relative">
+            <XlHelper />
+            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 border-x border-[#d6dace]">
+              {audienceItems.map((item, index) => (
+                <div
+                  key={item.text}
+                  className={`flex items-end p-6 min-h-[100px] md:h-[118px] ${
+                    index > 0 ? "border-t border-[#d6dace]" : ""
+                  } ${index === 1 ? "sm:border-t-0" : ""} ${
+                    index > 1 ? "sm:border-t sm:border-[#d6dace]" : ""
+                  } ${index % 2 === 1 ? "sm:border-l sm:border-[#d6dace]" : ""}`}
+                >
+                  <p
+                    data-reveal="text"
+                    className={`text-[#101700] text-[14px] md:text-[16px] ${item.textMaxClass}`}
+                    style={{
+                      fontFamily: display,
+                      letterSpacing: titleTracking,
+                      fontWeight: 500,
+                      lineHeight: "normal",
+                    }}
+                  >
+                    {item.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <XlHelper />
+            <SectionBorderTicks
+              positions={twoColumnTickPositions}
+            />
           </div>
         </div>
 
@@ -2839,15 +2908,15 @@ function LandingPage() {
               <SectionLabel>/Abordagem ShiftLabs</SectionLabel>
               <SectionTitle
                 as="h2"
-                className="text-[36px] md:text-[48px] lg:text-[64px]"
+                className="text-[32px]"
               >
                 Do caos a sistemas coordenados.
               </SectionTitle>
             </div>
             <p
               data-reveal="text"
-              className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[320px]"
-              style={{ fontFamily: body, lineHeight: 1.022 }}
+              className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[338px]"
+              style={{ fontFamily: body, lineHeight: 1.4 }}
             >
               <span>A ShiftLabs não é </span>
               <span
@@ -2874,93 +2943,39 @@ function LandingPage() {
           </div>
         </div>
 
-        {/* ===== SERVICE TAGS ===== */}
-        <div data-reveal="section" className="border-y border-[#d6dace]">
-          <div className="max-w-[1512px] mx-auto flex relative">
-            <XlHelper className="border-r border-[#d6dace]" />
-            <div className="flex flex-col lg:flex-row flex-1 min-w-0">
-              <div className="flex flex-col justify-between p-6 border-b lg:border-b-0 lg:border-r border-[#d6dace] w-full lg:w-1/2 min-h-[140px] lg:h-[174px]">
+        {/* ===== O QUE FAZEMOS ===== */}
+        <div className="border-t border-[#d6dace]">
+          <div
+            id="servicos"
+            data-reveal="section"
+            className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] pt-16 pb-9 scroll-mt-[96px]"
+          >
+            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 lg:gap-12">
+              <div className="flex flex-col gap-6 max-w-[499px]">
+                <SectionLabel>/O QUE FAZEMOS</SectionLabel>
                 <SectionTitle
                   as="h2"
-                  className="text-[20px] md:text-[24px] max-w-[242px]"
+                  className="text-[32px]"
+                >
+                  <span className="block">Como estruturamos </span>
+                  <span className="block">negócios.</span>
+                </SectionTitle>
+              </div>
+              <p
+                data-reveal="text"
+                className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[420px]"
+                style={{ fontFamily: body, lineHeight: 1.4 }}
+              >
+                <span
+                  className="text-[#101700]"
+                  style={{ fontFamily: display, fontWeight: 500 }}
                 >
                   Somos a engenharia estrutural do negócio.
-                </SectionTitle>
-                <p
-                  data-reveal="text"
-                  className="text-[#5f644c] text-[14px] md:text-[16px] uppercase mt-4"
-                  style={{ fontFamily: mono }}
-                >
-                  Trabalhamos na interseção de:
-                </p>
-              </div>
-              <div className="flex-1 grid grid-cols-2 sm:hidden">
-                {serviceTags.map((tag, index) => (
-                  <div
-                    key={`mobile-${tag}`}
-                    className={`flex items-end p-4 h-[87px] ${index % 2 === 1 ? "border-l border-[#d6dace]" : ""} ${
-                      index >= 2 ? "border-t border-[#d6dace]" : ""
-                    }`}
-                  >
-                    <p
-                      data-reveal="text"
-                      className="text-[#101700] text-[14px] md:text-[16px]"
-                      style={{
-                        fontFamily: display,
-                        fontWeight: 500,
-                        lineHeight: "normal",
-                      }}
-                    >
-                      {tag}
-                    </p>
-                  </div>
-                ))}
-              </div>
-              <div className="hidden sm:grid flex-1 grid-cols-3">
-                {serviceTags.map((tag, index) => (
-                  <div
-                    key={`desktop-${tag}`}
-                    className={`flex items-end p-4 h-[87px] ${index % 3 !== 0 ? "border-l border-[#d6dace]" : ""} ${
-                      index >= 3 ? "border-t border-[#d6dace]" : ""
-                    }`}
-                  >
-                    <p
-                      data-reveal="text"
-                      className="text-[#101700] text-[14px] md:text-[16px]"
-                      style={{
-                        fontFamily: display,
-                        fontWeight: 500,
-                        lineHeight: "normal",
-                      }}
-                    >
-                      {tag}
-                    </p>
-                  </div>
-                ))}
-              </div>
+                </span>{" "}
+                Trabalhamos na interseção de produto, tecnologia, comercial,
+                operações, growth e inteligência artificial.
+              </p>
             </div>
-            <XlHelper className="border-l border-[#d6dace]" />
-            <SectionBorderTicks
-              positions={serviceTagTickPositions}
-            />
-          </div>
-        </div>
-
-        {/* ===== O QUE FAZEMOS ===== */}
-        <div
-          id="servicos"
-          data-reveal="section"
-          className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] pt-16 pb-9 scroll-mt-[96px]"
-        >
-          <div className="flex flex-col gap-6 max-w-[499px]">
-            <SectionLabel>/O QUE FAZEMOS</SectionLabel>
-            <SectionTitle
-              as="h2"
-              className="text-[28px] md:text-[36px] lg:text-[40px]"
-            >
-              <span className="block">Como estruturamos </span>
-              <span className="block">negócios.</span>
-            </SectionTitle>
           </div>
         </div>
 
@@ -2970,48 +2985,36 @@ function LandingPage() {
           className="max-w-[1512px] mx-auto flex relative"
         >
           <XlHelper className="border-t border-[#d6dace]" />
-          <div className="flex-1 grid grid-cols-1 md:grid-cols-2 border-x border-t border-[#d6dace]">
+          <div className="hairline-row flex-1 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 border-x border-t border-[#d6dace]">
             {services.map((svc, index) => (
               <div
                 key={svc.title}
-                className={`relative flex flex-col p-6 min-h-[250px] md:h-[231px] md:pr-[249px] ${
+                className={`hairline-card relative flex flex-col px-6 py-8 xl:px-5 ${
                   index > 0 ? "border-t border-[#d6dace]" : ""
                 } ${index % 2 === 1 ? "md:border-l md:border-[#d6dace]" : ""} ${
                   index >= 2 ? "md:border-t md:border-[#d6dace]" : ""
-                } ${index === 1 ? "md:border-t-0" : ""}`}
+                } ${index === 1 ? "md:border-t-0" : ""} ${
+                  index > 0 ? "xl:border-t-0 xl:border-l" : ""
+                }`}
               >
-                <div className="pointer-events-none mb-4 flex w-full justify-end md:hidden">
-                  <img
-                    alt=""
-                    aria-hidden
-                    src={svc.illustrationSrc}
-                    className={`h-auto w-auto object-contain ${svc.illustrationClassName}`}
-                  />
-                </div>
-                <div className="pointer-events-none absolute right-0 top-0 hidden h-[232px] w-[249px] md:block">
-                  <img
-                    alt=""
-                    aria-hidden
-                    src={svc.illustrationSrc}
-                    className={`absolute h-auto object-contain ${svc.illustrationDesktopClassName}`}
-                  />
-                </div>
-                <div className="relative z-[1] flex max-w-[250px] flex-col gap-4 md:max-w-none md:mt-auto">
-                  <p
+                <HairlineFigure figure={svc.figure} label={svc.figureLabel} />
+                <div className="relative z-[1] flex max-w-[380px] flex-col gap-4">
+                  <h3
                     data-reveal="text"
-                    className={`text-[#101700] text-[14px] md:text-[16px] ${svc.titleMaxClass}`}
+                    className="text-[#101700] text-[14px] md:text-[16px]"
                     style={{
                       fontFamily: display,
+                      letterSpacing: titleTracking,
                       fontWeight: 500,
                       lineHeight: "normal",
                     }}
                   >
                     {svc.title}
-                  </p>
+                  </h3>
                   <p
                     data-reveal="text"
-                    className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[235px]"
-                    style={{ fontFamily: body, lineHeight: 1.076 }}
+                    className="text-[#5f644c] text-[14px] md:text-[16px]"
+                    style={{ fontFamily: body, lineHeight: 1.4 }}
                   >
                     {svc.desc}
                   </p>
@@ -3020,7 +3023,7 @@ function LandingPage() {
             ))}
           </div>
           <XlHelper className="border-t border-[#d6dace]" />
-          <SectionBorderTicks positions={twoColumnTickPositions} />
+          <SectionBorderTicks positions={fourColumnTickPositions} />
         </div>
 
         {/* ===== SERVICES QUOTE ===== */}
@@ -3032,6 +3035,7 @@ function LandingPage() {
                 className="text-[#101700] text-[18px] md:text-[20px] lg:text-[24px] max-w-[221px]"
                 style={{
                   fontFamily: display,
+                  letterSpacing: titleTracking,
                   fontWeight: 500,
                   lineHeight: "normal",
                 }}
@@ -3050,18 +3054,18 @@ function LandingPage() {
               <div className="flex flex-col items-center gap-6 text-center max-w-[450px]">
                 <p
                   data-reveal="text"
-                  className="text-[#b6bea1] text-[14px] md:text-[16px] uppercase"
+                  className="text-[#b6bea1] text-[12px] lowercase"
                   style={{ fontFamily: mono }}
                 >
-                  Crescimento previsível
+                  /Crescimento previsível
                 </p>
-                <p
+                <h2
                   data-reveal="title"
-                  className="text-[#f2f3ef] text-[20px] md:text-[24px]"
-                  style={{ fontFamily: heading, fontWeight: 500 }}
+                  className="text-[#f2f3ef] text-[32px]"
+                  style={{ fontFamily: heading, fontWeight: 500, letterSpacing: titleTracking }}
                 >
                   Framework de Engenharia de Negócios™
-                </p>
+                </h2>
                 <p
                   data-reveal="text"
                   className="text-[#b6bea1] text-[14px] md:text-[16px] max-w-[343px]"
@@ -3111,7 +3115,7 @@ function LandingPage() {
               <SectionLabel>/Como trabalhamos</SectionLabel>
               <SectionTitle
                 as="h2"
-                className="text-[28px] md:text-[36px] lg:text-[40px]"
+                className="text-[32px]"
               >
                 Da primeira conversa à execução coordenada.
               </SectionTitle>
@@ -3119,7 +3123,7 @@ function LandingPage() {
             <p
               data-reveal="text"
               className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[420px]"
-              style={{ fontFamily: body, lineHeight: 1.25 }}
+              style={{ fontFamily: body, lineHeight: 1.4 }}
             >
               Antes de sair construindo, entendemos onde o negócio trava,
               desenhamos a arquitetura de execução e colocamos produto,
@@ -3141,23 +3145,23 @@ function LandingPage() {
                 >
                   <p
                     data-reveal="text"
-                    className="text-[#5f644c] text-[14px] md:text-[16px] uppercase"
+                    className="text-[#5f644c] text-[12px] lowercase"
                     style={{ fontFamily: mono }}
                   >
                     {step.step}
                   </p>
                   <div className="flex flex-col gap-4">
-                    <p
+                    <h3
                       data-reveal="text"
                       className="text-[#101700] text-[18px] md:text-[20px]"
-                      style={{ fontFamily: display, fontWeight: 500 }}
+                      style={{ fontFamily: display, fontWeight: 500, letterSpacing: titleTracking }}
                     >
                       {step.title}
-                    </p>
+                    </h3>
                     <p
                       data-reveal="text"
                       className="text-[#5f644c] text-[14px] md:text-[16px] max-w-[310px]"
-                      style={{ fontFamily: body, lineHeight: 1.2 }}
+                      style={{ fontFamily: body, lineHeight: 1.4 }}
                     >
                       {step.desc}
                     </p>
@@ -3182,7 +3186,7 @@ function LandingPage() {
             <SectionLabel>/cases</SectionLabel>
             <SectionTitle
               as="h2"
-              className="text-[28px] md:text-[36px] lg:text-[40px]"
+              className="text-[32px]"
             >
               Onde a estratégia virou sistema.
             </SectionTitle>
@@ -3202,18 +3206,18 @@ function LandingPage() {
                 >
                   <MenuxLogo />
                   <div className="flex flex-col gap-4 mt-6">
-                    <p
+                    <h3
                       data-reveal="text"
                       className="text-[#101700] text-[14px] md:text-[16px]"
-                      style={{ fontFamily: display, fontWeight: 500 }}
+                      style={{ fontFamily: display, fontWeight: 500, letterSpacing: titleTracking }}
                     >
                       Tecnologia aplicada à experiência de restaurante.
-                    </p>
+                    </h3>
                     <div className="flex flex-col gap-3">
                       <p
                         data-reveal="text"
                         className="text-[#5f644c] text-[13px] md:text-[14px] max-w-[460px]"
-                        style={{ fontFamily: body, lineHeight: 1.2 }}
+                        style={{ fontFamily: body, lineHeight: 1.4 }}
                       >
                         <span className="text-[#101700]">Contexto: </span>
                         restaurantes operam com cliente, atendimento, equipe,
@@ -3222,7 +3226,7 @@ function LandingPage() {
                       <p
                         data-reveal="text"
                         className="text-[#5f644c] text-[13px] md:text-[14px] max-w-[460px]"
-                        style={{ fontFamily: body, lineHeight: 1.2 }}
+                        style={{ fontFamily: body, lineHeight: 1.4 }}
                       >
                         <span className="text-[#101700]">Efeito: </span>
                         Menux aproxima cliente, equipe e gestor para reduzir
@@ -3231,7 +3235,7 @@ function LandingPage() {
                       <p
                         data-reveal="text"
                         className="text-[#5f644c] text-[13px] md:text-[14px] max-w-[460px]"
-                        style={{ fontFamily: body, lineHeight: 1.2 }}
+                        style={{ fontFamily: body, lineHeight: 1.4 }}
                       >
                         <span className="text-[#101700]">Capacidade: </span>
                         produto operacional com experiência, dados e rotina de
@@ -3248,18 +3252,18 @@ function LandingPage() {
                 >
                   <CortexLogo />
                   <div className="flex flex-col gap-4 mt-6">
-                    <p
+                    <h3
                       data-reveal="text"
                       className="text-[#101700] text-[14px] md:text-[16px]"
-                      style={{ fontFamily: display, fontWeight: 500 }}
+                      style={{ fontFamily: display, fontWeight: 500, letterSpacing: titleTracking }}
                     >
                       Coordenação organizacional para empresas em crescimento.
-                    </p>
+                    </h3>
                     <div className="flex flex-col gap-3">
                       <p
                         data-reveal="text"
                         className="text-[#5f644c] text-[13px] md:text-[14px] max-w-[460px]"
-                        style={{ fontFamily: body, lineHeight: 1.2 }}
+                        style={{ fontFamily: body, lineHeight: 1.4 }}
                       >
                         <span className="text-[#101700]">Contexto: </span>
                         empresas em crescimento acumulam informação, prioridades
@@ -3268,7 +3272,7 @@ function LandingPage() {
                       <p
                         data-reveal="text"
                         className="text-[#5f644c] text-[13px] md:text-[14px] max-w-[460px]"
-                        style={{ fontFamily: body, lineHeight: 1.2 }}
+                        style={{ fontFamily: body, lineHeight: 1.4 }}
                       >
                         <span className="text-[#101700]">Efeito: </span>
                         Cortex conecta informação, prioridades e execução para
@@ -3277,7 +3281,7 @@ function LandingPage() {
                       <p
                         data-reveal="text"
                         className="text-[#5f644c] text-[13px] md:text-[14px] max-w-[460px]"
-                        style={{ fontFamily: body, lineHeight: 1.2 }}
+                        style={{ fontFamily: body, lineHeight: 1.4 }}
                       >
                         <span className="text-[#101700]">Capacidade: </span>
                         sistemas internos, dados e operação sustentando
@@ -3314,71 +3318,6 @@ function LandingPage() {
           </div>
         </div>
 
-        {/* ===== AUDIENCE ===== */}
-        <div data-reveal="section">
-          <div className="max-w-[1512px] mx-auto flex">
-            <XlHelper />
-            <div className="relative overflow-hidden flex-1 flex flex-col items-center justify-center p-6 min-h-[300px] lg:h-[462px] border-x border-[#d6dace]">
-              <AsciiStarfield className="absolute inset-0 hidden md:block" />
-              <div className="relative z-[1] flex flex-col items-center gap-6 text-center">
-                <p
-                  data-reveal="text"
-                  className="text-[#5f644c] text-[14px] md:text-[16px] uppercase"
-                  style={{ fontFamily: mono, textShadow: audienceTextHalo }}
-                >
-                  /Para Quem é a ShiftLabs
-                </p>
-                <h2
-                  data-reveal="title"
-                  className="text-[#101700] leading-[normal] text-[28px] md:text-[36px] lg:text-[40px] text-center max-w-[454px]"
-                  style={{
-                    fontFamily: heading,
-                    fontWeight: 500,
-                    textShadow: audienceTextHalo,
-                  }}
-                >
-                  Estrutura que acompanha crescimento.
-                </h2>
-              </div>
-            </div>
-            <XlHelper />
-          </div>
-        </div>
-
-        <div data-reveal="section" className="border-y border-[#d6dace]">
-          <div className="max-w-[1512px] mx-auto flex relative">
-            <XlHelper />
-            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 border-x border-[#d6dace]">
-              {audienceItems.map((item, index) => (
-                <div
-                  key={item.text}
-                  className={`flex items-end p-6 min-h-[100px] md:h-[118px] ${
-                    index > 0 ? "border-t border-[#d6dace]" : ""
-                  } ${index === 1 ? "sm:border-t-0" : ""} ${
-                    index > 1 ? "sm:border-t sm:border-[#d6dace]" : ""
-                  } ${index % 2 === 1 ? "sm:border-l sm:border-[#d6dace]" : ""}`}
-                >
-                  <p
-                    data-reveal="text"
-                    className={`text-[#101700] text-[14px] md:text-[16px] ${item.textMaxClass}`}
-                    style={{
-                      fontFamily: display,
-                      fontWeight: 500,
-                      lineHeight: "normal",
-                    }}
-                  >
-                    {item.text}
-                  </p>
-                </div>
-              ))}
-            </div>
-            <XlHelper />
-            <SectionBorderTicks
-              positions={twoColumnTickPositions}
-            />
-          </div>
-        </div>
-
         {/* ===== WHAT MAKES US DIFFERENT ===== */}
         <div
           data-reveal="section"
@@ -3387,47 +3326,30 @@ function LandingPage() {
           <div className="flex flex-col items-center gap-8 max-w-[430px]">
             <p
               data-reveal="text"
-              className="text-[#5f644c] text-[12px] md:text-[14px] uppercase"
+              className="text-[#5f644c] text-[12px] lowercase"
               style={{ fontFamily: mono }}
             >
-              Não somos para quem quer apenas “uma landing page”.
+              /Não somos para quem quer apenas “uma landing page”.
             </p>
-            <SectionTitle as="h2" className="text-[20px] md:text-[24px] text-center">
+            <SectionTitle as="h2" className="text-[32px] text-center">
               O que torna a ShiftLabs diferente
             </SectionTitle>
           </div>
         </div>
 
-        {/* Marquee text */}
+        {/* Thesis statement */}
         <div
           data-reveal="section"
-          className="overflow-x-hidden overflow-y-visible py-4"
+          className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] pb-12 md:pb-16 flex justify-center"
         >
-          <div className="w-full overflow-x-hidden overflow-y-visible">
-            <div className="marquee-track flex w-max whitespace-nowrap ">
-              <p
-                className="text-[#101700] text-[48px] sm:text-[72px] md:text-[96px] lg:text-[128px] text-left pr-10 lg:pr-14"
-                style={{
-                  fontFamily: heading,
-                  fontWeight: 500,
-                  lineHeight: "normal",
-                }}
-              >
-                {marqueeText}
-              </p>
-              <p
-                aria-hidden
-                className="text-[#101700] text-[48px] sm:text-[72px] md:text-[96px] lg:text-[128px] text-left pr-10 lg:pr-14"
-                style={{
-                  fontFamily: heading,
-                  fontWeight: 500,
-                  lineHeight: "normal",
-                }}
-              >
-                {marqueeText}
-              </p>
-            </div>
-          </div>
+          <p
+            data-reveal="title"
+            className="text-center text-balance text-[32px] leading-[1.1]"
+            style={{ fontFamily: heading, fontWeight: 500, letterSpacing: titleTracking }}
+          >
+            <span className="block text-[#5f644c]">{thesisLead}</span>
+            <span className="block text-[#101700]">{thesisClose}</span>
+          </p>
         </div>
 
         {/* Feature tags */}
@@ -3447,6 +3369,7 @@ function LandingPage() {
                     className="text-[#101700] text-[14px] md:text-[16px]"
                     style={{
                       fontFamily: heading,
+                      letterSpacing: titleTracking,
                       fontWeight: 500,
                       lineHeight: "normal",
                     }}
@@ -3468,7 +3391,7 @@ function LandingPage() {
           data-reveal="section"
           className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-9 flex justify-center"
         >
-          <SectionTitle as="h2" className="text-[20px] md:text-[24px] text-center ">
+          <SectionTitle as="h2" className="text-[32px] text-center ">
             A ShiftLabs entrega coordenação.
           </SectionTitle>
         </div>
@@ -3482,14 +3405,14 @@ function LandingPage() {
                 <div className="flex flex-col gap-6 max-w-[450px]">
                   <p
                     data-reveal="text"
-                    className="text-[#456300] text-[14px] md:text-[16px] uppercase"
+                    className="text-[#456300] text-[12px] lowercase"
                     style={{ fontFamily: mono }}
                   >
                     /Próximo passo
                   </p>
                   <SectionTitle
                     as="h2"
-                    className="text-[28px] md:text-[36px] lg:text-[40px]"
+                    className="text-[32px]"
                   >
                     Vamos estruturar o que sua empresa precisa executar agora?
                   </SectionTitle>
@@ -3497,7 +3420,7 @@ function LandingPage() {
                 <p
                   data-reveal="text"
                   className="text-[#456300] text-[14px] md:text-[16px] max-w-[360px] mt-8"
-                  style={{ fontFamily: body, lineHeight: 1.076 }}
+                  style={{ fontFamily: body, lineHeight: 1.4 }}
                 >
                   Se o crescimento já depende de muitas frentes ao mesmo tempo,
                   a primeira conversa serve para entender onde o sistema trava e
@@ -3508,7 +3431,7 @@ function LandingPage() {
                 <button
                   type="button"
                   onClick={openContactModal}
-                  className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase cursor-pointer transition-[background-color,transform] hover:bg-[#263600] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700]"
+                  className="inline-flex min-h-[36px] items-center bg-[#101700] text-[#f2f3ef] px-3 py-2 text-[12px] uppercase cursor-pointer transition-[background-color,transform] hover:bg-[#263600] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700]"
                   style={{ fontFamily: mono }}
                 >
                   iniciar diagnóstico
@@ -3520,72 +3443,154 @@ function LandingPage() {
           </div>
         </div>
 
-        {/* ===== FOOTER ===== */}
-        <div
-          id="contato"
-          data-reveal="section"
-          className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-9 scroll-mt-[96px]"
-        >
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 pb-9">
-            <div className="flex flex-col gap-8 max-w-[356px]">
-              <ShiftLabsIcon />
-              <p
-                data-reveal="text"
-                className="text-[#5f644c] text-[14px] md:text-[16px]"
-                style={{ fontFamily: body, lineHeight: 1.3 }}
-              >
-                Arquitetamos produto, tecnologia, comercial e operação em fluxos
-                coordenados, com inteligência aplicada de ponta a ponta.
-              </p>
-              <p
-                data-reveal="text"
-                className="text-[#5f644c] text-[14px] md:text-[16px]"
-                style={{ fontFamily: body, lineHeight: 1.3 }}
-              >
-                <span
-                  className="text-[#101700]"
-                  style={{ fontFamily: display, fontWeight: 500 }}
+        {/* ===== VAGAS ===== */}
+        <div data-reveal="section" className="border-b border-[#d6dace]">
+          <div className="max-w-[1512px] mx-auto flex relative">
+            <XlHelper className="border-r border-[#d6dace]" />
+            <div className="flex flex-1 min-w-0 flex-col gap-6 p-6 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-2">
+                <p
+                  className="text-[#5f644c] text-[12px] lowercase"
+                  style={{ fontFamily: mono }}
                 >
-                  © 2026 ShiftLabs.
-                </span>
-                <span> Todos os direitos reservados.</span>
-              </p>
-            </div>
-            <div className="flex flex-col gap-6">
-              <p
-                data-reveal="text"
-                className="text-[#5f644c] text-[14px] md:text-[16px] uppercase"
-                style={{ fontFamily: mono }}
+                  /vagas
+                </p>
+                <p
+                  className="text-[#101700] text-[20px] md:text-[24px]"
+                  style={{ fontFamily: display, fontWeight: 500, lineHeight: 1.2 }}
                 >
-                /Contato
-              </p>
-              <div className="flex items-center gap-5">
-                {socialLinks.map(({ name, href, Icon }) => (
-                  <a
-                    key={name}
-                    href={href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex min-h-[44px] items-center gap-2 py-1"
-                  >
-                    <Icon />
-                    <span
-                      className="text-[#5f644c] text-[14px] md:text-[16px]"
-                      style={{ fontFamily: body, lineHeight: 1.3 }}
-                    >
-                      {name}
-                    </span>
-                  </a>
-                ))}
+                  Estamos contratando.
+                </p>
+                <p
+                  className="text-[#5f644c] text-[14px] md:text-[16px]"
+                  style={{ fontFamily: body, lineHeight: 1.3 }}
+                >
+                  Venha estruturar negócios com a gente.
+                </p>
               </div>
+              <a
+                href="/vagas"
+                className="inline-flex min-h-[36px] shrink-0 items-center self-start sm:self-auto border border-[#d6dace] px-3 py-2 text-[#101700] text-[12px] uppercase transition-[background-color,border-color,color,transform] hover:border-[#101700] hover:bg-[#101700] hover:text-[#f2f3ef] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700]"
+                style={{ fontFamily: mono }}
+              >
+                ver vagas abertas
+              </a>
             </div>
-          </div>
-          {/* Big wordmark */}
-          <div className="pt-9">
-            <BigWordmark />
+            <XlHelper className="border-l border-[#d6dace]" />
+            <SectionBorderTicks positions={edgeTickPositions} showTop={false} />
           </div>
         </div>
+
       </main>
+
+      {/* ===== FOOTER ===== */}
+      <footer
+        id="contato"
+        data-reveal="section"
+        className="max-w-[1512px] mx-auto px-6 md:px-8 xl:px-[192px] py-9 scroll-mt-[96px] text-[#101700]"
+      >
+        <div className="flex flex-col md:flex-row md:justify-between gap-10 pb-9">
+          <div className="flex flex-col gap-8 max-w-[356px]">
+            <ShiftLabsIcon />
+            <p
+              data-reveal="text"
+              className="text-[#5f644c] text-[14px] md:text-[16px]"
+              style={{ fontFamily: body, lineHeight: 1.3 }}
+            >
+              Arquitetamos produto, tecnologia, comercial e operação em fluxos
+              coordenados, com inteligência aplicada de ponta a ponta.
+            </p>
+            <p
+              data-reveal="text"
+              className="text-[#5f644c] text-[14px] md:text-[16px]"
+              style={{ fontFamily: body, lineHeight: 1.3 }}
+            >
+              <span
+                className="text-[#101700]"
+                style={{ fontFamily: display, fontWeight: 500 }}
+              >
+                © 2026 ShiftLabs.
+              </span>
+              <span> Todos os direitos reservados.</span>
+            </p>
+          </div>
+          <nav
+            aria-label="Rodapé"
+            className="grid grid-cols-2 gap-x-8 gap-y-8 sm:grid-cols-3 md:gap-x-16"
+          >
+            <div className="flex flex-col gap-3">
+              <p
+                className="text-[#5f644c] text-[12px] lowercase"
+                style={{ fontFamily: mono }}
+              >
+                /home
+              </p>
+              {homeSections.map(([href, label]) => (
+                <a
+                  key={href}
+                  href={href}
+                  className="inline-flex min-h-[32px] items-center text-[#5f644c] hover:text-[#101700] transition-colors text-[14px] md:text-[16px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700]"
+                  style={{ fontFamily: body, lineHeight: 1.3 }}
+                >
+                  {label}
+                </a>
+              ))}
+            </div>
+            <div className="flex flex-col gap-3">
+              <p
+                className="text-[#5f644c] text-[12px] lowercase"
+                style={{ fontFamily: mono }}
+              >
+                /empresa
+              </p>
+              <a
+                href="/vagas"
+                className="inline-flex min-h-[32px] items-center text-[#5f644c] hover:text-[#101700] transition-colors text-[14px] md:text-[16px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700]"
+                style={{ fontFamily: body, lineHeight: 1.3 }}
+              >
+                Vagas
+              </a>
+              <button
+                type="button"
+                onClick={openContactModal}
+                className="inline-flex min-h-[32px] items-center text-left text-[#5f644c] hover:text-[#101700] transition-colors text-[14px] md:text-[16px] cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700]"
+                style={{ fontFamily: body, lineHeight: 1.3 }}
+              >
+                Contato
+              </button>
+            </div>
+            <div className="flex flex-col gap-3">
+              <p
+                className="text-[#5f644c] text-[12px] lowercase"
+                style={{ fontFamily: mono }}
+              >
+                /redes
+              </p>
+              {socialLinks.map(({ name, href, Icon }) => (
+                <a
+                  key={name}
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex min-h-[32px] items-center gap-2 text-[#5f644c] hover:text-[#101700] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#101700]"
+                >
+                  <Icon />
+                  <span
+                    className="text-[14px] md:text-[16px]"
+                    style={{ fontFamily: body, lineHeight: 1.3 }}
+                  >
+                    {name}
+                  </span>
+                </a>
+              ))}
+            </div>
+          </nav>
+        </div>
+        {/* Big wordmark */}
+        <div className="pt-9">
+          <BigWordmark />
+        </div>
+      </footer>
 
       {isContactModalOpen ? (
         <div
@@ -3603,7 +3608,7 @@ function LandingPage() {
             <div className="shrink-0 border-b border-[#d6dace] px-5 py-4 md:px-6">
               <div className="flex items-center justify-between gap-4">
                 <p
-                  className="text-[#5f644c] text-[13px] md:text-[14px] uppercase"
+                  className="text-[#5f644c] text-[12px] lowercase"
                   style={{ fontFamily: mono }}
                 >
                   {isContactSuccess ? "/contato enviado" : "/contato"}
@@ -3612,7 +3617,7 @@ function LandingPage() {
                   type="button"
                   onClick={closeContactModal}
                   disabled={isContactSubmitting}
-                  className="inline-flex min-h-[44px] items-center border border-[#d6dace] px-4 py-3 text-[12px] uppercase text-[#5f644c] hover:text-[#101700]"
+                  className="inline-flex min-h-[36px] items-center border border-[#d6dace] px-3 py-2 text-[12px] uppercase text-[#5f644c] hover:text-[#101700]"
                   style={{ fontFamily: mono, lineHeight: "normal" }}
                 >
                   fechar
@@ -3622,6 +3627,7 @@ function LandingPage() {
                 className="mt-3 text-[#101700] text-[24px] md:text-[30px]"
                 style={{
                   fontFamily: heading,
+                  letterSpacing: titleTracking,
                   fontWeight: 500,
                   lineHeight: "normal",
                 }}
@@ -3643,7 +3649,7 @@ function LandingPage() {
                         </span>
                         <div className="flex flex-col gap-1">
                           <p
-                            className="text-[12px] uppercase text-[#5f644c]"
+                            className="text-[12px] lowercase text-[#5f644c]"
                             style={{ fontFamily: mono }}
                           >
                             /envio concluído
@@ -3652,6 +3658,7 @@ function LandingPage() {
                             className="text-[25px] md:text-[36px] text-[#101700]"
                             style={{
                               fontFamily: heading,
+                              letterSpacing: titleTracking,
                               fontWeight: 500,
                               lineHeight: 1.03,
                             }}
@@ -3678,7 +3685,7 @@ function LandingPage() {
                     <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                       <div className="shiftlabs-success-step border border-[#d6dace] p-3">
                         <p
-                          className="text-[11px] uppercase text-[#5f644c]"
+                          className="text-[12px] lowercase text-[#5f644c]"
                           style={{ fontFamily: mono }}
                         >
                           /passo 01
@@ -3692,7 +3699,7 @@ function LandingPage() {
                       </div>
                       <div className="shiftlabs-success-step border border-[#d6dace] p-3">
                         <p
-                          className="text-[11px] uppercase text-[#5f644c]"
+                          className="text-[12px] lowercase text-[#5f644c]"
                           style={{ fontFamily: mono }}
                         >
                           /passo 02
@@ -3706,7 +3713,7 @@ function LandingPage() {
                       </div>
                       <div className="shiftlabs-success-step border border-[#d6dace] p-3">
                         <p
-                          className="text-[11px] uppercase text-[#5f644c]"
+                          className="text-[12px] lowercase text-[#5f644c]"
                           style={{ fontFamily: mono }}
                         >
                           /passo 03
@@ -3726,7 +3733,7 @@ function LandingPage() {
                       <button
                         type="button"
                         onClick={resetContactModalFeedback}
-                        className="inline-flex min-h-[44px] items-center border border-[#d6dace] px-4 py-3 text-[13px] uppercase text-[#5f644c] hover:text-[#101700]"
+                        className="inline-flex min-h-[36px] items-center border border-[#d6dace] px-3 py-2 text-[12px] uppercase text-[#5f644c] hover:text-[#101700]"
                         style={{ fontFamily: mono, lineHeight: "normal" }}
                       >
                         enviar novo contato
@@ -3766,7 +3773,7 @@ function LandingPage() {
                       className="text-[13px] text-[#5f644c]"
                       style={{ fontFamily: body }}
                     >
-                      Whatsapp
+                      WhatsApp
                     </span>
                     <input
                       type="tel"
@@ -3785,7 +3792,7 @@ function LandingPage() {
                       className="text-[13px] text-[#5f644c]"
                       style={{ fontFamily: body }}
                     >
-                      Email
+                      E-mail
                     </span>
                     <input
                       type="email"
@@ -3850,7 +3857,7 @@ function LandingPage() {
                     type="button"
                     onClick={closeContactModal}
                     disabled={isContactSubmitting}
-                    className="inline-flex min-h-[44px] items-center border border-[#d6dace] px-4 py-3 text-[13px] uppercase text-[#5f644c] hover:text-[#101700]"
+                    className="inline-flex min-h-[36px] items-center border border-[#d6dace] px-3 py-2 text-[12px] uppercase text-[#5f644c] hover:text-[#101700]"
                     style={{ fontFamily: mono, lineHeight: "normal" }}
                   >
                     cancelar
@@ -3858,7 +3865,7 @@ function LandingPage() {
                   <button
                     type="submit"
                     disabled={isContactSubmitting}
-                    className="inline-flex min-h-[44px] items-center bg-[#101700] px-4 py-3 text-[13px] uppercase text-[#f2f3ef]"
+                    className="inline-flex min-h-[36px] items-center bg-[#101700] px-3 py-2 text-[12px] uppercase text-[#f2f3ef]"
                     style={{ fontFamily: mono, lineHeight: "normal" }}
                   >
                     {isContactSubmitting ? "enviando..." : "enviar contato"}
@@ -3957,11 +3964,12 @@ function RoleContentSection({
       <h2
         className={
           usesLabelStyle
-            ? "text-[16px] text-[#5f644c] uppercase tracking-[0.02em]"
+            ? "text-[12px] text-[#5f644c] lowercase tracking-[0.02em]"
             : "text-[24px] text-[#101700]"
         }
         style={{
           fontFamily: usesLabelStyle ? mono : heading,
+          letterSpacing: usesLabelStyle ? undefined : titleTracking,
           fontWeight: usesLabelStyle ? 400 : 500,
           lineHeight: usesLabelStyle ? 1.1 : 1.08,
         }}
@@ -3979,7 +3987,7 @@ function MarkdownBody({ markdown }: { markdown: string }) {
 
   return (
     <div
-      className="pt-2 text-[16px] text-[#101700] leading-[1.42] [&_h1]:mt-7 [&_h1]:text-[28px] [&_h1]:font-medium [&_h2]:mt-7 [&_h2]:text-[24px] [&_h2]:font-medium [&_h3]:mt-6 [&_h3]:text-[20px] [&_h3]:font-medium [&_h2.role-section-label]:mt-12 [&_h2.role-section-label]:text-[16px] [&_h2.role-section-label]:font-normal [&_h2.role-section-label]:uppercase [&_h2.role-section-label]:tracking-[0.02em] [&_h2.role-section-label]:text-[#5f644c] [&_h2.role-section-label]:leading-[1.1] [&_h3.role-section-label]:mt-12 [&_h3.role-section-label]:text-[16px] [&_h3.role-section-label]:font-normal [&_h3.role-section-label]:uppercase [&_h3.role-section-label]:tracking-[0.02em] [&_h3.role-section-label]:text-[#5f644c] [&_h3.role-section-label]:leading-[1.1] [&_p]:m-0 [&_p+p]:mt-3 [&_p+ul]:mt-3 [&_p+ol]:mt-3 [&_p+h2.role-section-label]:mt-12 [&_p+h3.role-section-label]:mt-12 [&_ul]:m-0 [&_ul]:list-disc [&_ul]:pl-6 [&_ul+*]:mt-3 [&_ul+h2.role-section-label]:mt-12 [&_ul+h3.role-section-label]:mt-12 [&_ol]:m-0 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol+*]:mt-3 [&_ol+h2.role-section-label]:mt-12 [&_ol+h3.role-section-label]:mt-12 [&_li]:mb-2 [&_li:last-child]:mb-0 [&_a]:underline [&_a]:underline-offset-2 [&_a:hover]:opacity-80 [&_code]:rounded-none [&_code]:border [&_code]:border-[#d6dace] [&_code]:bg-[#ecefe7] [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[14px]"
+      className="pt-2 text-[16px] text-[#101700] leading-[1.42] [&_h1]:mt-7 [&_h1]:text-[28px] [&_h1]:font-medium [&_h2]:mt-7 [&_h2]:text-[24px] [&_h2]:font-medium [&_h3]:mt-6 [&_h3]:text-[20px] [&_h3]:font-medium [&_strong]:font-semibold [&_h2.role-section-label]:mt-12 [&_h2.role-section-label]:text-[12px] [&_h2.role-section-label]:font-normal [&_h2.role-section-label]:lowercase [&_h2.role-section-label]:tracking-[0.02em] [&_h2.role-section-label]:text-[#5f644c] [&_h2.role-section-label]:leading-[1.1] [&_h3.role-section-label]:mt-12 [&_h3.role-section-label]:text-[12px] [&_h3.role-section-label]:font-normal [&_h3.role-section-label]:lowercase [&_h3.role-section-label]:tracking-[0.02em] [&_h3.role-section-label]:text-[#5f644c] [&_h3.role-section-label]:leading-[1.1] [&_p]:m-0 [&_p+p]:mt-3 [&_p+ul]:mt-3 [&_p+ol]:mt-3 [&_p+h2.role-section-label]:mt-12 [&_p+h3.role-section-label]:mt-12 [&_ul]:m-0 [&_ul]:list-disc [&_ul]:pl-6 [&_ul+*]:mt-3 [&_ul+h2.role-section-label]:mt-12 [&_ul+h3.role-section-label]:mt-12 [&_ol]:m-0 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol+*]:mt-3 [&_ol+h2.role-section-label]:mt-12 [&_ol+h3.role-section-label]:mt-12 [&_li]:mb-2 [&_li:last-child]:mb-0 [&_a]:underline [&_a]:underline-offset-2 [&_a:hover]:opacity-80 [&_code]:rounded-none [&_code]:border [&_code]:border-[#d6dace] [&_code]:bg-[#ecefe7] [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[14px]"
       style={{ fontFamily: body }}
       dangerouslySetInnerHTML={{ __html: html }}
     />
@@ -4123,7 +4131,7 @@ function CareerRolePage({ role }: { role: CareersRole }) {
           <header
             className={`transition-all duration-300 ease-out ${
               isHeaderCondensed
-                ? "rounded-[16px] border border-[#d6dace] bg-[#f2f3ef]"
+                ? "border border-[#d6dace] bg-[#f2f3ef]"
                 : "border-b border-[#d6dace] bg-[#f2f3ef]"
             }`}
           >
@@ -4192,7 +4200,7 @@ function CareerRolePage({ role }: { role: CareersRole }) {
                     <CareersBackIcon />
                   </a>
                   <p
-                    className="text-[#5f644c] text-[13px] md:text-[14px] uppercase"
+                    className="text-[#5f644c] text-[12px] lowercase"
                     style={{ fontFamily: mono }}
                   >
                     /{displayArea}
@@ -4200,7 +4208,7 @@ function CareerRolePage({ role }: { role: CareersRole }) {
                   <div className="flex flex-wrap items-center gap-3 md:gap-4">
                     <h1
                       className="text-[#101700] text-[32px] md:text-[44px] lg:text-[56px] leading-[1.03]"
-                      style={{ fontFamily: display, fontWeight: 500 }}
+                      style={{ fontFamily: display, fontWeight: 500, letterSpacing: titleTracking }}
                     >
                       {displayRoleTitle}
                     </h1>
@@ -4243,14 +4251,14 @@ function CareerRolePage({ role }: { role: CareersRole }) {
                   <div className="flex flex-wrap gap-3">
                     <a
                       href="/vagas"
-                      className="inline-flex min-h-[44px] items-center border border-[#101700] text-[#101700] px-4 py-3 text-[14px] uppercase"
+                      className="inline-flex min-h-[36px] items-center border border-[#101700] text-[#101700] px-3 py-2 text-[12px] uppercase"
                       style={{ fontFamily: mono, lineHeight: "normal" }}
                     >
                       ver outras vagas
                     </a>
                     <a
                       href={applyPageHref}
-                      className="inline-flex min-h-[44px] items-center bg-[#101700] text-[#f2f3ef] px-4 py-3 text-[14px] uppercase"
+                      className="inline-flex min-h-[36px] items-center bg-[#101700] text-[#f2f3ef] px-3 py-2 text-[12px] uppercase"
                       style={{ fontFamily: mono, lineHeight: "normal" }}
                     >
                       candidatar-se
@@ -4422,15 +4430,16 @@ function CareerRolePage({ role }: { role: CareersRole }) {
               <div className="flex flex-col justify-between p-6 w-full lg:w-1/2 min-h-[300px] lg:h-[360px]">
                 <div className="flex flex-col gap-6 max-w-[450px]">
                   <p
-                    className="text-[#456300] text-[14px] md:text-[16px] uppercase"
+                    className="text-[#456300] text-[12px] lowercase"
                     style={{ fontFamily: mono }}
                   >
-                    /call to action
+                    /Próximo passo
                   </p>
                   <div
                     className="text-[#101700] text-[28px] md:text-[36px] lg:text-[40px]"
                     style={{
                       fontFamily: heading,
+                      letterSpacing: titleTracking,
                       fontWeight: 500,
                       lineHeight: "normal",
                     }}
@@ -4449,14 +4458,14 @@ function CareerRolePage({ role }: { role: CareersRole }) {
               <div className="flex items-end justify-end p-6 w-full lg:w-1/2 min-h-[120px] lg:h-[360px] gap-3">
                 <a
                   href="/vagas"
-                  className="inline-flex min-h-[44px] items-center border border-[#101700] text-[#101700] px-4 py-4 text-[14px] md:text-[16px] uppercase"
+                  className="inline-flex min-h-[36px] items-center border border-[#101700] text-[#101700] px-3 py-2 text-[12px] uppercase"
                   style={{ fontFamily: mono, lineHeight: "normal" }}
                 >
                   ver outras vagas
                 </a>
                 <a
                   href={applyPageHref}
-                  className="inline-flex min-h-[44px] items-center bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase"
+                  className="inline-flex min-h-[36px] items-center bg-[#101700] text-[#f2f3ef] px-3 py-2 text-[12px] uppercase"
                   style={{ fontFamily: mono, lineHeight: "normal" }}
                 >
                   candidatar-se
@@ -4494,7 +4503,7 @@ function CareerRolePage({ role }: { role: CareersRole }) {
             </div>
             <div className="flex flex-col gap-6">
               <p
-                className="text-[#5f644c] text-[14px] md:text-[16px] uppercase"
+                className="text-[#5f644c] text-[12px] lowercase"
                 style={{ fontFamily: mono }}
               >
                 /social
@@ -4738,7 +4747,7 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
           <header
             className={`transition-all duration-300 ease-out ${
               isHeaderCondensed
-                ? "rounded-[16px] border border-[#d6dace] bg-[#f2f3ef]"
+                ? "border border-[#d6dace] bg-[#f2f3ef]"
                 : "border-b border-[#d6dace] bg-[#f2f3ef]"
             }`}
           >
@@ -4802,14 +4811,14 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
                   <CareersBackIcon />
                 </a>
                 <p
-                  className="mt-6 text-[13px] uppercase text-[#5f644c] md:text-[14px]"
+                  className="mt-6 text-[12px] lowercase text-[#5f644c]"
                   style={{ fontFamily: mono }}
                 >
                   /candidatura
                 </p>
                 <h1
                   className="mt-3 text-[32px] leading-[1.03] md:text-[44px] lg:text-[52px]"
-                  style={{ fontFamily: display, fontWeight: 500 }}
+                  style={{ fontFamily: display, fontWeight: 500, letterSpacing: titleTracking }}
                 >
                   {displayRoleTitle}
                 </h1>
@@ -4847,14 +4856,14 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
                 <div className="mt-8 border border-[#d6dace] bg-[#ecefe7]">
                   <div className="border-b border-[#d6dace] px-4 py-3 md:px-5">
                     <p
-                      className="text-[12px] uppercase text-[#5f644c]"
+                      className="text-[12px] lowercase text-[#5f644c]"
                       style={{ fontFamily: mono }}
                     >
                       /como funciona
                     </p>
                     <p
                       className="mt-1 text-[18px] text-[#101700] md:text-[20px]"
-                      style={{ fontFamily: heading, fontWeight: 500 }}
+                      style={{ fontFamily: heading, fontWeight: 500, letterSpacing: titleTracking }}
                     >
                       Processo rápido e direto
                     </p>
@@ -4862,7 +4871,7 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
                   <ol className="m-0 list-none p-0">
                     <li className="border-b border-[#d6dace] px-4 py-3 md:px-5">
                       <p
-                        className="text-[12px] uppercase text-[#5f644c]"
+                        className="text-[12px] lowercase text-[#5f644c]"
                         style={{ fontFamily: mono }}
                       >
                         /passo 01
@@ -4876,7 +4885,7 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
                     </li>
                     <li className="border-b border-[#d6dace] px-4 py-3 md:px-5">
                       <p
-                        className="text-[12px] uppercase text-[#5f644c]"
+                        className="text-[12px] lowercase text-[#5f644c]"
                         style={{ fontFamily: mono }}
                       >
                         /passo 02
@@ -4890,7 +4899,7 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
                     </li>
                     <li className="px-4 py-3 md:px-5">
                       <p
-                        className="text-[12px] uppercase text-[#5f644c]"
+                        className="text-[12px] lowercase text-[#5f644c]"
                         style={{ fontFamily: mono }}
                       >
                         /passo 03
@@ -4910,7 +4919,7 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
                 <div className="border border-[#d6dace] bg-[#f2f3ef]">
                   <div className="border-b border-[#d6dace] px-4 py-3 md:px-5">
                     <p
-                      className="text-[13px] uppercase text-[#5f644c]"
+                      className="text-[12px] lowercase text-[#5f644c]"
                       style={{ fontFamily: mono }}
                     >
                       /formulário
@@ -4919,6 +4928,7 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
                       className="mt-1 text-[24px] text-[#101700] md:text-[30px]"
                       style={{
                         fontFamily: heading,
+                        letterSpacing: titleTracking,
                         fontWeight: 500,
                         lineHeight: "normal",
                       }}
@@ -5025,7 +5035,7 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
                     <div className="border-b border-[#d6dace]">
                       <div className="border-b border-[#d6dace] px-4 py-3 md:px-5">
                         <p
-                          className="text-[13px] uppercase text-[#5f644c]"
+                          className="text-[12px] lowercase text-[#5f644c]"
                           style={{ fontFamily: mono }}
                         >
                           /perguntas da vaga
@@ -5243,14 +5253,14 @@ function CareerRoleApplyPage({ role }: { role: CareersRole }) {
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="inline-flex min-h-[44px] items-center bg-[#101700] px-4 py-3 text-[14px] uppercase text-[#f2f3ef] disabled:cursor-not-allowed disabled:opacity-70"
+                        className="inline-flex min-h-[36px] items-center bg-[#101700] px-3 py-2 text-[12px] uppercase text-[#f2f3ef] disabled:cursor-not-allowed disabled:opacity-70"
                         style={{ fontFamily: mono, lineHeight: "normal" }}
                       >
                         {isSubmitting ? "enviando..." : "enviar candidatura"}
                       </button>
                       <a
                         href={roleHref}
-                        className="inline-flex min-h-[44px] items-center border border-[#d6dace] px-4 py-3 text-[14px] uppercase text-[#5f644c] hover:text-[#101700]"
+                        className="inline-flex min-h-[36px] items-center border border-[#d6dace] px-3 py-2 text-[12px] uppercase text-[#5f644c] hover:text-[#101700]"
                         style={{ fontFamily: mono, lineHeight: "normal" }}
                       >
                         voltar para vaga
@@ -5508,6 +5518,7 @@ function CareersEditorPage({
               className="text-[30px] text-[#101700] md:text-[32px]"
               style={{
                 fontFamily: heading,
+                letterSpacing: titleTracking,
                 fontWeight: 500,
                 lineHeight: "normal",
               }}
@@ -5562,7 +5573,7 @@ function CareersEditorPage({
               <div className={`border-b ${careersBorder} px-5 py-4`}>
                 <h2
                   className="text-[20px] text-[#101700]"
-                  style={{ fontFamily: heading, fontWeight: 500 }}
+                  style={{ fontFamily: heading, fontWeight: 500, letterSpacing: titleTracking }}
                 >
                   Entrar no editor
                 </h2>
@@ -5617,7 +5628,7 @@ function CareersEditorPage({
                 <button
                   type="submit"
                   disabled={isAuthSubmitting || authLoading}
-                  className="inline-flex bg-[#101700] px-4 py-3 text-[14px] uppercase text-[#f2f3ef] disabled:cursor-not-allowed disabled:opacity-70"
+                  className="inline-flex bg-[#101700] px-3 py-2 text-[12px] uppercase text-[#f2f3ef] disabled:cursor-not-allowed disabled:opacity-70"
                   style={{ fontFamily: mono, lineHeight: "normal" }}
                 >
                   {isAuthSubmitting || authLoading ? "Entrando..." : "Entrar"}
@@ -5671,7 +5682,7 @@ function CareersEditorPage({
                 <div className={`border-b ${careersBorder} px-4 py-3 md:px-5`}>
                   <h2
                     className="text-[18px] text-[#101700] md:text-[20px]"
-                    style={{ fontFamily: heading, fontWeight: 500 }}
+                    style={{ fontFamily: heading, fontWeight: 500, letterSpacing: titleTracking }}
                   >
                     {editingSlug ? "Editar vaga" : "Nova vaga"}
                   </h2>
@@ -5813,7 +5824,7 @@ function CareersEditorPage({
                   <button
                     type="submit"
                     disabled={isSaveSubmitting}
-                    className="inline-flex bg-[#101700] px-4 py-3 text-[14px] uppercase text-[#f2f3ef] disabled:cursor-not-allowed disabled:opacity-70"
+                    className="inline-flex bg-[#101700] px-3 py-2 text-[12px] uppercase text-[#f2f3ef] disabled:cursor-not-allowed disabled:opacity-70"
                     style={{ fontFamily: mono, lineHeight: "normal" }}
                   >
                     {isSaveSubmitting ? "Salvando..." : "Salvar vaga"}
@@ -5821,7 +5832,7 @@ function CareersEditorPage({
                   <button
                     type="button"
                     onClick={resetEditor}
-                    className="inline-flex border border-[#d6dace] px-4 py-3 text-[14px] uppercase text-[#5f644c]"
+                    className="inline-flex border border-[#d6dace] px-3 py-2 text-[12px] uppercase text-[#5f644c]"
                     style={{ fontFamily: mono, lineHeight: "normal" }}
                   >
                     Limpar
@@ -5841,7 +5852,7 @@ function CareersEditorPage({
                 <div className={`border-b ${careersBorder} px-4 py-3 md:px-5`}>
                   <h2
                     className="text-[18px] text-[#101700] md:text-[20px]"
-                    style={{ fontFamily: heading, fontWeight: 500 }}
+                    style={{ fontFamily: heading, fontWeight: 500, letterSpacing: titleTracking }}
                   >
                     Vagas cadastradas
                   </h2>
@@ -5874,7 +5885,7 @@ function CareersEditorPage({
                           <div>
                             <p
                               className="text-[18px] text-[#101700]"
-                              style={{ fontFamily: heading, fontWeight: 500 }}
+                              style={{ fontFamily: heading, fontWeight: 500, letterSpacing: titleTracking }}
                             >
                               {role.title}
                             </p>
@@ -6002,7 +6013,7 @@ function CareersPage({
           <header
             className={`transition-all duration-300 ease-out ${
               isHeaderCondensed
-                ? "rounded-[16px] border border-[#d6dace] bg-[#f2f3ef]"
+                ? "border border-[#d6dace] bg-[#f2f3ef]"
                 : "border-b border-[#d6dace] bg-[#f2f3ef]"
             }`}
           >
@@ -6063,14 +6074,14 @@ function CareersPage({
               <div className="flex flex-col justify-between p-6 w-full lg:w-1/2 min-h-[300px] lg:h-[462px]">
                 <div className="flex flex-col gap-8 max-w-[520px]">
                   <p
-                    className="text-[#5f644c] text-[14px] md:text-[16px] uppercase"
+                    className="text-[#5f644c] text-[12px] lowercase"
                     style={{ fontFamily: mono }}
                   >
                     /carreiras shiftlabs
                   </p>
                   <div
                     className="text-[#101700] text-[28px] md:text-[36px] lg:text-[40px] leading-[normal]"
-                    style={{ fontFamily: heading, fontWeight: 500 }}
+                    style={{ fontFamily: heading, fontWeight: 500, letterSpacing: titleTracking }}
                   >
                     Estruture o futuro com a gente.
                   </div>
@@ -6086,7 +6097,7 @@ function CareersPage({
                 <div className="mt-8 lg:mt-0">
                   <a
                     href="#lista-vagas"
-                    className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase cursor-pointer"
+                    className="inline-flex min-h-[36px] items-center bg-[#101700] text-[#f2f3ef] px-3 py-2 text-[12px] uppercase cursor-pointer"
                     style={{ fontFamily: mono }}
                   >
                     ver vagas abertas
@@ -6099,29 +6110,30 @@ function CareersPage({
                   <div className="grid grid-cols-2">
                     <div className="border-b border-r border-[#d6dace] p-6 min-h-[146px] flex flex-col justify-end gap-2">
                       <p
-                        className="text-[#5f644c] text-[12px] md:text-[14px] uppercase"
+                        className="text-[#5f644c] text-[12px] lowercase"
                         style={{ fontFamily: mono }}
                       >
-                        vagas ativas
+                        /vagas ativas
                       </p>
                       <p
                         className="text-[#101700] text-[36px] md:text-[48px]"
-                        style={{ fontFamily: heading, fontWeight: 500 }}
+                        style={{ fontFamily: heading, fontWeight: 500, letterSpacing: titleTracking }}
                       >
                         {isLoading ? "..." : roles.length}
                       </p>
                     </div>
                     <div className="border-b border-[#d6dace] p-6 min-h-[146px] flex flex-col justify-end gap-2">
                       <p
-                        className="text-[#5f644c] text-[12px] md:text-[14px] uppercase"
+                        className="text-[#5f644c] text-[12px] lowercase"
                         style={{ fontFamily: mono }}
                       >
-                        foco
+                        /foco
                       </p>
                       <p
                         className="text-[#101700] text-[18px] md:text-[24px]"
                         style={{
                           fontFamily: heading,
+                          letterSpacing: titleTracking,
                           fontWeight: 500,
                           lineHeight: 1.1,
                         }}
@@ -6131,15 +6143,16 @@ function CareersPage({
                     </div>
                     <div className="border-r border-[#d6dace] p-6 min-h-[146px] flex flex-col justify-end gap-2">
                       <p
-                        className="text-[#5f644c] text-[12px] md:text-[14px] uppercase"
+                        className="text-[#5f644c] text-[12px] lowercase"
                         style={{ fontFamily: mono }}
                       >
-                        modelo
+                        /modelo
                       </p>
                       <p
                         className="text-[#101700] text-[18px] md:text-[24px]"
                         style={{
                           fontFamily: heading,
+                          letterSpacing: titleTracking,
                           fontWeight: 500,
                           lineHeight: 1.1,
                         }}
@@ -6149,15 +6162,16 @@ function CareersPage({
                     </div>
                     <div className="p-6 min-h-[146px] flex flex-col justify-end gap-2">
                       <p
-                        className="text-[#5f644c] text-[12px] md:text-[14px] uppercase"
+                        className="text-[#5f644c] text-[12px] lowercase"
                         style={{ fontFamily: mono }}
                       >
-                        abordagem
+                        /abordagem
                       </p>
                       <p
                         className="text-[#101700] text-[18px] md:text-[24px]"
                         style={{
                           fontFamily: heading,
+                          letterSpacing: titleTracking,
                           fontWeight: 500,
                           lineHeight: 1.1,
                         }}
@@ -6181,14 +6195,14 @@ function CareersPage({
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
             <div className="flex flex-col gap-6 max-w-[560px]">
               <p
-                className="text-[#5f644c] text-[14px] md:text-[16px] uppercase"
+                className="text-[#5f644c] text-[12px] lowercase"
                 style={{ fontFamily: mono }}
               >
                 /vagas abertas
               </p>
               <h1
                 className="text-[#101700] text-[28px] md:text-[36px] lg:text-[40px] leading-[normal]"
-                style={{ fontFamily: heading, fontWeight: 500 }}
+                style={{ fontFamily: heading, fontWeight: 500, letterSpacing: titleTracking }}
               >
                 Onde você entra para construir sistema, não só tarefa.
               </h1>
@@ -6199,7 +6213,11 @@ function CareersPage({
             >
               {isLoading
                 ? "Carregando vagas..."
-                : `${roles.length} oportunidades disponíveis agora.`}
+                : `${roles.length} ${
+                    roles.length === 1
+                      ? "oportunidade disponível"
+                      : "oportunidades disponíveis"
+                  } agora.`}
             </p>
           </div>
         </div>
@@ -6262,7 +6280,7 @@ function CareersPage({
                       <article className="flex h-full min-h-[318px] flex-col justify-between gap-8 p-6">
                         <div className="flex flex-col gap-4">
                           <p
-                            className="text-[#5f644c] text-[13px] md:text-[14px] uppercase"
+                            className="text-[#5f644c] text-[12px] lowercase"
                             style={{ fontFamily: mono }}
                           >
                             /{displayArea}
@@ -6270,7 +6288,7 @@ function CareersPage({
                           <div className="flex flex-wrap items-center gap-2 md:gap-3">
                             <h2
                               className="text-[#101700] text-[28px] md:text-[32px] leading-[1.08] transition-transform duration-200 lg:group-hover:translate-x-2"
-                              style={{ fontFamily: display, fontWeight: 500 }}
+                              style={{ fontFamily: display, fontWeight: 500, letterSpacing: titleTracking }}
                             >
                               {displayRoleTitle}
                             </h2>
@@ -6312,7 +6330,7 @@ function CareersPage({
                             </span>
                           </div>
                           <span
-                            className="inline-flex w-fit bg-[#101700] text-[#f2f3ef] px-4 py-3 text-[14px] uppercase"
+                            className="inline-flex w-fit bg-[#101700] text-[#f2f3ef] px-3 py-2 text-[12px] uppercase"
                             style={{ fontFamily: mono, lineHeight: "normal" }}
                           >
                             ver detalhes
@@ -6338,15 +6356,16 @@ function CareersPage({
               <div className="flex flex-col justify-between p-6 w-full lg:w-1/2 min-h-[300px] lg:h-[360px]">
                 <div className="flex flex-col gap-6 max-w-[450px]">
                   <p
-                    className="text-[#456300] text-[14px] md:text-[16px] uppercase"
+                    className="text-[#456300] text-[12px] lowercase"
                     style={{ fontFamily: mono }}
                   >
-                    /call to action
+                    /Próximo passo
                   </p>
                   <div
                     className="text-[#101700] text-[28px] md:text-[36px] lg:text-[40px]"
                     style={{
                       fontFamily: heading,
+                      letterSpacing: titleTracking,
                       fontWeight: 500,
                       lineHeight: "normal",
                     }}
@@ -6365,7 +6384,7 @@ function CareersPage({
               <div className="flex items-end justify-end p-6 w-full lg:w-1/2 min-h-[120px] lg:h-[360px]">
                 <a
                   href="mailto:careers@shiftlabs.digital?subject=Candidatura%20ShiftLabs"
-                  className="inline-flex bg-[#101700] text-[#f2f3ef] px-4 py-4 text-[14px] md:text-[16px] uppercase"
+                  className="inline-flex min-h-[36px] items-center bg-[#101700] text-[#f2f3ef] px-3 py-2 text-[12px] uppercase"
                   style={{ fontFamily: mono, lineHeight: "normal" }}
                 >
                   enviar perfil
@@ -6403,7 +6422,7 @@ function CareersPage({
             </div>
             <div className="flex flex-col gap-6">
               <p
-                className="text-[#5f644c] text-[14px] md:text-[16px] uppercase"
+                className="text-[#5f644c] text-[12px] lowercase"
                 style={{ fontFamily: mono }}
               >
                 /social

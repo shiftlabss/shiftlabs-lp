@@ -2,6 +2,9 @@
 
 :root {
   --font-size: 16px;
+  --font-system: -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-system-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --tracking-title: -0.02em;
   --background: #f2f3ef;
   --foreground: oklch(0.145 0 0);
   --card: #ffffff;
@@ -79,6 +82,8 @@
 }
 
 @theme inline {
+  --font-sans: var(--font-system);
+  --font-mono: var(--font-system-mono);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -126,6 +131,8 @@
 
   body {
     @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -199,16 +206,6 @@
     font-size: var(--text-base);
     font-weight: var(--font-weight-normal);
     line-height: 1.5;
-  }
-}
-
-@keyframes marquee-left {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(-50%);
   }
 }
 
@@ -413,11 +410,6 @@
   animation: shiftlabs-success-shimmer 1.4s linear infinite;
 }
 
-.marquee-track {
-  animation: marquee-left 28s linear infinite;
-  will-change: transform;
-}
-
 .framework-layer-track {
   position: relative;
   isolation: isolate;
@@ -533,11 +525,63 @@
   transition: none;
 }
 
+.hairline-card {
+  container-type: inline-size;
+  --hairline-art-w: min(380px, 86cqw);
+}
+
+@media (min-width: 1280px) {
+  .hairline-row .hairline-card {
+    --hairline-art-w: min(380px, 100cqw);
+  }
+}
+
+.hairline-art {
+  --k: calc(var(--hairline-art-w) / 300);
+  position: relative;
+  width: var(--hairline-art-w);
+  height: calc(248 * var(--k));
+  margin: 8px auto 32px;
+  overflow: hidden;
+}
+
+.hairline-art [data-hairline] {
+  position: absolute;
+  left: calc(-50 * var(--k));
+  top: calc(-50 * var(--k));
+  width: calc(400 * var(--k));
+  --hairline-plate: #f2f3ef;
+  --hairline-hi: #101700;
+  --hairline-edge: #8d937b;
+  --hairline-mid: #bcc1ad;
+  --hairline-lo: #d6dace;
+  --hairline-stroke: 1;
+}
+
+.hairline-hero {
+  container-type: inline-size;
+  --hairline-art-w: min(400px, 100cqw);
+}
+
+.hairline-hero .hairline-art {
+  margin: 0 auto;
+  animation: hairline-hero-in 600ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+@keyframes hairline-hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track {
+  .hairline-hero .hairline-art {
     animation: none;
   }
+}
 
+@media (prefers-reduced-motion: reduce) {
   [data-reveal],
   [data-reveal='section'],
   [data-reveal='title'],
@@ -560,12 +604,6 @@
 }
 
 @media (hover: none) and (pointer: coarse) {
-  .marquee-track {
-    animation: none;
-    transform: none;
-    will-change: auto;
-  }
-
   [data-reveal],
   [data-reveal='section'],
   [data-reveal='title'],

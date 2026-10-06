@@ -542,18 +542,18 @@ function buildHead({
 }
 
 const staticShellStyles = {
-  main: "min-height:100vh;background:#f2f3ef;color:#101700;font-family:InterDisplay,Inter Tight,Arial,sans-serif;",
+  main: "min-height:100vh;background:#f2f3ef;color:#101700;font-family:-apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;",
   header:
     "height:72px;border-bottom:1px solid #d6dace;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 clamp(24px,12vw,192px);",
   brand:
-    "color:#101700;text-decoration:none;font-family:Inter Tight,InterDisplay,Arial,sans-serif;font-size:20px;font-weight:600;letter-spacing:0;",
-  nav: "color:#5f644c;text-decoration:none;font-family:Basis Grotesque Pro Mono,InterDisplay,monospace;font-size:14px;text-transform:uppercase;",
+    "color:#101700;text-decoration:none;font-family:-apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;font-size:20px;font-weight:600;letter-spacing:0;",
+  nav: "color:#5f644c;text-decoration:none;font-family:ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;font-size:14px;text-transform:uppercase;",
   section:
     "max-width:1512px;margin:0 auto;padding:clamp(48px,8vw,112px) clamp(24px,12vw,192px);border-bottom:1px solid #d6dace;",
   eyebrow:
-    "margin:0 0 24px;color:#5f644c;font-family:Basis Grotesque Pro Mono,InterDisplay,monospace;font-size:14px;text-transform:uppercase;",
+    "margin:0 0 24px;color:#5f644c;font-family:ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;font-size:12px;text-transform:lowercase;",
   title:
-    "max-width:780px;margin:0;color:#101700;font-family:Inter Tight,InterDisplay,Arial,sans-serif;font-size:clamp(32px,7vw,72px);font-weight:500;line-height:1.02;letter-spacing:0;",
+    "max-width:780px;margin:0;color:#101700;font-family:-apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;font-size:clamp(32px,7vw,72px);font-weight:500;line-height:1.02;letter-spacing:-0.02em;",
   description:
     "max-width:560px;margin:28px 0 0;color:#5f644c;font-size:clamp(16px,2vw,20px);line-height:1.35;",
 };
@@ -588,11 +588,11 @@ function buildRoleListHtml(roles) {
   const items = roles
     .map(
       (role) =>
-        `<li style="list-style:none;border:1px solid #d6dace;padding:20px;min-height:168px;display:flex;flex-direction:column;justify-content:space-between;gap:24px;"><span style="color:#5f644c;font-family:Basis Grotesque Pro Mono,InterDisplay,monospace;font-size:13px;text-transform:uppercase;">/${escapeHtml(
+        `<li style="list-style:none;border:1px solid #d6dace;padding:20px;min-height:168px;display:flex;flex-direction:column;justify-content:space-between;gap:24px;"><span style="color:#5f644c;font-family:ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;font-size:12px;text-transform:lowercase;">/${escapeHtml(
           getRoleArea(role),
         )}</span><a href="/vagas/${escapeHtml(
           role.slug,
-        )}" style="color:#101700;text-decoration:none;font-family:Inter Tight,InterDisplay,Arial,sans-serif;font-size:28px;font-weight:500;line-height:1.08;">${escapeHtml(
+        )}" style="color:#101700;text-decoration:none;font-family:-apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;font-size:28px;font-weight:500;line-height:1.08;letter-spacing:-0.02em;">${escapeHtml(
           getDisplayRoleTitle(role),
         )}</a></li>`,
     )
@@ -620,7 +620,7 @@ function buildRoleBodyHtml(role) {
       ? `    <ul style="display:flex;flex-wrap:wrap;gap:8px;margin:32px 0 0;padding:0;">${metaItems}</ul>`
       : "",
     `    <div style="max-width:760px;margin-top:40px;color:#101700;font-size:17px;line-height:1.55;">${markdownToSimpleHtml(roleToMarkdown(role))}</div>`,
-    `    <p style="margin-top:32px;"><a href="${escapeHtml(applyHref)}" style="display:inline-flex;background:#101700;color:#f2f3ef;padding:14px 16px;text-decoration:none;font-family:Basis Grotesque Pro Mono,InterDisplay,monospace;font-size:14px;text-transform:uppercase;">Candidatar-se</a></p>`,
+    `    <p style="margin-top:32px;"><a href="${escapeHtml(applyHref)}" style="display:inline-flex;background:#101700;color:#f2f3ef;padding:14px 16px;text-decoration:none;font-family:ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;font-size:14px;text-transform:uppercase;">Candidatar-se</a></p>`,
   ]
     .filter(Boolean)
     .join("\n");
@@ -733,7 +733,7 @@ async function run() {
       ),
     ],
     bodyHtml: buildStaticLayout({
-      eyebrow: "Engenharia para crescimento previsível",
+      eyebrow: "/Engenharia para crescimento previsível",
       title: "Não construímos ideias. Estruturamos negócios.",
       description:
         "A ShiftLabs transforma ideias, operacoes confusas ou produtos mal estruturados em negocios organizados, previsiveis e escalaveis.",

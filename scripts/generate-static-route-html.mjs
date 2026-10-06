@@ -715,7 +715,13 @@ async function fetchPublishedRoles() {
 
 async function run() {
   const baseHtml = await readFile(baseHtmlPath, "utf8");
-  const roles = await fetchPublishedRoles();
+  const roles = await fetchPublishedRoles().catch((error) => {
+    console.warn(
+      "[seo] Nao foi possivel carregar vagas publicadas do Supabase; HTML estatico sem vagas.",
+      error,
+    );
+    return [];
+  });
   const organizationSchema = buildOrganizationSchema();
 
   await writeRouteHtml(baseHtml, "/", {

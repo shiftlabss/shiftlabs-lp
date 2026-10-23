@@ -52,7 +52,7 @@ async function getSupabaseClient() {
 
   return supabaseClientPromise;
 }
-const fallbackSiteUrl = "https://www.shiftlabs.digital";
+const fallbackSiteUrl = "https://shiftlabs.sh";
 const configuredSiteUrl = (
   (import.meta.env.VITE_SITE_URL as string | undefined) ?? fallbackSiteUrl
 ).trim();

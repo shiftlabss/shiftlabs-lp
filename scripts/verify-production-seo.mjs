@@ -1,4 +1,4 @@
-const fallbackSiteUrl = "https://www.shiftlabs.digital";
+const fallbackSiteUrl = "https://shiftlabs.sh";
 const siteUrl = (
   process.env.SEO_PRODUCTION_URL ||
   process.env.SITE_URL ||

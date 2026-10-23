@@ -24,5 +24,29 @@
       "source": "/(.*)",
       "destination": "/"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "shiftlabs.digital"
+        }
+      ],
+      "destination": "https://shiftlabs.sh/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.shiftlabs.digital"
+        }
+      ],
+      "destination": "https://shiftlabs.sh/:path*",
+      "permanent": true
+    }
   ]
 }

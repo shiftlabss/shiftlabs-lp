@@ -3,7 +3,7 @@ import path from "node:path";
 
 const root = process.cwd();
 const distDir = path.join(root, "dist");
-const fallbackSiteUrl = "https://www.shiftlabs.digital";
+const fallbackSiteUrl = "https://shiftlabs.sh";
 const siteUrl = (process.env.SITE_URL || process.env.VITE_SITE_URL || fallbackSiteUrl)
   .trim()
   .replace(/\/+$/, "");

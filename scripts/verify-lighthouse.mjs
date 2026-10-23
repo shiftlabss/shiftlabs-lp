@@ -4,7 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 
-const url = process.env.LIGHTHOUSE_URL || "https://www.shiftlabs.digital/";
+const url = process.env.LIGHTHOUSE_URL || "https://shiftlabs.sh/";
 const outputPath = path.join(os.tmpdir(), `shiftlabs-lighthouse-${randomUUID()}.json`);
 const categoryThresholds = {
   performance: Number(process.env.LIGHTHOUSE_MIN_PERFORMANCE || 0.8),

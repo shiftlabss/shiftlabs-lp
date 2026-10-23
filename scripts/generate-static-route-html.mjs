@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-const fallbackSiteUrl = "https://www.shiftlabs.digital";
+const fallbackSiteUrl = "https://shiftlabs.sh";
 const fallbackSupabaseUrl = "https://cjoyxelowsfkhgswkipd.supabase.co";
 const fallbackSupabaseAnonKey =
   "sb_publishable_EWydN_Aqm9YbtXkQUNGfrA_BpB8LD4R";
